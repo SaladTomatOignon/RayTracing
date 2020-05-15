@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Repertoire de build
+build/
+
+# Fichiers de sortie
+bin/
