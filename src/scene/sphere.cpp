@@ -1,0 +1,21 @@
+#include "../../include/scene/sphere.h"
+#include "../../include/geometrie/point.h"
+#include <iostream>
+
+Sphere::Sphere(Point centre, double rayon) {
+    this->centre = Point(centre);
+    this->rayon = rayon;
+}
+
+Sphere::Sphere(const Sphere& sphere) {
+    this->centre = Point(sphere.centre);
+    this->rayon = sphere.rayon;
+}
+
+Sphere::~Sphere() {
+
+}
+
+Sphere* Sphere::clone() const {
+    return new Sphere(*this);
+}
