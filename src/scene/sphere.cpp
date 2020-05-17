@@ -7,9 +7,8 @@ Sphere::Sphere(Point centre, double rayon) {
     this->rayon = rayon;
 }
 
-Sphere::Sphere(const Sphere& sphere) {
-    this->centre = Point(sphere.centre);
-    this->rayon = sphere.rayon;
+Sphere::Sphere(const Sphere& sphere) : Sphere(sphere.centre, sphere.rayon) {
+
 }
 
 Sphere::~Sphere() {

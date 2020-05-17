@@ -1,9 +1,7 @@
 #include "../../include/geometrie/point.h"
 
-Point::Point() {
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
+Point::Point() : Point(0, 0, 0) {
+
 }
 
 Point::Point(double x, double y, double z) {
@@ -12,10 +10,8 @@ Point::Point(double x, double y, double z) {
     this->z = z;
 }
 
-Point::Point(const Point& point) {
-    this->x = point.x;
-    this->y = point.y;
-    this->z = point.z;
+Point::Point(const Point& point) : Point(point.x, point.y, point.z) {
+
 }
 
 Point::~Point() {

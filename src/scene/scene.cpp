@@ -1,9 +1,8 @@
 #include "../../include/scene/scene.h"
 #include <algorithm>
 
-Scene::Scene() {
-    this->camera = Camera();
-    this->formes = vector<Forme*>();
+Scene::Scene() : Scene(Camera(), vector<Forme*>()) {
+
 }
 
 Scene::Scene(Camera camera, vector<Forme*> formes) {

@@ -8,10 +8,8 @@ Triangle::Triangle(Point a, Point b, Point c) {
     this->c = Point(c);
 }
 
-Triangle::Triangle(const Triangle& tr) {
-    this->a = Point(tr.a);
-    this->b = Point(tr.b);
-    this->c = Point(tr.c);
+Triangle::Triangle(const Triangle& tr) : Triangle(tr.a, tr.b, tr.c) {
+
 }
 
 Triangle::~Triangle() {

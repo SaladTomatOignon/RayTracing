@@ -12,10 +12,8 @@ Vecteur::Vecteur(double x, double y, double z) {
     this->z = z;
 }
 
-Vecteur::Vecteur(const Vecteur& vecteur) {
-    this->x = vecteur.x;
-    this->y = vecteur.y;
-    this->z = vecteur.z;
+Vecteur::Vecteur(const Vecteur& vecteur) : Vecteur(vecteur.x, vecteur.y, vecteur.z) {
+
 }
 
 Vecteur::~Vecteur() {
