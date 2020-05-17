@@ -16,7 +16,11 @@ Image::Image(unsigned int largeur, unsigned int hauteur) {
 }
 
 Image::Image(const Image& image) : Image(image.largeur, image.hauteur) {
-
+    for (int i = 0; i < hauteur; i++) {
+        for (int j = 0; j < largeur; j++) {
+            this->valeurs[i][j] = Pixel(image.valeurs[i][j]);
+        }
+    }
 }
 
 Image::~Image() {
