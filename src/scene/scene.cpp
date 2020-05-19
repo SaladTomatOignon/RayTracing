@@ -7,10 +7,15 @@ Scene::Scene() : Scene(Camera(), vector<Forme*>()) {
 
 Scene::Scene(Camera camera, vector<Forme*> formes) {
     this->camera = Camera(camera);
-    this->formes = vector<Forme*>(formes.size());
-    transform(formes.begin(), formes.end(), this->formes.begin(), [](Forme* s) -> Forme* { return s->clone(); }); /* Copie du vector de Forme. */
+    this->formes = vector<Forme*>();
+
+    /* Copie du vector de Forme. */
+    for each (Forme* forme in formes) {
+        Forme* test = forme->clone();
+        this->formes.push_back(test);
+    }
 }
 
 Scene::~Scene() {
-
+    formes.clear();
 }
