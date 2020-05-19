@@ -1,9 +1,7 @@
 #include "../../include/geometrie/vecteur.h"
 
-Vecteur::Vecteur() {
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
+Vecteur::Vecteur() : Vecteur(0, 0, 0) {
+
 }
 
 Vecteur::Vecteur(double x, double y, double z) {
