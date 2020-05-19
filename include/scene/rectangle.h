@@ -10,7 +10,9 @@ class Rectangle : public Forme {
         Rectangle(const Rectangle& rect);
         ~Rectangle();
 
-        virtual Rectangle* clone() const override;
+        virtual Rectangle* clone() const {
+            return new Rectangle(*this);
+        }
 
     private:
         Point a, b, c, d;

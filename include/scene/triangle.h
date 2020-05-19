@@ -10,7 +10,9 @@ class Triangle : public Forme {
         Triangle(const Triangle& tr);
         ~Triangle();
 
-        virtual Triangle* clone() const override;
+        virtual Triangle* clone() const {
+            return new Triangle(*this);
+        };
 
     private:
         Point a, b, c;

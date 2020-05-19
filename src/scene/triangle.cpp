@@ -15,7 +15,3 @@ Triangle::Triangle(const Triangle& tr) : Triangle(tr.a, tr.b, tr.c) {
 Triangle::~Triangle() {
 
 }
-
-Triangle* Triangle::clone() const {
-    return new Triangle(*this);
-}

@@ -16,7 +16,3 @@ Rectangle::Rectangle(const Rectangle& rect) : Rectangle(rect.a, rect.b, rect.c, 
 Rectangle::~Rectangle() {
 
 }
-
-Rectangle* Rectangle::clone() const {
-    return new Rectangle(*this);
-}

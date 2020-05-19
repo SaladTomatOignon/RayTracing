@@ -14,7 +14,3 @@ Sphere::Sphere(const Sphere& sphere) : Sphere(sphere.centre, sphere.rayon) {
 Sphere::~Sphere() {
 
 }
-
-Sphere* Sphere::clone() const {
-    return new Sphere(*this);
-}

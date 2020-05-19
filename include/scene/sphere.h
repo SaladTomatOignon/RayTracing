@@ -10,7 +10,9 @@ class Sphere : public Forme {
         Sphere(const Sphere& sphere);
         ~Sphere();
 
-        virtual Sphere* clone() const override;
+        virtual Sphere* clone() const {
+            return new Sphere(*this);
+        };
 
     private:
         Point centre;
