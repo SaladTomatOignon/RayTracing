@@ -30,7 +30,8 @@ class Parser {
         enum class TypeForme {
             SPHERE,
             RECTANGLE,
-            TRIANGLE
+            TRIANGLE,
+            NONE
         };
 
         static Camera parseCamera(Document& jsonObject);

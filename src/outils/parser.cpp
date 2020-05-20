@@ -95,6 +95,8 @@ Parser::TypeForme Parser::getTypeForme(string forme) {
     if (formeToUpperCase == "TRIANGLE") {
         return TypeForme::TRIANGLE;
     }
+
+    return TypeForme::NONE;
 }
 
 Forme* Parser::parseForme(Value& forme) {
@@ -114,6 +116,7 @@ Forme* Parser::parseForme(Value& forme) {
                 return parseTriangle(forme);
                 break;
             default:
+                return nullptr;
                 break;
         }
     }
