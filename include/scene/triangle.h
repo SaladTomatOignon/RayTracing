@@ -16,6 +16,13 @@ class Triangle : public Forme {
 
     private:
         Point a, b, c;
+
+        Triangle(Point a, Point b, Point c, bool estCanonique);
+
+        virtual Triangle* creerFormeCanonique() override;
+        virtual void homothetieFormeCanonique() override;
+        virtual void rotationFormeCanonique() override;
+        virtual void translationFormeCanonique() override;
 };
 
 #endif

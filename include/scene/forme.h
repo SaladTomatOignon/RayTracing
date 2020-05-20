@@ -11,8 +11,15 @@ class Forme {
         virtual Forme* clone() const = 0;
 
     protected:
-        Matrice Md = Matrice(4, 4);
-        Matrice Mi = Matrice(4, 4);
+        virtual Forme* creerFormeCanonique() = 0;
+        void initialiserMatricesTransformation();
+        virtual void homothetieFormeCanonique() = 0;
+        virtual void rotationFormeCanonique() = 0;
+        virtual void translationFormeCanonique() = 0;
+
+        Forme* formeCanonique;
+        Matrice Md = Matrice::mat_identite(4);
+        Matrice Mi = Matrice::mat_identite(4);
 };
 
 #endif

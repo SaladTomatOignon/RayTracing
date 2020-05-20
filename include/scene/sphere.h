@@ -17,6 +17,13 @@ class Sphere : public Forme {
     private:
         Point centre;
         double rayon;
+
+        Sphere(Point centre, double rayon, bool estCanonique);
+
+        virtual Sphere* creerFormeCanonique() override;
+        virtual void homothetieFormeCanonique() override;
+        virtual void rotationFormeCanonique() override;
+        virtual void translationFormeCanonique() override;
 };
 
 #endif

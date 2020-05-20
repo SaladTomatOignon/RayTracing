@@ -2,11 +2,19 @@
 #include "../../include/geometrie/point.h"
 #include <iostream>
 
-Rectangle::Rectangle(Point a, Point b, Point c, Point d) {
+Rectangle::Rectangle(Point a, Point b, Point c, Point d, bool estCanonique) {
     this->a = Point(a);
     this->b = Point(b);
     this->c = Point(c);
     this->d = Point(d);
+
+    if (!estCanonique) {
+        initialiserMatricesTransformation();
+    }
+}
+
+Rectangle::Rectangle(Point a, Point b, Point c, Point d) : Rectangle(a, b, c, d, false) {
+
 }
 
 Rectangle::Rectangle(const Rectangle& rect) : Rectangle(rect.a, rect.b, rect.c, rect.d) {
@@ -14,5 +22,22 @@ Rectangle::Rectangle(const Rectangle& rect) : Rectangle(rect.a, rect.b, rect.c, 
 }
 
 Rectangle::~Rectangle() {
+
+}
+
+Rectangle* Rectangle::creerFormeCanonique() {
+    // Carré de côté 2 centré sur l'origine, dans le plan z = 0
+    return new Rectangle(Point(-1, -1, 0), Point(-1, 1, 0), Point(1, 1, 0), Point(1, -1, 0), true);
+}
+
+void Rectangle::homothetieFormeCanonique() {
+
+}
+
+void Rectangle::rotationFormeCanonique() {
+
+}
+
+void Rectangle::translationFormeCanonique() {
 
 }

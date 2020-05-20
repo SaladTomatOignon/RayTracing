@@ -16,6 +16,13 @@ class Rectangle : public Forme {
 
     private:
         Point a, b, c, d;
+
+        Rectangle(Point a, Point b, Point c, Point d, bool estCanonique);
+        virtual Rectangle* creerFormeCanonique() override;
+
+        virtual void homothetieFormeCanonique() override;
+        virtual void rotationFormeCanonique() override;
+        virtual void translationFormeCanonique() override;
 };
 
 #endif
