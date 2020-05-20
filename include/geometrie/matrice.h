@@ -12,6 +12,7 @@ class Matrice {
         double* operator[](int const& i);
         Matrice operator*(Matrice matrice);
 
+        static Matrice mat_identite(unsigned int taille);
         static Matrice mat_translation(double x = 0, double y = 0, double z = 0);
         static Matrice mat_translation(Vecteur vecteur);
         static Matrice mat_homothetie(double x = 0, double y = 0, double z = 0);

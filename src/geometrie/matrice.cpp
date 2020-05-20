@@ -52,6 +52,16 @@ Matrice Matrice::operator*(Matrice matrice) {
     return resultat;
 }
 
+Matrice Matrice::mat_identite(unsigned int taille) {
+    Matrice identite(taille, taille);
+
+    for (unsigned int i = 0; i < taille; i++) {
+        identite.mat[i][i] = 1;
+    }
+
+    return identite;
+}
+
 Matrice Matrice::mat_translation(double x, double y, double z) {
     Matrice matrice(4, 4);
 
