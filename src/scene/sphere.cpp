@@ -1,6 +1,5 @@
 #include "../../include/scene/sphere.h"
 #include "../../include/geometrie/point.h"
-#include <iostream>
 
 Sphere::Sphere(Point centre, double rayon, bool estCanonique) {
     this->centre = Point(centre);
@@ -37,5 +36,6 @@ void Sphere::rotationFormeCanonique() {
 }
 
 void Sphere::translationFormeCanonique() {
-
+    Md = Md * Matrice::mat_translation(centre.x, centre.y, centre.z);
+    Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
