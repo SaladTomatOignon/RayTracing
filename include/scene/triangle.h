@@ -20,6 +20,8 @@ class Triangle : public Forme {
         Triangle(Point a, Point b, Point c, bool estCanonique);
 
         virtual Triangle* creerFormeCanonique() override;
+        virtual Triangle* getFormeCanonique() override;
+        virtual Point getCentre() override;
         virtual void homothetieFormeCanonique() override;
         virtual void rotationFormeCanonique() override;
         virtual void translationFormeCanonique() override;
