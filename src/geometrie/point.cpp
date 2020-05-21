@@ -17,3 +17,7 @@ Point::Point(const Point& point) : Point(point.x, point.y, point.z) {
 Point::~Point() {
 
 }
+
+Point Point::operator+(const Vecteur& v) {
+    return Point(x + v.x, y + v.y, z + v.z);
+}

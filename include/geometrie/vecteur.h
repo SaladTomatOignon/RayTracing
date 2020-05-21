@@ -8,6 +8,15 @@ class Vecteur {
         Vecteur(const Vecteur& vecteur);
         ~Vecteur();
 
+        bool operator==(const Vecteur& autre);
+        bool operator!=(const Vecteur& autre);
+        Vecteur operator+(const Vecteur& autre);
+        Vecteur operator-(const Vecteur& autre);
+        friend Vecteur operator*(const double scalaire, const Vecteur& u);
+        double prodScalaire(Vecteur& v);
+        Vecteur prodVectoriel(Vecteur& v);
+        Vecteur unitaire();
+
         double x, y, z;
 };
 
