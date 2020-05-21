@@ -27,8 +27,19 @@ Sphere* Sphere::creerFormeCanonique() {
     return new Sphere(Point(0, 0, 0), 1, true);
 }
 
-void Sphere::homothetieFormeCanonique() {
+Sphere* Sphere::getFormeCanonique() {
+    return (Sphere*) formeCanonique;
+}
 
+Point Sphere::getCentre() {
+    return Point(centre);
+}
+
+void Sphere::homothetieFormeCanonique() {
+    Sphere* sphereCanonique = getFormeCanonique();
+
+    Md = Md * Matrice::mat_homothetie(rayon, rayon, rayon);
+    Mi = Mi * Matrice::mat_homothetie(sphereCanonique->rayon / rayon, sphereCanonique->rayon / rayon, sphereCanonique->rayon / rayon);
 }
 
 void Sphere::rotationFormeCanonique() {
