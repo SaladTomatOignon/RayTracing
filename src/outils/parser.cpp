@@ -1,6 +1,5 @@
 #include "../../include/outils/parser.h"
 #include "../../include/rapidjson/document.h"
-#include <iostream>
 #include <fstream>
 #include <algorithm>
 
@@ -36,8 +35,14 @@ Scene Parser::parseJSON(string const fileName) {
     /* Parsing des �l�ments composant la sc�ne. */
     Camera camera = parseCamera(document);
     vector<Forme*> formes = parseFormes(document);
+    Scene scene(camera, formes);
 
-    return Scene(camera, formes);
+    /* Libération des formes parsées allouées */
+    for (const auto* forme : formes) {
+        delete forme;
+    }
+
+    return scene;
 }
 
 Camera Parser::parseCamera(Document& jsonObject) {
