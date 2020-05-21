@@ -1,6 +1,5 @@
 #include "../../include/scene/rectangle.h"
 #include "../../include/geometrie/point.h"
-#include <iostream>
 
 Rectangle::Rectangle(Point a, Point b, Point c, Point d, bool estCanonique) {
     this->a = Point(a);
@@ -30,6 +29,14 @@ Rectangle* Rectangle::creerFormeCanonique() {
     return new Rectangle(Point(-1, -1, 0), Point(-1, 1, 0), Point(1, 1, 0), Point(1, -1, 0), true);
 }
 
+Rectangle* Rectangle::getFormeCanonique() {
+    return (Rectangle*) formeCanonique;
+}
+
+Point Rectangle::getCentre() {
+    return Point(); // TODO
+}
+
 void Rectangle::homothetieFormeCanonique() {
 
 }
@@ -39,5 +46,8 @@ void Rectangle::rotationFormeCanonique() {
 }
 
 void Rectangle::translationFormeCanonique() {
+    Point centre = getCentre();
 
+    Md = Md * Matrice::mat_translation(centre.x, centre.y, centre.z);
+    Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
