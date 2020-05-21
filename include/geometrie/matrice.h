@@ -10,7 +10,8 @@ class Matrice {
         ~Matrice();
 
         double* operator[](int const& i);
-        Matrice operator*(Matrice matrice);
+        Matrice operator*(Matrice& matrice);
+        Matrice& operator=(const Matrice& autre);
 
         static Matrice mat_identite(unsigned int taille);
         static Matrice mat_translation(double x = 0, double y = 0, double z = 0);

@@ -23,20 +23,22 @@ Matrice::Matrice(const Matrice& matrice) : Matrice(matrice.lignes, matrice.colon
 Matrice::~Matrice() {
     for (unsigned int i = 0; i < lignes; i++) {
         delete[] mat[i];
+        mat[i] = nullptr;
     }
 
     delete[] mat;
+    mat = nullptr;
 }
 
 double* Matrice::operator[](int const& i) {
     return mat[i];
 }
 
-Matrice Matrice::operator*(Matrice matrice) {
+Matrice Matrice::operator*(Matrice& matrice) {
     Matrice resultat(lignes, colonnes);
 
     if (this->colonnes != matrice.lignes) {
-        throw std::domain_error::domain_error("Matrices incompatibles pour la multiplication");
+        throw std::domain_error("Matrices incompatibles pour la multiplication");
     }
 
     for (unsigned int i = 0; i < lignes; i++) {
@@ -50,6 +52,22 @@ Matrice Matrice::operator*(Matrice matrice) {
     }
 
     return resultat;
+}
+
+Matrice& Matrice::operator=(const Matrice& autre) {
+    if (&autre != this) {
+        lignes = autre.lignes;
+        colonnes = autre.colonnes;
+
+        /* S'assurer que 'this' a bien alloué ses tableaux */
+        for (unsigned int i = 0; i < autre.lignes; i++) {
+            for (unsigned int j = 0; j < autre.colonnes; j++) {
+                mat[i][j] = autre.mat[i][j];
+            }
+        }
+    }
+
+    return *this;
 }
 
 Matrice Matrice::mat_identite(unsigned int taille) {
