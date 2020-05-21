@@ -1,5 +1,11 @@
 #include "../../include/outils/parser.h"
 #include "../../include/rapidjson/document.h"
+#include "../../include/scene/scene.h"
+#include "../../include/scene/camera.h"
+#include "../../include/scene/grille.h"
+#include "../../include/scene/rectangle.h"
+#include "../../include/scene/sphere.h"
+#include "../../include/scene/triangle.h"
 #include <fstream>
 #include <algorithm>
 
@@ -34,8 +40,9 @@ Scene Parser::parseJSON(string const fileName) {
 
     /* Parsing des �l�ments composant la sc�ne. */
     Camera camera = parseCamera(document);
+    Grille grille = parseGrille(document);
     vector<Forme*> formes = parseFormes(document);
-    Scene scene(camera, formes);
+    Scene scene(camera, grille, formes);
 
     /* Libération des formes parsées allouées */
     for (const auto* forme : formes) {
@@ -67,6 +74,59 @@ Camera Parser::parseCamera(Document& jsonObject) {
     }
 
     return Camera(camera_position, camera_orientation);
+}
+
+Grille Parser::parseGrille(Document& jsonObject) {
+    /* R�cup�ration de la distance focale. */
+    double distanceFocale;
+    if (!jsonObject.HasMember("distance_focale")) {
+        throw logic_error("Distance focale de la caméra manquante.");
+    } else {
+        distanceFocale = jsonObject["distance_focale"].GetDouble();
+    }
+
+    /* R�cup�ration de la taille en largeur de la grille. */
+    double definitionLargeur;
+    if (!jsonObject.HasMember("definition_largeur")) {
+        throw logic_error("Taille en largeur de la grille manquante.");
+    } else {
+        definitionLargeur = jsonObject["definition_largeur"].GetDouble();
+    }
+
+    /* R�cup�ration de la taille en hauteur de la grille. */
+    double definitionHauteur;
+    if (!jsonObject.HasMember("definition_hauteur")) {
+        throw logic_error("Taille en hauteur de la grille manquante.");
+    } else {
+        definitionHauteur = jsonObject["definition_hauteur"].GetDouble();
+    }
+
+    /* R�cup�ration de la resolution en largeur de la grille. */
+    unsigned int resolutionLargeur;
+    if (!jsonObject.HasMember("resolution_largeur")) {
+        throw logic_error("Resolution en largeur de la grille manquante.");
+    } else {
+        resolutionLargeur = jsonObject["resolution_largeur"].GetInt();
+    }
+
+    /* R�cup�ration de la resolution en hauteur de la grille. */
+    unsigned int resolutionHauteur;
+    if (!jsonObject.HasMember("resolution_hauteur")) {
+        throw logic_error("Resolution en hauteur de la grille manquante.");
+    } else {
+        resolutionHauteur = jsonObject["resolution_hauteur"].GetInt();
+    }
+
+    /* Recuperation de l'inclinaison de la grille */
+    Vecteur grilleInclinaison;
+    if (!jsonObject.HasMember("inclinaison_grille") || !jsonObject["inclinaison_grille"].IsArray() || jsonObject["inclinaison_grille"].GetArray().Size() != 3) {
+        throw logic_error("Inclinaison de la grille manquante ou invalide");
+    } else {
+        const Value& coords = jsonObject["inclinaison_grille"];
+        grilleInclinaison = Vecteur(coords[0].GetDouble(), coords[1].GetDouble(), coords[2].GetDouble());
+    }
+
+    return Grille(definitionLargeur, definitionHauteur, resolutionLargeur, resolutionHauteur, distanceFocale, grilleInclinaison);
 }
 
 vector<Forme*> Parser::parseFormes(Document& jsonObject) {

@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <vector>
-#include "../scene/scene.h"
 #include "../rapidjson/document.h"
+#include "../scene/scene.h"
+#include "../scene/camera.h"
+#include "../scene/grille.h"
 #include "../scene/sphere.h"
 #include "../scene/rectangle.h"
 #include "../scene/triangle.h"
@@ -35,6 +37,7 @@ class Parser {
         };
 
         static Camera parseCamera(Document& jsonObject);
+        static Grille parseGrille(Document& jsonObject);
         static vector<Forme*> parseFormes(Document& jsonObject);
         static TypeForme getTypeForme(string forme);
         static Forme* parseForme(Value& forme);

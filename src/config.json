@@ -1,6 +1,16 @@
 {
-    "camera_position": [ 1, 2, 3 ],
-    "camera_orientation": [ 4, 5, 6 ],
+    "camera_position": [ 2, 2, 2 ],
+    "camera_orientation": [ 0, 0, 1 ],
+
+    "distance_focale": 5,
+
+    "definition_largeur": 50,
+    "definition_hauteur": 50,
+
+    "resolution_largeur": 100,
+    "resolution_hauteur": 100,
+
+    "inclinaison_grille": [0, 1, 0],
 
     "formes": [
         {
