@@ -10,9 +10,8 @@ Scene::Scene(Camera camera, vector<Forme*> formes) {
     this->formes = vector<Forme*>();
 
     /* Copie du vector de Forme. */
-    for each (Forme* forme in formes) {
-        Forme* test = forme->clone();
-        this->formes.push_back(test);
+    for (const auto* forme : formes) {
+        this->formes.push_back(forme->clone());
     }
 }
 
