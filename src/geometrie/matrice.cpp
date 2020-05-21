@@ -34,7 +34,7 @@ double* Matrice::operator[](int const& i) {
     return mat[i];
 }
 
-Matrice Matrice::operator*(Matrice& matrice) {
+Matrice Matrice::operator*(Matrice matrice) {
     Matrice resultat(lignes, colonnes);
 
     if (this->colonnes != matrice.lignes) {
@@ -59,7 +59,7 @@ Matrice& Matrice::operator=(const Matrice& autre) {
         lignes = autre.lignes;
         colonnes = autre.colonnes;
 
-        /* S'assurer que 'this' a bien alloué ses tableaux */
+        /* S'assurer que 'this' a bien allouï¿½ ses tableaux */
         for (unsigned int i = 0; i < autre.lignes; i++) {
             for (unsigned int j = 0; j < autre.colonnes; j++) {
                 mat[i][j] = autre.mat[i][j];
