@@ -14,7 +14,6 @@ class Scene {
         Scene(Camera camera, Grille grille, vector<Forme*> formes);
         ~Scene();
 
-    private:
         Camera camera;
         Grille grille;
         vector<Forme*> formes;
