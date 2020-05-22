@@ -1,13 +1,10 @@
 #include "../../include/scene/sphere.h"
 #include "../../include/geometrie/point.h"
+#include "../../include/geometrie/matrice.h"
 
 Sphere::Sphere(Point centre, double rayon, bool estCanonique) {
     this->centre = Point(centre);
     this->rayon = rayon;
-
-    if (!estCanonique) {
-        initialiserMatricesTransformation();
-    }
 }
 
 Sphere::Sphere(Point centre, double rayon) : Sphere(centre, rayon, false) {

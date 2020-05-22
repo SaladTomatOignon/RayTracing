@@ -1,15 +1,12 @@
 #include "../../include/scene/rectangle.h"
 #include "../../include/geometrie/point.h"
+#include "../../include/geometrie/matrice.h"
 
 Rectangle::Rectangle(Point a, Point b, Point c, Point d, bool estCanonique) {
     this->a = Point(a);
     this->b = Point(b);
     this->c = Point(c);
     this->d = Point(d);
-
-    if (!estCanonique) {
-        initialiserMatricesTransformation();
-    }
 }
 
 Rectangle::Rectangle(Point a, Point b, Point c, Point d) : Rectangle(a, b, c, d, false) {

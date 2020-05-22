@@ -1,14 +1,11 @@
 #include "../../include/scene/triangle.h"
 #include "../../include/geometrie/point.h"
+#include "../../include/geometrie/matrice.h"
 
 Triangle::Triangle(Point a, Point b, Point c, bool estCanonique) {
     this->a = Point(a);
     this->b = Point(b);
     this->c = Point(c);
-
-    if (!estCanonique) {
-        initialiserMatricesTransformation();
-    }
 }
 
 Triangle::Triangle(Point a, Point b, Point c) : Triangle(a, b, c, false) {
