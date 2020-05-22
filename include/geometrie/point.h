@@ -11,6 +11,11 @@ class Point {
         ~Point();
 
         Point operator+(const Vecteur& v);
+        Point operator-(const Point& p);
+        Point operator-(const Vecteur& v);
+
+        static Vecteur creerVecteur(Point a, Point b);
+        double distance(Point a);
 
         double x, y, z;
 };
