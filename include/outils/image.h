@@ -1,7 +1,7 @@
 #ifndef DEF__IMAGE
 #define DEF__IMAGE
 
-#include "../scene/pixel.h"
+#include "../scene/couleur.h"
 
 class Image {
     public:
@@ -9,7 +9,7 @@ class Image {
         Image(const Image& image);
         ~Image();
 
-        Pixel* operator[](int const& i);
+        Couleur* operator[](int const& i);
 
         /*!
          * \brief Cr�e un nouveau fichier au format ppm contenant les pixels associ� � cette image.
@@ -19,9 +19,8 @@ class Image {
          */
         void exportPPM(const char* fileName);
 
-    private:
         unsigned int largeur, hauteur;
-        Pixel** valeurs;
+        Couleur** valeurs;
 };
 
 #endif

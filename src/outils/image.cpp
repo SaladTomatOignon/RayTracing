@@ -1,6 +1,5 @@
 #include "../../include/outils/image.h"
-#include "../../include/scene/pixel.h"
-#include <iostream>
+#include "../../include/scene/couleur.h"
 #include <fstream>
 
 using namespace std;
@@ -9,29 +8,29 @@ Image::Image(unsigned int largeur, unsigned int hauteur) {
     this->largeur = largeur;
     this->hauteur = hauteur;
 
-    this->valeurs = new Pixel* [hauteur];
-    for (int i = 0; i < hauteur; i++) {
-        this->valeurs[i] = new Pixel[largeur];
+    this->valeurs = new Couleur* [hauteur];
+    for (unsigned int i = 0; i < hauteur; i++) {
+        this->valeurs[i] = new Couleur[largeur];
     }
 }
 
 Image::Image(const Image& image) : Image(image.largeur, image.hauteur) {
-    for (int i = 0; i < hauteur; i++) {
-        for (int j = 0; j < largeur; j++) {
-            this->valeurs[i][j] = Pixel(image.valeurs[i][j]);
+    for (unsigned int i = 0; i < hauteur; i++) {
+        for (unsigned int j = 0; j < largeur; j++) {
+            this->valeurs[i][j] = Couleur(image.valeurs[i][j]);
         }
     }
 }
 
 Image::~Image() {
-    for (int i = 0; i < hauteur; i++) {
+    for (unsigned int i = 0; i < hauteur; i++) {
         delete [] valeurs[i];
     }
 
     delete [] valeurs;
 }
 
-Pixel* Image::operator[](int const& i) {
+Couleur* Image::operator[](int const& i) {
     return valeurs[i];
 }
 
@@ -43,11 +42,11 @@ void Image::exportPPM(const char* fileName) {
     fichier << largeur << " " << hauteur << endl;
     fichier << "255" << endl;
 
-    for (int i = 0; i < hauteur; i++) {
-        for (int j = 0; j < largeur; j++) {
-            fichier << valeurs[i][j].r << " " << valeurs[i][j].g << " " << valeurs[i][j].b;
+    for (unsigned int i = 0; i < hauteur; i++) {
+        for (unsigned int j = 0; j < largeur; j++) {
+            fichier << (int) valeurs[i][j].r << " " << (int) valeurs[i][j].g << " " << (int) valeurs[i][j].b;
             if (j < largeur - 1) {
-                fichier << "\t";
+                fichier << '\t';
             }
         }
         fichier << endl;

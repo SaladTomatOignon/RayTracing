@@ -1,8 +1,8 @@
 #ifndef DEF__PARSER
 #define DEF__PARSER
 
-#include <iostream>
 #include <vector>
+#include <string>
 #include "../rapidjson/document.h"
 #include "../scene/scene.h"
 #include "../scene/camera.h"
@@ -10,8 +10,8 @@
 #include "../scene/sphere.h"
 #include "../scene/rectangle.h"
 #include "../scene/triangle.h"
+#include "../scene/couleur.h"
 
-using namespace std;
 using namespace rapidjson;
 
 class Parser {
@@ -42,6 +42,7 @@ class Parser {
         static TypeForme getTypeForme(string forme);
         static Forme* parseForme(Value& forme);
         static Point getPoint(Value& forme, const char* champ);
+        static Couleur getCouleur(Value& forme);
         static Sphere* parseSphere(Value& forme);
         static Rectangle* parseRectangle(Value& forme);
         static Triangle* parseTriangle(Value& forme);

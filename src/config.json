@@ -1,37 +1,23 @@
 {
-    "camera_position": [ 2, 2, 2 ],
-    "camera_orientation": [ 0, 0, 1 ],
+    "camera_position": [ 0, 0, 2 ],
+    "camera_orientation": [ 0, 1, 0 ],
 
-    "distance_focale": 5,
+    "distance_focale": 2,
 
-    "definition_largeur": 50,
-    "definition_hauteur": 50,
+    "definition_largeur": 30,
+    "definition_hauteur": 30,
 
-    "resolution_largeur": 100,
-    "resolution_hauteur": 100,
+    "resolution_largeur": 800,
+    "resolution_hauteur": 800,
 
-    "inclinaison_grille": [0, 1, 0],
+    "inclinaison_grille": [1, 0, 0],
 
     "formes": [
         {
             "type": "sphere",
-            "centre": [ 7, 8, 9 ],
-            "rayon": 5
-        },
-
-        {
-            "type": "rectangle",
-            "pointA": [ 1, 2, 3 ],
-            "pointB": [ 4, 5, 6 ],
-            "pointC": [ 7, 8, 9 ],
-            "pointD": [ 10, 11, 12 ]
-        },
-
-        {
-            "type": "triangle",
-            "pointA": [ 1, 2, 3 ],
-            "pointB": [ 4, 5, 6 ],
-            "pointC": [ 7, 8, 9 ]
+            "couleur": "FF0000",
+            "centre": [ 0, 40, 2 ],
+            "rayon": 30
         }
     ]
 }

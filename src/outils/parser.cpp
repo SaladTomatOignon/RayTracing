@@ -8,6 +8,7 @@
 #include "../../include/scene/triangle.h"
 #include <fstream>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 using namespace rapidjson;
@@ -200,7 +201,30 @@ Point Parser::getPoint(Value& forme, const char* champ) {
     return point;
 }
 
+Couleur Parser::getCouleur(Value& forme) {
+    int r = 0, g = 0, b = 0;
+
+    if (!forme.HasMember("couleur") || !forme["couleur"].IsString()) {
+        throw logic_error("Vous devez indiquer une couleur pour chaque forme");
+    } else {
+        const Value& codeCouleur = forme["couleur"];
+
+        try {
+            r = stoi(string(codeCouleur.GetString()).substr(0, 2), nullptr, 16);
+            g = stoi(string(codeCouleur.GetString()).substr(2, 2), nullptr, 16);
+            b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16);
+        } catch (...) {
+            throw logic_error("Le code couleur d'une forme est mal formé");
+        }
+    }
+
+    return Couleur(r, g, b);
+}
+
 Sphere* Parser::parseSphere(Value& forme) {
+    /* Récupération de la couleur */
+    Couleur couleur = getCouleur(forme);
+
     /* R�cup�ration du centre de la sph�re. */
     Point centre;
     try {
@@ -217,10 +241,13 @@ Sphere* Parser::parseSphere(Value& forme) {
         rayon = forme["rayon"].GetDouble();
     }
 
-    return new Sphere(centre, rayon);
+    return new Sphere(centre, rayon, couleur);
 }
 
 Rectangle* Parser::parseRectangle(Value& forme) {
+    /* Récupération de la couleur */
+    Couleur couleur = getCouleur(forme);
+
     /* D�termination du point A */
     Point pointA;
     try {
@@ -253,10 +280,13 @@ Rectangle* Parser::parseRectangle(Value& forme) {
         throw logic_error("Point D du rectangle manquant ou invalide.");
     }
 
-    return new Rectangle(pointA, pointB, pointC, pointD);
+    return new Rectangle(pointA, pointB, pointC, pointD, couleur);
 }
 
 Triangle* Parser::parseTriangle(Value& forme) {
+    /* Récupération de la couleur */
+    Couleur couleur = getCouleur(forme);
+
     /* D�termination du point A */
     Point pointA;
     try {
@@ -281,5 +311,5 @@ Triangle* Parser::parseTriangle(Value& forme) {
         throw logic_error("Point C du triangle manquant ou invalide.");
     }
 
-    return new Triangle(pointA, pointB, pointC);
+    return new Triangle(pointA, pointB, pointC, couleur);
 }

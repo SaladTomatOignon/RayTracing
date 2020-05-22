@@ -3,10 +3,13 @@
 
 #include "../scene/forme.h"
 #include "../geometrie/point.h"
+#include "../geometrie/rayon.h"
+#include "../scene/couleur.h"
 
 class Triangle : public Forme {
     public:
         Triangle(Point a, Point b, Point c);
+        Triangle(Point a, Point b, Point c, Couleur couleur);
         Triangle(const Triangle& tr);
         ~Triangle();
 
@@ -14,14 +17,16 @@ class Triangle : public Forme {
             return new Triangle(*this);
         };
 
+        virtual Point getCentre() override;
+        virtual bool intersection(Rayon r, Point& intersection, Vecteur& normale) override;
+
     private:
         Point a, b, c;
 
-        Triangle(Point a, Point b, Point c, bool estCanonique);
+        Triangle(Point a, Point b, Point c, Couleur couleur, bool estCanonique);
 
         virtual Triangle* creerFormeCanonique() override;
         virtual Triangle* getFormeCanonique() override;
-        virtual Point getCentre() override;
         virtual void homothetieFormeCanonique() override;
         virtual void rotationFormeCanonique() override;
         virtual void translationFormeCanonique() override;

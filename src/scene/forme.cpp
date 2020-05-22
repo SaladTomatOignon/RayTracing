@@ -1,8 +1,14 @@
 #include "../../include/scene/forme.h"
-#include <iostream>
+#include "../../include/scene/couleur.h"
 
-Forme::Forme() {
+Forme::Forme() : Forme(Couleur()) {
+
+}
+
+Forme::Forme(Couleur couleur) {
     formeCanonique = nullptr;
+
+    this->couleur = couleur;
 }
 
 Forme::~Forme() {
