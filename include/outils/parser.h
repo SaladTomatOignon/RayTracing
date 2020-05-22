@@ -10,6 +10,7 @@
 #include "../scene/sphere.h"
 #include "../scene/rectangle.h"
 #include "../scene/triangle.h"
+#include "../scene/cylindre.h"
 #include "../scene/couleur.h"
 
 using namespace rapidjson;
@@ -33,6 +34,7 @@ class Parser {
             SPHERE,
             RECTANGLE,
             TRIANGLE,
+            CYLINDRE,
             NONE
         };
 
@@ -46,6 +48,7 @@ class Parser {
         static Sphere* parseSphere(Value& forme);
         static Rectangle* parseRectangle(Value& forme);
         static Triangle* parseTriangle(Value& forme);
+        static Cylindre* parseCylindre(Value& forme);
 };
 
 #endif

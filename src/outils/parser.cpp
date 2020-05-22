@@ -181,6 +181,9 @@ Forme* Parser::parseForme(Value& forme) {
             case TypeForme::TRIANGLE:
                 return parseTriangle(forme);
                 break;
+            case TypeForme::CYLINDRE:
+                return parseCylindre(forme);
+                break;
             default:
                 return nullptr;
                 break;
@@ -312,4 +315,35 @@ Triangle* Parser::parseTriangle(Value& forme) {
     }
 
     return new Triangle(pointA, pointB, pointC, couleur);
+}
+
+Cylindre* Parser::parseCylindre(Value& forme) {
+    /* Récupération de la couleur */
+    Couleur couleur = getCouleur(forme);
+
+    /* Détermination du point A */
+    Point pointA;
+    try {
+        pointA = getPoint(forme, "pointA");
+    } catch (logic_error le) {
+        throw logic_error("Point A du cylindre manquant ou invalide.");
+    }
+
+    /* Détermination du point B */
+    Point pointB;
+    try {
+        pointB = getPoint(forme, "pointB");
+    } catch (logic_error le) {
+        throw logic_error("Point B du cylindre manquant ou invalide.");
+    }
+
+    /* Récupération du rayon du cylindre. */
+    double rayon;
+    if (!forme.HasMember("rayon")) {
+        throw logic_error("Rayon du cylindre manquant.");
+    } else {
+        rayon = forme["rayon"].GetDouble();
+    }
+
+    return new Cylindre(pointA, pointB, rayon, couleur);
 }
