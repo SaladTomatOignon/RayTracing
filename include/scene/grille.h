@@ -12,6 +12,13 @@ class Grille {
         Grille(const Grille& grille);
         ~Grille();
 
+        /**
+         * @brief Renvoie la surface de la grille correspondant au pixel de l'image.
+         * Le point (0,0) correspond au pixel "en haut à gauche" de la grille et le point(max, max) au pixel "en bas à droite".
+         * @param i La ligne du pixel
+         * @param j La colonne de la grille
+         * @return Un rectangle correspondant à la surface du pixel de la grille.
+        */
         Rectangle at(unsigned int i, unsigned int j);
         void positionner(Camera camera);
 

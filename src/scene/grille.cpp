@@ -21,7 +21,9 @@ Grille::Grille(double largeur, double hauteur, unsigned int resolution_l, unsign
 }
 
 Grille::Grille(const Grille& grille) : Grille(grille.largeur, grille.hauteur, grille.resolution_l, grille.resolution_h, grille.distance_focale, Vecteur(grille.inclinaison_h)) {
-
+    this->inclinaison_v = grille.inclinaison_v;
+    this->position = grille.position;
+    this->estPositionne = grille.estPositionne;
 }
 
 Grille::~Grille() {
@@ -31,8 +33,8 @@ Grille::~Grille() {
 void Grille::positionner(Camera camera) {
     /* On suppose que la caméra est au mileu de la grille à une distance `distance_focale` en z. */
     inclinaison_v = inclinaison_h.prodVectoriel(camera.orientation);
-    /* a = Position de la caméra. b = Position du point qu'on cherche (le point en bas à gauche de la grille) */
-    Vecteur ab = distance_focale * camera.orientation - (resolution_l / 2) * inclinaison_h - (resolution_h / 2) * inclinaison_v;
+    /* a = Position de la caméra. b = Position du point qu'on cherche (le point en haut à gauche de la grille) */
+    Vecteur ab = distance_focale * camera.orientation - (resolution_l / 2) * inclinaison_h + (resolution_h / 2) * inclinaison_v;
 
     position = camera.position + ab;
     estPositionne = true;
@@ -51,9 +53,9 @@ Rectangle Grille::at(unsigned int i, unsigned int j) {
     double tailleCaseHauteur = hauteur / resolution_h;
 
     return Rectangle(
-        Point(position), /* Point bas gauche */
-        Point(position + (i + 1.0) * tailleCaseHauteur * inclinaison_v), /* Point haut gauche */
-        Point(position + (i + 1.0) * tailleCaseHauteur * inclinaison_v + (j + 1.0) * tailleCaseLargeur * inclinaison_h), /* Point haut droit */
-        Point(position + (j + 1.0) * tailleCaseLargeur * inclinaison_h) /* Point bas droit */
+        Point(position), /* Point haut gauche */
+        Point(position - (i + 1.0) * tailleCaseHauteur * inclinaison_v), /* Point bas gauche */
+        Point(position - (i + 1.0) * tailleCaseHauteur * inclinaison_v + (j + 1.0) * tailleCaseLargeur * inclinaison_h), /* Point bas droit */
+        Point(position + (j + 1.0) * tailleCaseLargeur * inclinaison_h) /* Point haut droit */
     );
 }
