@@ -2,7 +2,7 @@
 #define DEF__SPHERE
 
 #include "../scene/forme.h"
-#include "../scene/couleur.h"
+#include "../outils/couleur.h"
 #include "../geometrie/point.h"
 #include "../geometrie/rayon.h"
 

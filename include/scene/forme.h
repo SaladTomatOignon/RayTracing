@@ -4,7 +4,7 @@
 #include "../geometrie/matrice.h"
 #include "../geometrie/point.h"
 #include "../geometrie/rayon.h"
-#include "../scene/couleur.h"
+#include "../outils/couleur.h"
 
 class Forme {
     public:

@@ -1,7 +1,7 @@
 #ifndef DEF__IMAGE
 #define DEF__IMAGE
 
-#include "../scene/couleur.h"
+#include "../outils/couleur.h"
 
 class Image {
     public:

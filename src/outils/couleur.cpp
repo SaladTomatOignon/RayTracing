@@ -1,4 +1,4 @@
-#include "../../include/scene/couleur.h"
+#include "../../include/outils/couleur.h"
 
 Couleur::Couleur() : Couleur(0, 0, 0) {
 

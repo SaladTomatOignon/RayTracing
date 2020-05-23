@@ -11,7 +11,7 @@
 #include "../scene/rectangle.h"
 #include "../scene/triangle.h"
 #include "../scene/cylindre.h"
-#include "../scene/couleur.h"
+#include "../outils/couleur.h"
 
 using namespace rapidjson;
 
