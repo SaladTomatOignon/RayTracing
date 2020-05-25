@@ -1,5 +1,5 @@
 #include "../../include/scene/rectangle.h"
-#include "../../include/scene/couleur.h"
+#include "../../include/outils/couleur.h"
 #include "../../include/geometrie/point.h"
 #include "../../include/geometrie/matrice.h"
 #include "../../include/geometrie/rayon.h"

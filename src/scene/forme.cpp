@@ -1,5 +1,5 @@
 #include "../../include/scene/forme.h"
-#include "../../include/scene/couleur.h"
+#include "../../include/outils/couleur.h"
 
 Forme::Forme() : Forme(Couleur()) {
 
