@@ -65,3 +65,7 @@ Vecteur Vecteur::unitaire() {
                    z / sqrt(prodScalaire(*this))
                   );
 }
+
+double Vecteur::sommeCoeff(Vecteur& vecteur) {
+    return vecteur.x + vecteur.y + vecteur.z;
+}

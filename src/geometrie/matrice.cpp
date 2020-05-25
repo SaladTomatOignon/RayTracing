@@ -34,7 +34,7 @@ double* Matrice::operator[](int const& i) {
     return mat[i];
 }
 
-Matrice Matrice::operator*(Matrice matrice) {
+Matrice Matrice::operator*(Matrice& matrice) {
     Matrice resultat(lignes, colonnes);
 
     if (this->colonnes != matrice.lignes) {
@@ -52,6 +52,20 @@ Matrice Matrice::operator*(Matrice matrice) {
     }
 
     return resultat;
+}
+
+Vecteur Matrice::operator*(Vecteur& vecteur) {
+    double x = 0, y = 0, z = 0;
+
+    if (this->colonnes != 4) {
+        throw std::domain_error("Matrice incompatible pour la multiplication");
+    }
+
+    x = mat[0][0] * vecteur.x + mat[0][1] * vecteur.y + mat[0][2] * vecteur.z;
+    y = mat[1][0] * vecteur.x + mat[1][1] * vecteur.y + mat[1][2] * vecteur.z;
+    z = mat[2][0] * vecteur.x + mat[2][1] * vecteur.y + mat[2][2] * vecteur.z;
+
+    return Vecteur(x, y, z);
 }
 
 Matrice& Matrice::operator=(const Matrice& autre) {

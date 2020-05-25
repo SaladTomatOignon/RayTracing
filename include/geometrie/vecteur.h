@@ -1,6 +1,9 @@
 #ifndef DEF__VECTEUR
 #define DEF__VECTEUR
 
+#define _EPSILON_ (1.e-6)
+#define _ZERO_ (0 + _EPSILON_)
+
 class Vecteur {
     public:
         Vecteur();
@@ -16,6 +19,13 @@ class Vecteur {
         double prodScalaire(Vecteur& v);
         Vecteur prodVectoriel(Vecteur& v);
         Vecteur unitaire();
+
+        /**
+         * @brief Renvoie la somme des coefficients du vecteur en paramètre.
+         * @param vecteur 
+         * @return La somme des coefficients du vecteur.
+        */
+        static double sommeCoeff(Vecteur& vecteur);
 
         double x, y, z;
 };
