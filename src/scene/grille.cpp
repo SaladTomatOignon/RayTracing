@@ -8,7 +8,7 @@ Grille::Grille() : Grille(0, 0, 0, 0, 0, Vecteur()) {
 }
 
 Grille::Grille(double largeur, double hauteur, unsigned int resolution_l, unsigned int resolution_h, double distance_focale, Vecteur inclinaison) {
-    if (inclinaison != inclinaison.unitaire()) { /* Si le vecteur donné n'est pas unitaire */
+    if (abs(Vecteur::sommeCoeff(inclinaison - inclinaison.unitaire())) > _ZERO_) {
         throw std::invalid_argument("Le vecteur d'inclinaison de la grille doit être un vecteur unitaire");
     }
 
@@ -32,7 +32,7 @@ Grille::~Grille() {
 
 void Grille::positionner(Camera camera) {
     /* On suppose que la caméra est au mileu de la grille à une distance `distance_focale` en z. */
-    inclinaison_v = inclinaison_h.prodVectoriel(camera.orientation);
+    inclinaison_v = -1 * inclinaison_h.prodVectoriel(camera.orientation).unitaire();
     /* a = Position de la caméra. b = Position du point qu'on cherche (le point en haut à gauche de la grille) */
     Vecteur ab = distance_focale * camera.orientation - (resolution_l / 2) * inclinaison_h + (resolution_h / 2) * inclinaison_v;
 
