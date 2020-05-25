@@ -10,7 +10,7 @@
 
 using namespace std;
 
-SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene) {
+SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput) {
     m_titreFenetre = titreFenetre;
     m_largeurFenetre = largeurFenetre;
     m_hauteurFenetre = hauteurFenetre;
@@ -18,6 +18,7 @@ SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFen
     m_contexteOpenGL = nullptr;
     m_scene = Scene(scene);
     m_input = Input();
+    m_fichierOutput = fichierOutput;
 }
 
 SceneOpenGL::~SceneOpenGL() {
@@ -121,6 +122,10 @@ void SceneOpenGL::bouclePrincipale() {
         if (m_input.getTouche(SDL_SCANCODE_ESCAPE))
             break;
 
+        if (m_input.getTouche(SDL_SCANCODE_RETURN)) {
+            rendu.exportPPM(m_fichierOutput.c_str());
+        }
+
         deplacerCamera();
         orienterCamera();
 
@@ -153,13 +158,13 @@ void SceneOpenGL::afficherImage(Image& image) {
 
     for (unsigned int i = 0; i < image.hauteur; i++) {
         for (unsigned int j = 0; j < image.largeur; j++) {
-            window_RGBData[3 * (i * image.hauteur + j) + 0] = image[image.hauteur - 1 - i][j].r;
-            window_RGBData[3 * (i * image.hauteur + j) + 1] = image[image.hauteur - 1 - i][j].g;
-            window_RGBData[3 * (i * image.hauteur + j) + 2] = image[image.hauteur - 1 - i][j].b;
+            window_RGBData[3 * (i * image.largeur + j) + 0] = image[image.hauteur - 1 - i][j].r;
+            window_RGBData[3 * (i * image.largeur + j) + 1] = image[image.hauteur - 1 - i][j].g;
+            window_RGBData[3 * (i * image.largeur + j) + 2] = image[image.hauteur - 1 - i][j].b;
         }
     }
 
-    glDrawPixels(300, 300, GL_RGB, GL_UNSIGNED_BYTE, window_RGBData);
+    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_UNSIGNED_BYTE, window_RGBData);
 
     delete [] window_RGBData;
 }
@@ -169,13 +174,23 @@ void SceneOpenGL::deplacerCamera() {
 
     /* ATTENTION : SDL ne considère que les clavier QWERTY */
 
+    if (m_input.getTouche(SDL_SCANCODE_Q)) {
+        m_scene.camera.translater(Camera::DIRECTION::DERRIERE);
+        deplacer = true;
+    }
+
+    if (m_input.getTouche(SDL_SCANCODE_E)) {
+        m_scene.camera.translater(Camera::DIRECTION::DEVANT);
+        deplacer = true;
+    }
+
     if (m_input.getTouche(SDL_SCANCODE_A)) {
         m_scene.camera.translater(Camera::DIRECTION::GAUCHE);
         deplacer = true;
     }
 
     if (m_input.getTouche(SDL_SCANCODE_W)) {
-        m_scene.camera.translater(Camera::DIRECTION::DEVANT);
+        m_scene.camera.translater(Camera::DIRECTION::HAUT);
         deplacer = true;
     }
 
@@ -185,7 +200,7 @@ void SceneOpenGL::deplacerCamera() {
     }
 
     if (m_input.getTouche(SDL_SCANCODE_S)) {
-        m_scene.camera.translater(Camera::DIRECTION::DERRIERE);
+        m_scene.camera.translater(Camera::DIRECTION::BAS);
         deplacer = true;
     }
 

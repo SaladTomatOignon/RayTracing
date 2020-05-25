@@ -18,7 +18,7 @@
 
 class SceneOpenGL {
     public:
-        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene);
+        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput);
         ~SceneOpenGL();
 
         bool initialiserFenetre();
@@ -38,6 +38,7 @@ class SceneOpenGL {
         Input m_input;
 
         Scene m_scene;
+        string m_fichierOutput;
 
         void afficherImage(Image& image);
         void deplacerCamera();
