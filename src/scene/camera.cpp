@@ -23,3 +23,39 @@ Camera::Camera(Point position, Vecteur orientation) {
 Camera::~Camera() {
 
 }
+
+void Camera::translater(DIRECTION direction) {
+    switch (direction) {
+        case DIRECTION::GAUCHE:
+            break;
+        case DIRECTION::HAUT:
+            break;
+        case DIRECTION::DROITE:
+            break;
+        case DIRECTION::BAS:
+            break;
+        case DIRECTION::DEVANT:
+            position = position + orientation.unitaire();
+            break;
+        case DIRECTION::DERRIERE:
+            position = position - orientation.unitaire();
+            break;
+        default:
+            break;
+    }
+}
+
+void Camera::orienter(DIRECTION direction) {
+    switch (direction) {
+        case DIRECTION::GAUCHE:
+            break;
+        case DIRECTION::HAUT:
+            break;
+        case DIRECTION::DROITE:
+            break;
+        case DIRECTION::BAS:
+            break;
+        default:
+            break;
+    }
+}
