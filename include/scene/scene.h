@@ -12,6 +12,7 @@ class Scene {
     public:
         Scene();
         Scene(Camera camera, Grille grille, vector<Forme*> formes);
+        Scene(const Scene& scene);
         ~Scene();
 
         Camera camera;

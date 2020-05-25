@@ -1,5 +1,4 @@
 #include "../../include/scene/scene.h"
-#include <algorithm>
 
 Scene::Scene() : Scene(Camera(), Grille(), vector<Forme*>()) {
 
@@ -16,6 +15,10 @@ Scene::Scene(Camera camera, Grille grille, vector<Forme*> formes) {
     for (const auto* forme : formes) {
         this->formes.push_back(forme->clone());
     }
+}
+
+Scene::Scene(const Scene& scene) : Scene(scene.camera, scene.grille, scene.formes) {
+
 }
 
 Scene::~Scene() {
