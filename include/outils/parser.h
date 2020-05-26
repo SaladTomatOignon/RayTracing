@@ -13,6 +13,7 @@
 #include "../scene/cylindre.h"
 #include "../scene/lumiere.h"
 #include "../outils/couleur.h"
+#include "../outils/materiau.h"
 
 using namespace rapidjson;
 
@@ -47,6 +48,7 @@ class Parser {
         static TypeForme getTypeForme(string forme);
         static Forme* parseForme(Value& forme);
         static Point getPoint(Value& forme, const char* champ);
+        static Materiau getMateriau(Value& forme);
         static Couleur getCouleur(Value& forme);
         static Sphere* parseSphere(Value& forme);
         static Rectangle* parseRectangle(Value& forme);

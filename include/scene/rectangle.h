@@ -2,14 +2,14 @@
 #define DEF__RECTANGLE
 
 #include "../scene/forme.h"
-#include "../outils/couleur.h"
+#include "../outils/materiau.h"
 #include "../geometrie/point.h"
 #include "../geometrie/rayon.h"
 
 class Rectangle : public Forme {
     public:
         Rectangle(Point a, Point b, Point c, Point d);
-        Rectangle(Point a, Point b, Point c, Point d, Couleur couleur);
+        Rectangle(Point a, Point b, Point c, Point d, Materiau materiau);
         Rectangle(const Rectangle& rect);
         ~Rectangle();
 
@@ -23,7 +23,7 @@ class Rectangle : public Forme {
     private:
         Point a, b, c, d;
 
-        Rectangle(Point a, Point b, Point c, Point d, Couleur couleur, bool estCanonique);
+        Rectangle(Point a, Point b, Point c, Point d, Materiau materiau, bool estCanonique);
 
         virtual Rectangle* creerFormeCanonique() override;
         virtual Rectangle* getFormeCanonique() override;

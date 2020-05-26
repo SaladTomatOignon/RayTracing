@@ -1,14 +1,14 @@
 #include "../../include/scene/forme.h"
-#include "../../include/outils/couleur.h"
+#include "../../include/outils/materiau.h"
 
-Forme::Forme() : Forme(Couleur()) {
+Forme::Forme() : Forme(Materiau()) {
 
 }
 
-Forme::Forme(Couleur couleur) {
+Forme::Forme(Materiau materiau) {
     formeCanonique = nullptr;
 
-    this->couleur = couleur;
+    this->materiau = Materiau(materiau);
 }
 
 Forme::~Forme() {

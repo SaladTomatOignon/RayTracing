@@ -243,6 +243,21 @@ Point Parser::getPoint(Value& forme, const char* champ) {
     return point;
 }
 
+Materiau Parser::getMateriau(Value& forme) {
+    /* Récupération de la couleur */
+    Couleur couleur = getCouleur(forme);
+
+    /* Récuperation de la valeur de brillance. */
+    int brillance;
+    if (!forme.HasMember("brillance")) {
+        brillance = 0;
+    } else {
+        brillance = forme["brillance"].GetInt();
+    }
+
+    return Materiau(couleur, brillance);
+}
+
 Couleur Parser::getCouleur(Value& forme) {
     int r = 0, g = 0, b = 0;
 
@@ -264,8 +279,8 @@ Couleur Parser::getCouleur(Value& forme) {
 }
 
 Sphere* Parser::parseSphere(Value& forme) {
-    /* Récupération de la couleur */
-    Couleur couleur = getCouleur(forme);
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
 
     /* R�cup�ration du centre de la sph�re. */
     Point centre;
@@ -283,12 +298,12 @@ Sphere* Parser::parseSphere(Value& forme) {
         rayon = forme["rayon"].GetDouble();
     }
 
-    return new Sphere(centre, rayon, couleur);
+    return new Sphere(centre, rayon, materiau);
 }
 
 Rectangle* Parser::parseRectangle(Value& forme) {
-    /* Récupération de la couleur */
-    Couleur couleur = getCouleur(forme);
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
 
     /* D�termination du point A */
     Point pointA;
@@ -322,12 +337,12 @@ Rectangle* Parser::parseRectangle(Value& forme) {
         throw logic_error("Point D du rectangle manquant ou invalide.");
     }
 
-    return new Rectangle(pointA, pointB, pointC, pointD, couleur);
+    return new Rectangle(pointA, pointB, pointC, pointD, materiau);
 }
 
 Triangle* Parser::parseTriangle(Value& forme) {
-    /* Récupération de la couleur */
-    Couleur couleur = getCouleur(forme);
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
 
     /* D�termination du point A */
     Point pointA;
@@ -353,12 +368,12 @@ Triangle* Parser::parseTriangle(Value& forme) {
         throw logic_error("Point C du triangle manquant ou invalide.");
     }
 
-    return new Triangle(pointA, pointB, pointC, couleur);
+    return new Triangle(pointA, pointB, pointC, materiau);
 }
 
 Cylindre* Parser::parseCylindre(Value& forme) {
-    /* Récupération de la couleur */
-    Couleur couleur = getCouleur(forme);
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
 
     /* Détermination du point A */
     Point pointA;
@@ -384,5 +399,5 @@ Cylindre* Parser::parseCylindre(Value& forme) {
         rayon = forme["rayon"].GetDouble();
     }
 
-    return new Cylindre(pointA, pointB, rayon, couleur);
+    return new Cylindre(pointA, pointB, rayon, materiau);
 }

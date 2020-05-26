@@ -2,14 +2,14 @@
 #define DEF__SPHERE
 
 #include "../scene/forme.h"
-#include "../outils/couleur.h"
+#include "../outils/materiau.h"
 #include "../geometrie/point.h"
 #include "../geometrie/rayon.h"
 
 class Sphere : public Forme {
     public:
         Sphere(Point centre, double rayon);
-        Sphere(Point centre, double rayon, Couleur couleur);
+        Sphere(Point centre, double rayon, Materiau materiau);
         Sphere(const Sphere& sphere);
         ~Sphere();
 
@@ -24,7 +24,7 @@ class Sphere : public Forme {
         Point centre;
         double rayon;
 
-        Sphere(Point centre, double rayon, Couleur couleur, bool estCanonique);
+        Sphere(Point centre, double rayon, Materiau materiau, bool estCanonique);
 
         virtual Sphere* creerFormeCanonique() override;
         virtual Sphere* getFormeCanonique() override;

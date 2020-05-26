@@ -1,24 +1,24 @@
 #include "../../include/scene/cylindre.h"
-#include "../../include/outils/couleur.h"
+#include "../../include/outils/materiau.h"
 #include "../../include/geometrie/point.h"
 #include "../../include/geometrie/matrice.h"
 #include "../../include/geometrie/rayon.h"
 
-Cylindre::Cylindre(Point a, Point b, double rayon, Couleur couleur, bool estCanonique) : Forme(couleur) {
+Cylindre::Cylindre(Point a, Point b, double rayon, Materiau materiau, bool estCanonique) : Forme(materiau) {
     this->a = Point(a);
     this->b = Point(b);
     this->rayon = rayon;
 }
 
-Cylindre::Cylindre(Point a, Point b, double rayon, Couleur couleur) : Cylindre(a, b, rayon, couleur, false) {
+Cylindre::Cylindre(Point a, Point b, double rayon, Materiau materiau) : Cylindre(a, b, rayon, materiau, false) {
 
 }
 
-Cylindre::Cylindre(Point a, Point b, double rayon) : Cylindre(a, b, rayon, Couleur(), false) {
+Cylindre::Cylindre(Point a, Point b, double rayon) : Cylindre(a, b, rayon, Materiau(), false) {
 
 }
 
-Cylindre::Cylindre(const Cylindre& cylindre) : Cylindre(cylindre.a, cylindre.b, cylindre.rayon, cylindre.couleur) {
+Cylindre::Cylindre(const Cylindre& cylindre) : Cylindre(cylindre.a, cylindre.b, cylindre.rayon, cylindre.materiau) {
 
 }
 

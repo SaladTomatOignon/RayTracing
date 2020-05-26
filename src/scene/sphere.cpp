@@ -5,20 +5,20 @@
 #include "../../include/geometrie/rayon.h"
 #include <math.h>
 
-Sphere::Sphere(Point centre, double rayon, Couleur couleur, bool estCanonique) : Forme(couleur) {
+Sphere::Sphere(Point centre, double rayon, Materiau materiau, bool estCanonique) : Forme(materiau) {
     this->centre = Point(centre);
     this->rayon = rayon;
 }
 
-Sphere::Sphere(Point centre, double rayon, Couleur couleur) : Sphere(centre, rayon, couleur, false) {
+Sphere::Sphere(Point centre, double rayon, Materiau materiau) : Sphere(centre, rayon, materiau, false) {
 
 }
 
-Sphere::Sphere(Point centre, double rayon) : Sphere(centre, rayon, Couleur(), false) {
+Sphere::Sphere(Point centre, double rayon) : Sphere(centre, rayon, Materiau(), false) {
 
 }
 
-Sphere::Sphere(const Sphere& sphere) : Sphere(sphere.centre, sphere.rayon, sphere.couleur) {
+Sphere::Sphere(const Sphere& sphere) : Sphere(sphere.centre, sphere.rayon, sphere.materiau) {
 
 }
 
@@ -28,7 +28,7 @@ Sphere::~Sphere() {
 
 Sphere* Sphere::creerFormeCanonique() {
     // Sphère de rayon 1 centré à l'origine.
-    return new Sphere(Point(0, 0, 0), 1, Couleur(), true);
+    return new Sphere(Point(0, 0, 0), 1, Materiau(), true);
 }
 
 Sphere* Sphere::getFormeCanonique() {

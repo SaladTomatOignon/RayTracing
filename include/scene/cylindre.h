@@ -2,14 +2,14 @@
 #define DEF__CYLINDRE
 
 #include "../scene/forme.h"
-#include "../outils/couleur.h"
+#include "../outils/materiau.h"
 #include "../geometrie/point.h"
 #include "../geometrie/rayon.h"
 
 class Cylindre : public Forme {
     public:
         Cylindre(Point a, Point b, double rayon);
-        Cylindre(Point a, Point b, double rayon, Couleur couleur);
+        Cylindre(Point a, Point b, double rayon, Materiau materiau);
         Cylindre(const Cylindre& cylindre);
         ~Cylindre();
 
@@ -24,7 +24,7 @@ class Cylindre : public Forme {
         Point a, b;
         double rayon;
 
-        Cylindre(Point a, Point b, double rayon, Couleur couleur, bool estCanonique);
+        Cylindre(Point a, Point b, double rayon, Materiau materiau, bool estCanonique);
 
         virtual Cylindre* creerFormeCanonique() override;
         virtual Cylindre* getFormeCanonique() override;
