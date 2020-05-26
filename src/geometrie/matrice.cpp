@@ -30,11 +30,11 @@ Matrice::~Matrice() {
     mat = nullptr;
 }
 
-double* Matrice::operator[](int const& i) {
+double* Matrice::operator[](int const& i) const {
     return mat[i];
 }
 
-Matrice Matrice::operator*(Matrice& matrice) {
+Matrice Matrice::operator*(const Matrice& matrice) {
     Matrice resultat(lignes, colonnes);
 
     if (this->colonnes != matrice.lignes) {

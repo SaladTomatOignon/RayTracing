@@ -46,7 +46,7 @@ bool SceneOpenGL::initialiserFenetre() {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 
-    // Création de la fenêtre
+    // Crï¿½ation de la fenï¿½tre
     m_fenetre = SDL_CreateWindow(m_titreFenetre.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_largeurFenetre, m_hauteurFenetre, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if (m_fenetre == 0) {
@@ -57,7 +57,7 @@ bool SceneOpenGL::initialiserFenetre() {
     }
 
 
-    // Création du contexte OpenGL
+    // Crï¿½ation du contexte OpenGL
     m_contexteOpenGL = SDL_GL_CreateContext(m_fenetre);
 
     if (m_contexteOpenGL == 0) {
@@ -78,9 +78,9 @@ bool SceneOpenGL::initGL() {
         GLenum initialisationGLEW(glewInit());
 
 
-        // Si l'initialisation a échoué :
+        // Si l'initialisation a ï¿½chouï¿½ :
         if (initialisationGLEW != GLEW_OK) {
-            // On affiche l'erreur grâce à la fonction : glewGetErrorString(GLenum code)
+            // On affiche l'erreur grï¿½ce ï¿½ la fonction : glewGetErrorString(GLenum code)
             cerr << "Erreur d'initialisation de GLEW : " << glewGetErrorString(initialisationGLEW) << endl;
 
             // On quitte la SDL
@@ -93,7 +93,7 @@ bool SceneOpenGL::initGL() {
 
     #endif
 
-    // Tout s'est bien passé, on retourne true
+    // Tout s'est bien passï¿½, on retourne true
     return true;
 }
 
@@ -103,7 +103,7 @@ void SceneOpenGL::bouclePrincipale() {
     Image rendu2(m_scene.grille.resolution_l, m_scene.grille.resolution_h);
     unsigned int iterations = 1;
 
-    // Variables relatives à la boucle
+    // Variables relatives ï¿½ la boucle
     bool terminer = false;
     bool renduProgressif = true;
     unsigned int frameRate(1000 / 50);
@@ -113,7 +113,7 @@ void SceneOpenGL::bouclePrincipale() {
 
     // Boucle principale
     while (!m_input.terminer()) {
-        // On définit le temps de début de boucle
+        // On dï¿½finit le temps de dï¿½but de boucle
         debutBoucle = SDL_GetTicks();
 
         /* --------------------------------------------------------------- */
@@ -122,7 +122,7 @@ void SceneOpenGL::bouclePrincipale() {
 
         Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2);
 
-        // Gestion des évènements
+        // Gestion des ï¿½vï¿½nements
         m_input.updateEvenements();
 
         if (m_input.getTouche(SDL_SCANCODE_ESCAPE))
@@ -136,7 +136,7 @@ void SceneOpenGL::bouclePrincipale() {
             renduProgressif = !renduProgressif;
         }
 
-        /* Pour forcer l'évaluation des 2 méthodes... */
+        /* Pour forcer l'ï¿½valuation des 2 mï¿½thodes... */
         bool deplacer = deplacerCamera();
         bool orienter = orienterCamera();
         if (deplacer || orienter) {
@@ -153,19 +153,19 @@ void SceneOpenGL::bouclePrincipale() {
         /* ---------------------- AFFICHAGE DE L'ECRAN ------------------- */
         /* --------------------------------------------------------------- */
 
-        // Nettoyage de l'écran
+        // Nettoyage de l'ï¿½cran
         glClear(GL_COLOR_BUFFER_BIT);
 
         afficherImage(rendu2);
 
-        // Actualisation de la fenêtre
+        // Actualisation de la fenï¿½tre
         SDL_GL_SwapWindow(m_fenetre);
 
-        // Calcul du temps écoulé
+        // Calcul du temps ï¿½coulï¿½
         finBoucle = SDL_GetTicks();
         tempsEcoule = finBoucle - debutBoucle;
 
-        // Si nécessaire, on met en pause le programme
+        // Si nï¿½cessaire, on met en pause le programme
         if (tempsEcoule < frameRate)
             SDL_Delay(frameRate - tempsEcoule);
     }
@@ -192,7 +192,7 @@ void SceneOpenGL::afficherImage(Image& image) {
 bool SceneOpenGL::deplacerCamera() {
     bool deplacer = false;
 
-    /* ATTENTION : SDL ne considère que les clavier QWERTY */
+    /* ATTENTION : SDL ne considï¿½re que les clavier QWERTY */
 
     if (m_input.getTouche(SDL_SCANCODE_Q)) {
         m_scene.camera.translater(Camera::DIRECTION::DERRIERE);
@@ -256,7 +256,8 @@ bool SceneOpenGL::orienterCamera() {
     }
 
     if (deplacer) {
-        m_scene.grille.inclinaison_h = - 1 * m_scene.camera.orientation.prodVectoriel(Vecteur(0, 1, 0));
+        Vecteur vecteurVertical = Vecteur(0, 1, 0);
+        m_scene.grille.inclinaison_h = -1 * m_scene.camera.orientation.prodVectoriel(vecteurVertical);
         m_scene.grille.positionner(m_scene.camera);
         return true;
     }

@@ -9,8 +9,8 @@ class Matrice {
         Matrice(const Matrice& image);
         ~Matrice();
 
-        double* operator[](int const& i);
-        Matrice operator*(Matrice& matrice);
+        double* operator[](int const& i) const;
+        Matrice operator*(const Matrice& matrice);
         Vecteur operator*(Vecteur& matrice);
         Matrice& operator=(const Matrice& autre);
 

@@ -21,7 +21,7 @@ class Vecteur {
         Vecteur unitaire();
 
         /**
-         * @brief Renvoie la somme des coefficients du vecteur en paramètre.
+         * @brief Renvoie la somme des coefficients du vecteur en paramï¿½tre.
          * @param vecteur 
          * @return La somme des coefficients du vecteur.
         */

@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
-#include <cxxopts.h>
 
 #include "../../include/application.h"
 #include "../../include/scene/scene.h"
 #include "../../include/outils/image.h"
 #include "../../include/outils/parser.h"
+#include "../../include/outils/cxxopts.h"
 
 int main(int argc, char *argv[]) {
     Scene scene;
@@ -15,9 +15,9 @@ int main(int argc, char *argv[]) {
     try {
         cxxopts::ParseResult arguments = Parser::parseArguments(argc, argv);
 
-        if (!arguments.count("niveau")) throw invalid_argument("Le niveau de rendu doit être renseigné");
-        if (!arguments.count("input")) throw invalid_argument("Le fichier de configuration json doit être renseigné");
-        if (!arguments.count("output")) throw invalid_argument("Le nom du fichier image de sortie doit être renseigné");
+        if (!arguments.count("niveau")) throw invalid_argument("Le niveau de rendu doit ï¿½tre renseignï¿½");
+        if (!arguments.count("input")) throw invalid_argument("Le fichier de configuration json doit ï¿½tre renseignï¿½");
+        if (!arguments.count("output")) throw invalid_argument("Le nom du fichier image de sortie doit ï¿½tre renseignï¿½");
 
         niveau = arguments["niveau"].as<int>();
         input = arguments["input"].as<string>();
@@ -26,10 +26,13 @@ int main(int argc, char *argv[]) {
         if (arguments.count("ps")) {
             nbSampling = arguments["ps"].as<int>();
         } else if (niveau == 3) {
-            throw invalid_argument("Le nombre de rayon par pixel (valeur du pixel sampling) doit être renseigné pour le niveau 3");
+            throw invalid_argument("Le nombre de rayon par pixel (valeur du pixel sampling) doit ï¿½tre renseignï¿½ pour le niveau 3");
         }
-    } catch (exception e) {
+    } catch (invalid_argument e) {
         cerr << "Erreur durant le parsing des arguments : " << e.what() << endl;
+        return EXIT_FAILURE;
+    } catch (...) {
+        cerr << "Erreur durant le parsing des arguments. Utilisez 'lray --help'" << endl;
         return EXIT_FAILURE;
     }
 

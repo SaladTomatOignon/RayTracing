@@ -16,8 +16,10 @@ Camera::Camera(const Camera& camera) : Camera(Point(camera.position), Vecteur(ca
 }
 
 Camera::Camera(Point position, Vecteur orientation) {
-    if (abs(Vecteur::sommeCoeff(orientation - orientation.unitaire())) > _ZERO_) {
-        throw std::invalid_argument("Le vecteur d'orientation de la caméra doit être un vecteur unitaire");
+    Vecteur vecteurNul = orientation - orientation.unitaire();
+
+    if (abs(Vecteur::sommeCoeff(vecteurNul)) > _ZERO_) {
+        throw std::invalid_argument("Le vecteur d'orientation de la camï¿½ra doit ï¿½tre un vecteur unitaire");
     }
 
     this->position = Point(position);

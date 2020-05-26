@@ -27,7 +27,7 @@ Sphere::~Sphere() {
 }
 
 Sphere* Sphere::creerFormeCanonique() {
-    // Sphère de rayon 1 centré à l'origine.
+    // Sphï¿½re de rayon 1 centrï¿½ ï¿½ l'origine.
     return new Sphere(Point(0, 0, 0), 1, Materiau(), true);
 }
 
@@ -59,8 +59,9 @@ bool Sphere::intersection(Rayon r, Point& intersection, Vecteur& normale) {
     Vecteur u = r.direction.unitaire();
 
     Point L = centre - r.origine;
-    double d = Vecteur(L.x, L.y, L.z).prodScalaire(u);
-    double l2 = Vecteur(L.x, L.y, L.z).prodScalaire(Vecteur(L.x, L.y, L.z));
+    Vecteur vL = Vecteur(L.x, L.y, L.z);
+    double d = vL.prodScalaire(u);
+    double l2 = vL.prodScalaire(vL);
 
     if (d < 0 && l2 > rayon * rayon) {
         return false;

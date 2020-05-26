@@ -1,5 +1,5 @@
-#include "..\..\include\outils\materiau.h"
-#include "..\..\include\outils\couleur.h"
+#include "../../include/outils/materiau.h"
+#include "../../include/outils/couleur.h"
 
 Materiau::Materiau() : Materiau(Couleur(), 0) {
 

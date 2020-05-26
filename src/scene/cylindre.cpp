@@ -27,7 +27,7 @@ Cylindre::~Cylindre() {
 }
 
 Cylindre* Cylindre::creerFormeCanonique() {
-    /* Cylindre centré à l'origine de rayon 1 et de hauteur 2 */
+    /* Cylindre centrï¿½ ï¿½ l'origine de rayon 1 et de hauteur 2 */
     return new Cylindre(
         Point(0, -1, 0),
         Point(0, 1, 0),

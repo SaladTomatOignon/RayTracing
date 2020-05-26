@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <cxxopts.h>
 
 #include "../rapidjson/document.h"
 #include "../scene/scene.h"
@@ -16,6 +15,7 @@
 #include "../scene/lumiere.h"
 #include "../outils/couleur.h"
 #include "../outils/materiau.h"
+#include "../outils/cxxopts.h"
 
 using namespace rapidjson;
 

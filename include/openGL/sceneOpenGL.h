@@ -5,7 +5,7 @@
     #include <GL/glew.h>
 #else
     #define GL3_PROTOTYPES 1
-    #include <GL3/gl3.h>
+    #include <GL/glut.h>
 #endif
 
 #include "../scene/scene.h"
@@ -34,7 +34,7 @@ class SceneOpenGL {
         SDL_GLContext m_contexteOpenGL;
         SDL_Event m_evenements;
 
-        // Objet Input pour la gestion des évènements
+        // Objet Input pour la gestion des ï¿½vï¿½nements
         Input m_input;
 
         Scene m_scene;

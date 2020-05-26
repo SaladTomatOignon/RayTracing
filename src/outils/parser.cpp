@@ -405,15 +405,21 @@ Cylindre* Parser::parseCylindre(Value& forme) {
 }
 
 cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {
-    cxxopts::Options options("lray", "Implémentation du lancer de rayon");
+    cxxopts::Options options("lray", "Programme le principe du lancer de rayon");
 
     options.add_options()
         ("n,niveau", "Niveau de rendu", cxxopts::value<int>())
         ("p,ps", "Nombre de rayons par pixel", cxxopts::value<int>())
         ("i,input", "Fichier de configuration json", cxxopts::value<string>())
-        ("o,output", "Nom de l'image de sortie", cxxopts::value<string>());
+        ("o,output", "Nom de l'image de sortie", cxxopts::value<string>())
+        ("h,help", "Affiche ce message");
 
     auto resultat = options.parse(argc, argv);
+
+    if (resultat.count("help")) {
+        std::cout << options.help() << std::endl;
+        exit(EXIT_SUCCESS);
+    }
 
     return resultat;
 }
