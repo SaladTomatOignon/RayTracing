@@ -10,7 +10,6 @@ class Lumiere {
         Lumiere(Point position, double intensite);
         ~Lumiere();
 
-    private:
         Point position;
         double intensite;
 };
