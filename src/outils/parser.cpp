@@ -1,4 +1,5 @@
 #include "../../include/outils/parser.h"
+#include "../../include/outils/couleur.h"
 #include "../../include/rapidjson/document.h"
 #include "../../include/scene/scene.h"
 #include "../../include/scene/camera.h"
@@ -6,6 +7,7 @@
 #include "../../include/scene/rectangle.h"
 #include "../../include/scene/sphere.h"
 #include "../../include/scene/triangle.h"
+#include "../../include/scene/lumiere.h"
 #include <fstream>
 #include <algorithm>
 #include <string>
@@ -43,7 +45,8 @@ Scene Parser::parseJSON(string const fileName) {
     Camera camera = parseCamera(document);
     Grille grille = parseGrille(document);
     vector<Forme*> formes = parseFormes(document);
-    Scene scene(camera, grille, formes);
+    vector<Lumiere> lumieres = parseLumieres(document);
+    Scene scene(camera, grille, formes, lumieres);
 
     /* Libération des formes parsées allouées */
     for (const auto* forme : formes) {
@@ -130,6 +133,22 @@ Grille Parser::parseGrille(Document& jsonObject) {
     return Grille(definitionLargeur, definitionHauteur, resolutionLargeur, resolutionHauteur, distanceFocale, grilleInclinaison);
 }
 
+vector<Lumiere> Parser::parseLumieres(Document& jsonObject) {
+    vector<Lumiere> lumieres;
+
+    if (jsonObject.HasMember("lumieres")) {
+        if (!jsonObject["lumieres"].IsArray()) {
+            throw logic_error("Les lumieres doivent être représentées sous forme d'un tableau d'objets JSON");
+        }
+
+        for (auto& lumiere : jsonObject["lumieres"].GetArray()) {
+            lumieres.push_back(parseLumiere(lumiere));
+        }
+    }
+
+    return lumieres;
+}
+
 vector<Forme*> Parser::parseFormes(Document& jsonObject) {
     vector<Forme*> formes;
 
@@ -144,6 +163,26 @@ vector<Forme*> Parser::parseFormes(Document& jsonObject) {
     }
 
     return formes;
+}
+
+Lumiere Parser::parseLumiere(Value& forme) {
+    /* Récupération de la position de la lumière. */
+    Point position;
+    try {
+        position = getPoint(forme, "position");
+    } catch (logic_error le) {
+        throw logic_error("Position de la lumière manquante ou invalide.");
+    }
+
+    /* Récupération de l'intensité lumineuse. */
+    double intensite;
+    if (!forme.HasMember("intensite")) {
+        throw logic_error("intensitée de la lumière manquante.");
+    } else {
+        intensite = forme["intensite"].GetDouble();
+    }
+
+    return Lumiere(position, intensite);
 }
 
 Parser::TypeForme Parser::getTypeForme(string forme) {

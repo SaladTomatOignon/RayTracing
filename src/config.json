@@ -1,14 +1,14 @@
 {
-    "camera_position": [ 0, 0, 2 ],
-    "camera_orientation": [ 0, 1, 0 ],
+    "camera_position": [ 0, 10, 0 ],
+    "camera_orientation": [ 0, 0, 1 ],
 
-    "distance_focale": 2,
+    "distance_focale": 37,
 
     "definition_largeur": 30,
     "definition_hauteur": 30,
 
-    "resolution_largeur": 800,
-    "resolution_hauteur": 800,
+    "resolution_largeur": 200,
+    "resolution_hauteur": 200,
 
     "inclinaison_grille": [1, 0, 0],
 
@@ -16,8 +16,22 @@
         {
             "type": "sphere",
             "couleur": "FF0000",
-            "centre": [ 0, 40, 2 ],
-            "rayon": 30
+            "centre": [ 0, 14, 50 ],
+            "rayon": 10
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "FFF000",
+            "centre": [ 10, 19, 70 ],
+            "rayon": 10
+        }
+    ],
+
+    "lumieres": [
+        {
+            "position": [ -40, 70, 50 ],
+            "intensite": 50
         }
     ]
 }

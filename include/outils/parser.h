@@ -11,6 +11,7 @@
 #include "../scene/rectangle.h"
 #include "../scene/triangle.h"
 #include "../scene/cylindre.h"
+#include "../scene/lumiere.h"
 #include "../outils/couleur.h"
 
 using namespace rapidjson;
@@ -41,6 +42,8 @@ class Parser {
         static Camera parseCamera(Document& jsonObject);
         static Grille parseGrille(Document& jsonObject);
         static vector<Forme*> parseFormes(Document& jsonObject);
+        static vector<Lumiere> parseLumieres(Document& jsonObject);
+        static Lumiere parseLumiere(Value& forme);
         static TypeForme getTypeForme(string forme);
         static Forme* parseForme(Value& forme);
         static Point getPoint(Value& forme, const char* champ);
