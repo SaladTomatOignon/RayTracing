@@ -41,8 +41,8 @@ class SceneOpenGL {
         string m_fichierOutput;
 
         void afficherImage(Image& image);
-        void deplacerCamera();
-        void orienterCamera();
+        bool deplacerCamera();
+        bool orienterCamera();
 };
 
 #endif

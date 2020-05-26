@@ -98,12 +98,18 @@ bool SceneOpenGL::initGL() {
 }
 
 void SceneOpenGL::bouclePrincipale() {
-    Image rendu(m_scene.grille.resolution_l, m_scene.grille.resolution_h);
+    /* Avec le lancer de rayons progressifs, le rendu final se base sur un rendu initial, on a donc besoin de 2 images */
+    Image rendu1(m_scene.grille.resolution_l, m_scene.grille.resolution_h);
+    Image rendu2(m_scene.grille.resolution_l, m_scene.grille.resolution_h);
+    unsigned int iterations = 1;
 
     // Variables relatives à la boucle
-    bool terminer(false);
+    bool terminer = false;
+    bool renduProgressif = true;
     unsigned int frameRate(1000 / 50);
     Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
+
+    Application::lancerRayons(m_scene, rendu1);
 
     // Boucle principale
     while (!m_input.terminer()) {
@@ -114,7 +120,7 @@ void SceneOpenGL::bouclePrincipale() {
         /* ---------------------- GESTION DE LA LOGIQUE ------------------ */
         /* --------------------------------------------------------------- */
 
-        Application::lancerRayons(m_scene, rendu);
+        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2);
 
         // Gestion des évènements
         m_input.updateEvenements();
@@ -123,11 +129,25 @@ void SceneOpenGL::bouclePrincipale() {
             break;
 
         if (m_input.getTouche(SDL_SCANCODE_RETURN)) {
-            rendu.exportPPM(m_fichierOutput.c_str());
+            rendu2.exportPPM(m_fichierOutput.c_str());
         }
 
-        deplacerCamera();
-        orienterCamera();
+        if (m_input.getTouche(SDL_SCANCODE_P)) {
+            renduProgressif = !renduProgressif;
+        }
+
+        /* Pour forcer l'évaluation des 2 méthodes... */
+        bool deplacer = deplacerCamera();
+        bool orienter = orienterCamera();
+        if (deplacer || orienter) {
+            iterations = 1;
+        } else {
+            if (renduProgressif) {
+                iterations++;
+            }
+        }
+
+        rendu1 = rendu2;
 
         /* --------------------------------------------------------------- */
         /* ---------------------- AFFICHAGE DE L'ECRAN ------------------- */
@@ -136,7 +156,7 @@ void SceneOpenGL::bouclePrincipale() {
         // Nettoyage de l'écran
         glClear(GL_COLOR_BUFFER_BIT);
 
-        afficherImage(rendu);
+        afficherImage(rendu2);
 
         // Actualisation de la fenêtre
         SDL_GL_SwapWindow(m_fenetre);
@@ -169,7 +189,7 @@ void SceneOpenGL::afficherImage(Image& image) {
     delete [] window_RGBData;
 }
 
-void SceneOpenGL::deplacerCamera() {
+bool SceneOpenGL::deplacerCamera() {
     bool deplacer = false;
 
     /* ATTENTION : SDL ne considère que les clavier QWERTY */
@@ -206,23 +226,40 @@ void SceneOpenGL::deplacerCamera() {
 
     if (deplacer) {
         m_scene.grille.positionner(m_scene.camera);
+        return true;
     }
+
+    return false;
 }
 
-void SceneOpenGL::orienterCamera() {
+bool SceneOpenGL::orienterCamera() {
+    bool deplacer = false;
+
     if (m_input.getTouche(SDL_SCANCODE_LEFT)) {
         m_scene.camera.orienter(Camera::DIRECTION::GAUCHE);
+        deplacer = true;
     }
 
     if (m_input.getTouche(SDL_SCANCODE_UP)) {
         m_scene.camera.orienter(Camera::DIRECTION::HAUT);
+        deplacer = true;
     }
 
     if (m_input.getTouche(SDL_SCANCODE_RIGHT)) {
         m_scene.camera.orienter(Camera::DIRECTION::DROITE);
+        deplacer = true;
     }
 
     if (m_input.getTouche(SDL_SCANCODE_DOWN)) {
         m_scene.camera.orienter(Camera::DIRECTION::BAS);
+        deplacer = true;
     }
+
+    if (deplacer) {
+        m_scene.grille.inclinaison_h = - 1 * m_scene.camera.orientation.prodVectoriel(Vecteur(0, 1, 0));
+        m_scene.grille.positionner(m_scene.camera);
+        return true;
+    }
+
+    return false;
 }
