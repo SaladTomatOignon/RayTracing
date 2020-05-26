@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <cxxopts.h>
+
 #include "../rapidjson/document.h"
 #include "../scene/scene.h"
 #include "../scene/camera.h"
@@ -31,6 +33,9 @@ class Parser {
          */
         static Scene parseJSON(string fileName);
 
+        /* Parsing de la ligne de commande */
+        static cxxopts::ParseResult parseArguments(int argc, char* argv[]);
+
     private:
         enum class TypeForme {
             SPHERE,
@@ -40,6 +45,7 @@ class Parser {
             NONE
         };
 
+        /* Parsing du fichier de configuration Json */
         static Camera parseCamera(Document& jsonObject);
         static Grille parseGrille(Document& jsonObject);
         static vector<Forme*> parseFormes(Document& jsonObject);

@@ -8,9 +8,11 @@
 #include "../../include/scene/sphere.h"
 #include "../../include/scene/triangle.h"
 #include "../../include/scene/lumiere.h"
+
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include <cxxopts.h>
 
 using namespace std;
 using namespace rapidjson;
@@ -400,4 +402,18 @@ Cylindre* Parser::parseCylindre(Value& forme) {
     }
 
     return new Cylindre(pointA, pointB, rayon, materiau);
+}
+
+cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {
+    cxxopts::Options options("lray", "Implémentation du lancer de rayon");
+
+    options.add_options()
+        ("n,niveau", "Niveau de rendu", cxxopts::value<int>())
+        ("p,ps", "Nombre de rayons par pixel", cxxopts::value<int>())
+        ("i,input", "Fichier de configuration json", cxxopts::value<string>())
+        ("o,output", "Nom de l'image de sortie", cxxopts::value<string>());
+
+    auto resultat = options.parse(argc, argv);
+
+    return resultat;
 }

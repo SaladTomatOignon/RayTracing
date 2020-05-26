@@ -109,7 +109,7 @@ void SceneOpenGL::bouclePrincipale() {
     unsigned int frameRate(1000 / 50);
     Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
 
-    Application::lancerRayons(m_scene, rendu1);
+    Application::lancerRayons(m_scene, rendu1, true);
 
     // Boucle principale
     while (!m_input.terminer()) {
