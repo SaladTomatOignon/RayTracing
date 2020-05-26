@@ -16,6 +16,7 @@
         {
             "type": "sphere",
             "couleur": "FF0000",
+            "brillance": 123,
             "centre": [ 0, 14, 50 ],
             "rayon": 10
         },

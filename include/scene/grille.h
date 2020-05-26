@@ -22,10 +22,12 @@ class Grille {
         Rectangle at(unsigned int i, unsigned int j);
         void positionner(Camera camera);
 
-    private:
-        double largeur, hauteur, distance_focale;
         unsigned int resolution_l, resolution_h;
+
+        double largeur, hauteur, distance_focale;
         Vecteur inclinaison_h, inclinaison_v;
+
+    private:
         bool estPositionne = false;
         Point position;
 };
