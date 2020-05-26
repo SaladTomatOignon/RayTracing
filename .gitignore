@@ -37,6 +37,7 @@ build/
 # Fichiers de sortie
 bin/
 
-# Dossier de configuration Visual Studio
+# Dossier de configuration Visual Studio et Visual Code
 .vs/
+.vscode/
 CMakeSettings.json
