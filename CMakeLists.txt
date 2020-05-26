@@ -5,6 +5,7 @@ project(lray)
 # Inclusion de la bibliotheque OpenGL - SDL2
 find_package(GLEW REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
+find_package(OpenGL REQUIRED)
 
 # Inclusion des headers
 include_directories(include/geometrie)
@@ -27,11 +28,10 @@ file(GLOB SRC_FILES
     "src/main.cpp"
 )
 
-# Met binaires générés dans un dossier bin
+# Place les binaires générés dans un dossier bin
 set(EXECUTABLE_OUTPUT_PATH "../bin/")
 
 add_executable(lray ${SRC_FILES})
 
 # Linkage des bibliothèques
-target_link_libraries(lray PRIVATE GLEW::GLEW)
-target_link_libraries(lray PRIVATE SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(lray PRIVATE GLEW::GLEW ${SDL2_LIBRARIES} OpenGL::OpenGL)
