@@ -8,6 +8,9 @@ class Couleur {
         Couleur(const Couleur& pixel);
         ~Couleur();
 
+        Couleur operator*(const double& reel);
+        Couleur operator+(const Couleur& autre);
+
         unsigned char r, g, b;
 };
 

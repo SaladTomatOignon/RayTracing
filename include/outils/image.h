@@ -10,6 +10,7 @@ class Image {
         ~Image();
 
         Couleur* operator[](int const& i);
+        Image& operator=(Image const& autre);
 
         /*!
          * \brief Cr�e un nouveau fichier au format ppm contenant les pixels associ� � cette image.

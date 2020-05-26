@@ -34,6 +34,17 @@ Couleur* Image::operator[](int const& i) {
     return valeurs[i];
 }
 
+Image& Image::operator=(Image const& autre) {
+    if (&autre != this) {
+        for (unsigned int i = 0; i < hauteur; i++) {
+            for (unsigned int j = 0; j < largeur; j++) {
+                this->valeurs[i][j] = Couleur(autre.valeurs[i][j]);
+            }
+        }
+    }
+
+    return *this;
+}
 
 void Image::exportPPM(const char* fileName) {
     ofstream fichier(fileName);

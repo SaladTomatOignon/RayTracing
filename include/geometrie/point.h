@@ -16,6 +16,7 @@ class Point {
 
         static Vecteur creerVecteur(Point a, Point b);
         double distance(Point a);
+        double distance2(Point a);
 
         double x, y, z;
 };

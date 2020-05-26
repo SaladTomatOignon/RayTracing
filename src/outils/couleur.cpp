@@ -17,3 +17,11 @@ Couleur::Couleur(const Couleur& couleur) : Couleur(couleur.r, couleur.g, couleur
 Couleur::~Couleur() {
 
 }
+
+Couleur Couleur::operator*(const double& reel) {
+    return Couleur(r*reel, g*reel, b*reel);
+}
+
+Couleur Couleur::operator+(const Couleur& autre) {
+    return Couleur(r + autre.r, g + autre.g, b + autre.b);
+}
