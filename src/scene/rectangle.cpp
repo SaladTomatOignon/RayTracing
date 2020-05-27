@@ -37,7 +37,11 @@ Rectangle* Rectangle::getFormeCanonique() {
 }
 
 Point Rectangle::getCentre() {
-    return Point(); // TODO
+    return Point(
+        (a.x + b.x + c.x + d.x) / 4,
+        (a.y + b.y + c.y + d.y) / 4,
+        (a.z + b.z + c.z + d.z) / 4
+    );
 }
 
 void Rectangle::homothetieFormeCanonique() {
