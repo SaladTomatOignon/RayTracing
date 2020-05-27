@@ -7,6 +7,8 @@
 #include "../../include/scene/rectangle.h"
 #include "../../include/scene/sphere.h"
 #include "../../include/scene/triangle.h"
+#include "../../include/scene/cylindre.h"
+#include "../../include/scene/plan.h"
 #include "../../include/scene/lumiere.h"
 
 #include <fstream>
@@ -203,6 +205,14 @@ Parser::TypeForme Parser::getTypeForme(string forme) {
         return TypeForme::TRIANGLE;
     }
 
+    if (formeToUpperCase == "CYLINDRE") {
+        return TypeForme::CYLINDRE;
+    }
+
+    if (formeToUpperCase == "PLAN") {
+        return TypeForme::PLAN;
+    }
+
     return TypeForme::NONE;
 }
 
@@ -224,6 +234,9 @@ Forme* Parser::parseForme(Value& forme) {
                 break;
             case TypeForme::CYLINDRE:
                 return parseCylindre(forme);
+                break;
+            case TypeForme::PLAN:
+                return parsePlan(forme);
                 break;
             default:
                 return nullptr;
@@ -423,6 +436,29 @@ Cylindre* Parser::parseCylindre(Value& forme) {
     }
 
     return new Cylindre(pointA, pointB, rayon, materiau);
+}
+
+Plan* Parser::parsePlan(Value& forme) {
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
+
+    /* Détermination du point par lequel le plan passe */
+    Point centre;
+    try {
+        centre = getPoint(forme, "centre");
+    } catch (logic_error le) {
+        throw logic_error("Point du plan manquant ou invalide.");
+    }
+
+    /* Détermination de la normale au plan */
+    Point normale;
+    try {
+        normale = getPoint(forme, "normale");
+    } catch (logic_error le) {
+        throw logic_error("Normale au plan manquante ou invalide.");
+    }
+
+    return new Plan(centre, Vecteur(normale.x, normale.y, normale.z), materiau);
 }
 
 cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {
