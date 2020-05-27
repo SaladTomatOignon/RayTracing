@@ -16,8 +16,8 @@
         {
             "type": "sphere",
             "couleur": "FF0000",
-            "specularite": "FF0000",
-            "brillance": 20,
+            "specularite": "FFFFFF",
+            "brillance": 10,
             "centre": [ 0, 14, 50 ],
             "rayon": 10
         },
@@ -25,8 +25,8 @@
         {
             "type": "sphere",
             "couleur": "FFF000",
-            "specularite": "FFF000",
-            "brillance": 256,
+            "specularite": "FFFFFF",
+            "brillance": 50,
             "centre": [ 10, 19, 70 ],
             "rayon": 10
         },
@@ -34,10 +34,10 @@
         {
             "type": "plan",
             "couleur": "0083FF",
-            "specularite": "0083FF",
+            "specularite": "FFFFFF",
             "brillance": 100,
             "centre": [ 0, 0, 0 ],
-            "normale": [0, 1, 0]
+            "normale": [ 0, 1, 0 ]
         }
     ],
 

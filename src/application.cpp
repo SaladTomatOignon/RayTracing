@@ -26,7 +26,7 @@ Application::~Application() {
 Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumiere) {
     Vecteur I = Point::creerVecteur(inter.intersection, lumiere.position).unitaire();
     Vecteur V = Point::creerVecteur(inter.intersection, camera).unitaire();
-    Vecteur H = 0.5 * V;
+    Vecteur H = 0.5 * (I + V);
 
     double a = lumiere.intensite / (4 * M_PI * inter.intersection.distance2(lumiere.position));
 
