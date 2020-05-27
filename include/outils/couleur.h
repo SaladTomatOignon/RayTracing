@@ -4,14 +4,21 @@
 class Couleur {
     public:
         Couleur();
-        Couleur(unsigned char r, unsigned char g, unsigned char b);
+        Couleur(unsigned int r, unsigned int g, unsigned int b);
         Couleur(const Couleur& pixel);
         ~Couleur();
 
         Couleur operator*(const double& reel);
         Couleur operator+(const Couleur& autre);
+        Couleur operator/(const double& reel);
 
-        unsigned char r, g, b;
+        /**
+         * @brief Renvoie la même couleur avec un seuil maximum de 255 pour la valeur de chaque composante.
+         * Note : Vu qu'une composante est un entier non signé, seul le maximum est borné.
+        */
+        Couleur clamp();
+
+        unsigned int r, g, b;
 };
 
 #endif
