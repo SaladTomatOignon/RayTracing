@@ -15,8 +15,8 @@ class Application {
         Application(int niveau, string fichierOutput, int nbSampling);
         ~Application();
 
-        static void lancerRayons(Scene& scene, Image& image, bool eclairage);
-        static void lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle);
+        static void lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling);
+        static void lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling);
         void visualiserScene(Scene& scene);
         void enregistrerImage(Scene& scene);
 

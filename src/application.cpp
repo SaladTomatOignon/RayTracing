@@ -40,11 +40,11 @@ Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumi
     double bB = inter.materiau.couleur.b * max<double>(inter.normale.prodScalaire(I), 0);
     double cB = inter.materiau.specularite.b * pow(max<double>(inter.normale.prodScalaire(H), 0), inter.materiau.brillance);
 
-    double r = a * (bR + cR);
-    double g = a * (bG + cG);
-    double b = a * (bB + cB);
+    unsigned int r = a * (bR + cR);
+    unsigned int g = a * (bG + cG);
+    unsigned int b = a * (bB + cB);
 
-    return Couleur(r, g, b);
+    return Couleur(r, g, b).clamp();
 }
 
 bool Application::interPlusProche(Rayon r, vector<Forme*> formes, Intersection& inter) {
@@ -70,77 +70,70 @@ bool Application::interPlusProche(Rayon r, vector<Forme*> formes, Intersection& 
     return aIntersecte;
 }
 
-void Application::lancerRayons(Scene& scene, Image& image, bool eclairage) {
+void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling) {
     for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
         for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
-            //Rayon r(scene.camera.position, Point::creerVecteur(scene.camera.position, scene.grille.at(i, j).getCentre()));
+            Couleur couleurPixel;
+            int rayonsLances = 0;
 
-            Point A = scene.camera.position;
-            double f = scene.grille.distance_focale;
-            double tw = scene.grille.largeur;
-            double th = scene.grille.hauteur;
-            double resw = scene.grille.resolution_l;
-            double resh = scene.grille.resolution_h;
-            Vecteur u = scene.camera.orientation;
-            Vecteur v = scene.grille.inclinaison_h;
-            Vecteur w = scene.grille.inclinaison_v;
+            do {
+                Vecteur positionPixel = pixelSampling <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
+                Rayon r(scene.camera.position, scene.grille.distance_focale * scene.camera.orientation + positionPixel);
 
-            if (i == 10 && j == 10) {
-                double azerty = 1;
-            }
-
-            Rayon r(A, f * u - (tw / 2) * v + (th / 2) * w + (j + 1 / 2) * (tw / resw) * v - (i + 1 / 2) * (th / resh) * w);
-
-            Intersection inter;
-            if (interPlusProche(r, scene.formes, inter)) {
-                if (eclairage) {
-                    image[i][j] = illumination(inter, scene.camera.position, scene.lumieres[0]);
+                Intersection inter;
+                if (interPlusProche(r, scene.formes, inter)) {
+                    if (eclairage) {
+                        Couleur moyenneIllumination = Couleur();
+                        for (Lumiere& lumiere : scene.lumieres) {
+                            moyenneIllumination = moyenneIllumination + illumination(inter, scene.camera.position, lumiere);
+                        }
+                        couleurPixel = couleurPixel + moyenneIllumination.clamp();
+                    } else {
+                        couleurPixel = couleurPixel + inter.materiau.couleur;
+                    }
                 } else {
-                    image[i][j] = inter.materiau.couleur;
+                    couleurPixel = couleurPixel + Couleur();
                 }
-            } else {
-                image[i][j] = Couleur();
-            }
+
+                rayonsLances++;
+            } while (rayonsLances < pixelSampling);
+
+            image[i][j] = couleurPixel / max(pixelSampling, 1);
         }
     }
 }
 
-void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle) {
+void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling) {
     for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
         for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
-            //Rayon r(scene.camera.position, Point::creerVecteur(scene.camera.position, scene.grille.at(i, j).getCentre()));
+            Couleur couleurPixel;
+            int rayonsLances = 0;
 
-            Point A = scene.camera.position;
-            double f = scene.grille.distance_focale;
-            double tw = scene.grille.largeur;
-            double th = scene.grille.hauteur;
-            double resw = scene.grille.resolution_l;
-            double resh = scene.grille.resolution_h;
-            Vecteur u = scene.camera.orientation;
-            Vecteur v = scene.grille.inclinaison_h;
-            Vecteur w = scene.grille.inclinaison_v;
+            do {
+                Vecteur positionPixel = pixelSampling <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
+                Rayon r(scene.camera.position, scene.grille.distance_focale * scene.camera.orientation + positionPixel);
 
-            if (i == 100 && j == 100) {
-                double azerty = 1;
-            }
+                Intersection inter;
+                if (interPlusProche(r, scene.formes, inter)) {
+                    Couleur moyenneIllumination = Couleur();
+                    for (Lumiere& lumiere : scene.lumieres) {
+                        moyenneIllumination = moyenneIllumination + illumination(inter, scene.camera.position, lumiere);
+                    }
+                    couleurPixel = couleurPixel + moyenneIllumination.clamp();
+                } else {
+                    couleurPixel = couleurPixel + Couleur();
+                }
 
-            Rayon r(A, f * u - (tw / 2) * v + (th / 2) * w + (j + 1 / 2) * (tw / resw) * v - (i + 1 / 2) * (th / resh) * w);
+                rayonsLances++;
+            } while (rayonsLances < pixelSampling);
 
-            Intersection inter;
-            Couleur couleur;
-            if (interPlusProche(r, scene.formes, inter)) {
-                couleur = illumination(inter, scene.camera.position, scene.lumieres[0]);
-            } else {
-                couleur = Couleur();
-            }
-
-            nouvelle[i][j] = couleur * (1.0 / iteration) + ancienne[i][j] * ((iteration - 1.0) / iteration);
+            nouvelle[i][j] = (couleurPixel / max(pixelSampling, 1)) * (1.0 / iteration) + ancienne[i][j] * ((iteration - 1.0) / iteration);
         }
     }
 }
 
 void Application::visualiserScene(Scene& scene) {
-    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput);
+    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput, niveau > 2 ? nbSampling : 1);
 
     // Initialisation de la scène
     if (sceneGL.initialiserFenetre() == false) {
@@ -158,7 +151,7 @@ void Application::visualiserScene(Scene& scene) {
 void Application::enregistrerImage(Scene& scene) {
     Image rendu(scene.grille.resolution_l, scene.grille.resolution_h);
 
-    lancerRayons(scene, rendu, niveau > 1);
+    lancerRayons(scene, rendu, niveau > 1, niveau > 2 ? nbSampling : 1);
 
     rendu.exportPPM(fichierOutput.c_str());
 }

@@ -18,7 +18,7 @@
 
 class SceneOpenGL {
     public:
-        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput);
+        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, int nbSampling);
         ~SceneOpenGL();
 
         bool initialiserFenetre();
@@ -34,8 +34,10 @@ class SceneOpenGL {
         SDL_GLContext m_contexteOpenGL;
         SDL_Event m_evenements;
 
-        // Objet Input pour la gestion des �v�nements
+        /* Objet Input pour la gestion des évènements */
         Input m_input;
+        /* Nombre de rayons lancés par pixel */
+        int m_nbSampling;
 
         Scene m_scene;
         string m_fichierOutput;

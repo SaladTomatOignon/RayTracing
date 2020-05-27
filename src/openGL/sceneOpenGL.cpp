@@ -10,7 +10,7 @@
 
 using namespace std;
 
-SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput) {
+SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, int nbSampling) {
     m_titreFenetre = titreFenetre;
     m_largeurFenetre = largeurFenetre;
     m_hauteurFenetre = hauteurFenetre;
@@ -19,6 +19,7 @@ SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFen
     m_scene = Scene(scene);
     m_input = Input();
     m_fichierOutput = fichierOutput;
+    m_nbSampling = nbSampling;
 }
 
 SceneOpenGL::~SceneOpenGL() {
@@ -103,13 +104,13 @@ void SceneOpenGL::bouclePrincipale() {
     Image rendu2(m_scene.grille.resolution_l, m_scene.grille.resolution_h);
     unsigned int iterations = 1;
 
-    // Variables relatives � la boucle
+    // Variables relatives à la boucle
     bool terminer = false;
     bool renduProgressif = true;
     unsigned int frameRate(1000 / 50);
     Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
 
-    Application::lancerRayons(m_scene, rendu1, true);
+    Application::lancerRayons(m_scene, rendu1, true, m_nbSampling);
 
     // Boucle principale
     while (!m_input.terminer()) {
@@ -120,9 +121,9 @@ void SceneOpenGL::bouclePrincipale() {
         /* ---------------------- GESTION DE LA LOGIQUE ------------------ */
         /* --------------------------------------------------------------- */
 
-        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2);
+        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2, m_nbSampling);
 
-        // Gestion des �v�nements
+        // Gestion des évènements
         m_input.updateEvenements();
 
         if (m_input.getTouche(SDL_SCANCODE_ESCAPE))
@@ -134,6 +135,11 @@ void SceneOpenGL::bouclePrincipale() {
 
         if (m_input.getTouche(SDL_SCANCODE_P)) {
             renduProgressif = !renduProgressif;
+            if (renduProgressif) {
+                cout << "Rendu progressif activé" << endl;
+            } else {
+                cout << "Rendu progressif désactivé" << endl;
+            }
         }
 
         /* Pour forcer l'�valuation des 2 m�thodes... */

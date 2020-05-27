@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <time.h>
 
 #include "../../include/application.h"
 #include "../../include/scene/scene.h"
@@ -36,6 +37,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
+    srand(time(NULL));
     Application application(niveau, output, nbSampling);
 
     try {
