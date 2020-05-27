@@ -36,7 +36,7 @@ void Grille::positionner(Camera camera) {
     /* On suppose que la cam�ra est au mileu de la grille � une distance `distance_focale` en z. */
     inclinaison_v = -1 * inclinaison_h.prodVectoriel(camera.orientation).unitaire();
     /* a = Position de la cam�ra. b = Position du point qu'on cherche (le point en haut � gauche de la grille) */
-    Vecteur ab = distance_focale * camera.orientation - (resolution_l / 2) * inclinaison_h + (resolution_h / 2) * inclinaison_v;
+    Vecteur ab = distance_focale * camera.orientation - (largeur / 2) * inclinaison_h + (hauteur / 2) * inclinaison_v;
 
     position = camera.position + ab;
     estPositionne = true;
@@ -54,10 +54,24 @@ Rectangle Grille::at(unsigned int i, unsigned int j) {
     double tailleCaseLargeur = largeur / resolution_l;
     double tailleCaseHauteur = hauteur / resolution_h;
 
+    Point A = position - (i + 1.0) * tailleCaseHauteur * inclinaison_v + (j + 1.0) * tailleCaseLargeur * inclinaison_h;
+
     return Rectangle(
-        Point(position), /* Point haut gauche */
-        Point(position - (i + 1.0) * tailleCaseHauteur * inclinaison_v), /* Point bas gauche */
-        Point(position - (i + 1.0) * tailleCaseHauteur * inclinaison_v + (j + 1.0) * tailleCaseLargeur * inclinaison_h), /* Point bas droit */
-        Point(position + (j + 1.0) * tailleCaseLargeur * inclinaison_h) /* Point haut droit */
+        Point(A), /* Point haut gauche */
+        Point(A + tailleCaseHauteur * inclinaison_v), /* Point bas gauche */
+        Point(A + tailleCaseHauteur * inclinaison_v + tailleCaseLargeur * inclinaison_h), /* Point bas droit */
+        Point(A + tailleCaseLargeur * inclinaison_h) /* Point haut droit */
     );
+}
+
+Vecteur Grille::centrePixel(unsigned int i, unsigned int j) {
+    return  - (largeur / 2) * inclinaison_h + (hauteur / 2) * inclinaison_v // Point haut gauche de la grille
+            + (j + 1.0 / 2.0) * (largeur / resolution_l) * inclinaison_h  // Decalage horizontal
+            - (i + 1.0 / 2.0) * (hauteur / resolution_h) * inclinaison_v; // Decalage vertical
+}
+
+Vecteur Grille::pointAleatoirePixel(unsigned int i, unsigned int j) {
+    return  - (largeur / 2) * inclinaison_h + (hauteur / 2) * inclinaison_v // Point haut gauche de la grille
+            + (j + (((double)rand() / (RAND_MAX)) + 1)) * (largeur / resolution_l) * inclinaison_h  // Decalage horizontal
+            - (i + (((double)rand() / (RAND_MAX)) + 1)) * (hauteur / resolution_h) * inclinaison_v; // Decalage vertical
 }

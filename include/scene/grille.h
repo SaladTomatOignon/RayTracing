@@ -4,6 +4,7 @@
 #include "../scene/rectangle.h"
 #include "../scene/camera.h"
 #include "../geometrie/point.h"
+#include "../geometrie/vecteur.h"
 
 class Grille {
     public:
@@ -20,6 +21,20 @@ class Grille {
          * @return Un rectangle correspondant à la surface du pixel de la grille.
         */
         Rectangle at(unsigned int i, unsigned int j);
+        /**
+         * @brief Renvoie le vecteur partant du centre de la grille et pointant vers le centre du pixel (i, j).
+         * @param i Ligne du pixel (0 : en haut; max : en bas)
+         * @param j Colonne du pixel (0 : à gauche; max : à droite)
+         * @return Le vecteur du milieu de la grille vers le centre du pixel (i, j)
+        */
+        Vecteur centrePixel(unsigned int i, unsigned int j);
+        /**
+         * @brief Renvoie le vecteur partant du centre de la grille et pointant vers un point aléatoire du pixel (i, j).
+         * @param i Ligne du pixel (0 : en haut; max : en bas)
+         * @param j Colonne du pixel (0 : à gauche; max : à droite)
+         * @return Le vecteur du milieu de la grille vers un point aléatoire du pixel (i, j)
+        */
+        Vecteur pointAleatoirePixel(unsigned int i, unsigned int j);
         void positionner(Camera camera);
 
         unsigned int resolution_l, resolution_h;
