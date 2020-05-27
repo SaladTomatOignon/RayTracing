@@ -34,4 +34,4 @@ set(EXECUTABLE_OUTPUT_PATH "../bin/")
 add_executable(lray ${SRC_FILES})
 
 # Linkage des bibliothèques
-target_link_libraries(lray PRIVATE GLEW::GLEW ${SDL2_LIBRARIES} OpenGL::OpenGL)
+target_link_libraries(lray PRIVATE ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES})
