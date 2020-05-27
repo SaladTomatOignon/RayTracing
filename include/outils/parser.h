@@ -56,6 +56,7 @@ class Parser {
         static Point getPoint(Value& forme, const char* champ);
         static Materiau getMateriau(Value& forme);
         static Couleur getCouleur(Value& forme);
+        static Couleur getSpecularite(Value& forme);
         static Sphere* parseSphere(Value& forme);
         static Rectangle* parseRectangle(Value& forme);
         static Triangle* parseTriangle(Value& forme);

@@ -16,7 +16,8 @@
         {
             "type": "sphere",
             "couleur": "FF0000",
-            "brillance": 123,
+            "specularite": "FF0000",
+            "brillance": 2,
             "centre": [ 0, 14, 50 ],
             "rayon": 10
         },
@@ -24,6 +25,8 @@
         {
             "type": "sphere",
             "couleur": "FFF000",
+            "specularite": "FFF000",
+            "brillance": 256,
             "centre": [ 10, 19, 70 ],
             "rayon": 10
         }
@@ -32,7 +35,7 @@
     "lumieres": [
         {
             "position": [ -40, 70, 50 ],
-            "intensite": 50
+            "intensite": 15000
         }
     ]
 }

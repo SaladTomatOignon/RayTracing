@@ -28,13 +28,23 @@ Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumi
     Vecteur V = Point::creerVecteur(inter.intersection, camera).unitaire();
     Vecteur H = 0.5 * V;
 
-    double a = 1 / (4 * M_PI * inter.intersection.distance2(lumiere.position));
-    double b = 1 * max<double>(inter.normale.prodScalaire(I), 0);
-    double c = 1 * pow(max<double>(inter.normale.prodScalaire(H), 0), 1);
+    double a = lumiere.intensite / (4 * M_PI * inter.intersection.distance2(lumiere.position));
 
-    double res = a * (b + c);
+    /* Composante rouge */
+    double bR = inter.materiau.couleur.r * max<double>(inter.normale.prodScalaire(I), 0);
+    double cR = inter.materiau.specularite.r * pow(max<double>(inter.normale.prodScalaire(H), 0), inter.materiau.brillance);
+    /* Composante verte */
+    double bG = inter.materiau.couleur.g * max<double>(inter.normale.prodScalaire(I), 0);
+    double cG = inter.materiau.specularite.g * pow(max<double>(inter.normale.prodScalaire(H), 0), inter.materiau.brillance);
+    /* Composante bleue */
+    double bB = inter.materiau.couleur.b * max<double>(inter.normale.prodScalaire(I), 0);
+    double cB = inter.materiau.specularite.b * pow(max<double>(inter.normale.prodScalaire(H), 0), inter.materiau.brillance);
 
-    return inter.materiau.couleur;
+    double r = a * (bR + cR);
+    double g = a * (bG + cG);
+    double b = a * (bB + cB);
+
+    return Couleur(r, g, b);
 }
 
 bool Application::interPlusProche(Rayon r, vector<Forme*> formes, Intersection& inter) {

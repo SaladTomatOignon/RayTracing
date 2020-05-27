@@ -249,6 +249,9 @@ Materiau Parser::getMateriau(Value& forme) {
     /* Récupération de la couleur */
     Couleur couleur = getCouleur(forme);
 
+    /* Récupération de la spécularité */
+    Couleur specularite = getSpecularite(forme);
+
     /* Récuperation de la valeur de brillance. */
     int brillance;
     if (!forme.HasMember("brillance")) {
@@ -257,7 +260,7 @@ Materiau Parser::getMateriau(Value& forme) {
         brillance = forme["brillance"].GetInt();
     }
 
-    return Materiau(couleur, brillance);
+    return Materiau(couleur, brillance, specularite);
 }
 
 Couleur Parser::getCouleur(Value& forme) {
@@ -274,6 +277,24 @@ Couleur Parser::getCouleur(Value& forme) {
             b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16);
         } catch (...) {
             throw logic_error("Le code couleur d'une forme est mal formé");
+        }
+    }
+
+    return Couleur(r, g, b);
+}
+
+Couleur Parser::getSpecularite(Value& forme) {
+    int r = 0, g = 0, b = 0;
+
+    if (forme.HasMember("specularite")) {
+        const Value& codeCouleur = forme["specularite"];
+
+        try {
+            r = stoi(string(codeCouleur.GetString()).substr(0, 2), nullptr, 16);
+            g = stoi(string(codeCouleur.GetString()).substr(2, 2), nullptr, 16);
+            b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16);
+        } catch (...) {
+            throw logic_error("Le code couleur de la spécularité d'une forme est mal formé");
         }
     }
 
