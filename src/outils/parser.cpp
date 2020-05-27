@@ -264,7 +264,7 @@ Materiau Parser::getMateriau(Value& forme) {
 }
 
 Couleur Parser::getCouleur(Value& forme) {
-    int r = 0, g = 0, b = 0;
+    unsigned char r = 0, g = 0, b = 0;
 
     if (!forme.HasMember("couleur") || !forme["couleur"].IsString()) {
         throw logic_error("Vous devez indiquer une couleur pour chaque forme");
