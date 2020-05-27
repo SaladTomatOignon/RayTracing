@@ -83,6 +83,7 @@ bool Sphere::intersection(Rayon r, Point& intersection, Vecteur& normale) {
     }
 
     intersection = Point(r.origine + t * u);
+    normale = (1 / rayon) * Point::creerVecteur(centre, intersection);
 
     return true;
 }
