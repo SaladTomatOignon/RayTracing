@@ -47,6 +47,8 @@ Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumi
         return Couleur();
     }
 
+    /* Calcul de l'illumination selon le modèle de Blinn-Phong */
+
     double a = lumiere.intensite / (4 * M_PI * inter.intersection.distance2(lumiere.position));
 
     /* Composante rouge */
@@ -117,7 +119,7 @@ void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& a
                 rayonsLances++;
             } while (rayonsLances < pixelSampling);
 
-            nouvelle[i][j] = f(couleurPixel / max(pixelSampling, 1), iteration, ancienne[i][j]);
+            nouvelle.set(i, j, f(couleurPixel / max(pixelSampling, 1), iteration, ancienne.get(i, j)));
         }
     }
 }

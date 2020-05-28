@@ -181,20 +181,7 @@ void SceneOpenGL::bouclePrincipale() {
 }
 
 void SceneOpenGL::afficherImage(Image& image) {
-    int nbPixels = image.largeur * image.hauteur * 3;
-    unsigned char* window_RGBData = new unsigned char[nbPixels]();
-
-    for (unsigned int i = 0; i < image.hauteur; i++) {
-        for (unsigned int j = 0; j < image.largeur; j++) {
-            window_RGBData[3 * (i * image.largeur + j) + 0] = image[image.hauteur - 1 - i][j].r;
-            window_RGBData[3 * (i * image.largeur + j) + 1] = image[image.hauteur - 1 - i][j].g;
-            window_RGBData[3 * (i * image.largeur + j) + 2] = image[image.hauteur - 1 - i][j].b;
-        }
-    }
-
-    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_UNSIGNED_BYTE, window_RGBData);
-
-    delete [] window_RGBData;
+    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_UNSIGNED_BYTE, image.getData());
 }
 
 bool SceneOpenGL::deplacerCamera() {

@@ -8,38 +8,36 @@ Image::Image(unsigned int largeur, unsigned int hauteur) {
     this->largeur = largeur;
     this->hauteur = hauteur;
 
-    this->valeurs = new Couleur* [hauteur];
-    for (unsigned int i = 0; i < hauteur; i++) {
-        this->valeurs[i] = new Couleur[largeur];
-    }
+    this->valeurs = new m_Couleur[hauteur * largeur];
 }
 
 Image::Image(const Image& image) : Image(image.largeur, image.hauteur) {
-    for (unsigned int i = 0; i < hauteur; i++) {
-        for (unsigned int j = 0; j < largeur; j++) {
-            this->valeurs[i][j] = Couleur(image.valeurs[i][j]);
-        }
+    for (unsigned int i = 0; i < hauteur * largeur; i++) {
+        this->valeurs[i] = image.valeurs[i];
     }
 }
 
 Image::~Image() {
-    for (unsigned int i = 0; i < hauteur; i++) {
-        delete [] valeurs[i];
-    }
-
     delete [] valeurs;
 }
 
-Couleur* Image::operator[](int const& i) {
-    return valeurs[i];
+Couleur Image::get(unsigned i, unsigned j) {
+    m_Couleur couleur = *(valeurs + ((hauteur - 1 - i) * largeur) + j);
+    return Couleur(couleur.r, couleur.g, couleur.b);
+}
+
+Image::m_Couleur* Image::getData() {
+    return valeurs;
+}
+
+void Image::set(unsigned i, unsigned j, Couleur& couleur) {
+    *(valeurs + ((hauteur - 1 - i) * largeur) + j) = m_Couleur{ (unsigned char) couleur.r, (unsigned char) couleur.g, (unsigned char) couleur.b };
 }
 
 Image& Image::operator=(Image const& autre) {
     if (&autre != this) {
-        for (unsigned int i = 0; i < hauteur; i++) {
-            for (unsigned int j = 0; j < largeur; j++) {
-                this->valeurs[i][j] = Couleur(autre.valeurs[i][j]);
-            }
+        for (unsigned int i = 0; i < hauteur * largeur; i++) {
+            this->valeurs[i] = autre.valeurs[i];
         }
     }
 
@@ -55,7 +53,7 @@ void Image::exportPPM(const char* fileName) {
 
     for (unsigned int i = 0; i < hauteur; i++) {
         for (unsigned int j = 0; j < largeur; j++) {
-            fichier << (int) valeurs[i][j].r << " " << (int) valeurs[i][j].g << " " << (int) valeurs[i][j].b;
+            fichier << (int) get(i, j).r << " " << (int) get(i, j).g << " " << (int) get(i, j).b;
             if (j < largeur - 1) {
                 fichier << '\t';
             }

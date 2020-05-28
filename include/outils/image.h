@@ -9,8 +9,17 @@ class Image {
         Image(const Image& image);
         ~Image();
 
-        Couleur* operator[](int const& i);
+        struct m_Couleur {
+            unsigned char r;
+            unsigned char g;
+            unsigned char b;
+        };
+
         Image& operator=(Image const& autre);
+
+        Couleur get(unsigned i, unsigned j);
+        m_Couleur* getData();
+        void set(unsigned i, unsigned j, Couleur& couleur);
 
         /*!
          * \brief Cr�e un nouveau fichier au format ppm contenant les pixels associ� � cette image.
@@ -21,7 +30,7 @@ class Image {
         void exportPPM(const char* fileName);
 
         unsigned int largeur, hauteur;
-        Couleur** valeurs;
+        m_Couleur* valeurs;
 };
 
 #endif
