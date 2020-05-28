@@ -189,12 +189,12 @@ bool SceneOpenGL::deplacerCamera() {
 
     /* ATTENTION : SDL ne consid�re que les clavier QWERTY */
 
-    if (m_input.getTouche(SDL_SCANCODE_Q)) {
+    if (m_input.getTouche(SDL_SCANCODE_S)) {
         m_scene.camera.translater(Camera::DIRECTION::DERRIERE);
         deplacer = true;
     }
 
-    if (m_input.getTouche(SDL_SCANCODE_E)) {
+    if (m_input.getTouche(SDL_SCANCODE_W)) {
         m_scene.camera.translater(Camera::DIRECTION::DEVANT);
         deplacer = true;
     }
@@ -204,7 +204,7 @@ bool SceneOpenGL::deplacerCamera() {
         deplacer = true;
     }
 
-    if (m_input.getTouche(SDL_SCANCODE_W)) {
+    if (m_input.getTouche(SDL_SCANCODE_SPACE)) {
         m_scene.camera.translater(Camera::DIRECTION::HAUT);
         deplacer = true;
     }
@@ -214,7 +214,7 @@ bool SceneOpenGL::deplacerCamera() {
         deplacer = true;
     }
 
-    if (m_input.getTouche(SDL_SCANCODE_S)) {
+    if (m_input.getTouche(SDL_SCANCODE_LCTRL)) {
         m_scene.camera.translater(Camera::DIRECTION::BAS);
         deplacer = true;
     }

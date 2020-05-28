@@ -57,7 +57,7 @@ Matrice Matrice::operator*(const Matrice& matrice) {
 Vecteur Matrice::operator*(Vecteur& vecteur) {
     double x = 0, y = 0, z = 0;
 
-    if (this->colonnes != 4) {
+    if (this->colonnes != 4 && this->colonnes != 3) {
         throw std::domain_error("Matrice incompatible pour la multiplication");
     }
 
@@ -175,6 +175,27 @@ Matrice Matrice::mat_rotation_z(double theta) {
 
     matrice[0][1] = -sin(theta);
     matrice[1][0] = sin(theta);
+
+    return matrice;
+}
+
+Matrice Matrice::mat_rotation_axe(Vecteur axe, double theta) {
+    Matrice matrice(3, 3);
+    double c = cos(theta);
+    double s = sin(theta);
+
+    matrice[0][0] = pow(axe.x, 2) * (1.0 - c) + c;
+    matrice[1][1] = pow(axe.y, 2) * (1.0 - c) + c;
+    matrice[2][2] = pow(axe.z, 2) * (1.0 - c) + c;
+
+    matrice[1][0] = axe.x * axe.y * (1.0 - c) + axe.z * s;
+    matrice[0][1] = axe.x * axe.y * (1.0 - c) - axe.z * s;
+
+    matrice[2][0] = axe.x * axe.z * (1.0 - c) - axe.y * s;
+    matrice[0][2] = axe.x * axe.z * (1.0 - c) + axe.y * s;
+
+    matrice[2][1] = axe.y * axe.z * (1.0 - c) + axe.x * s;
+    matrice[1][2] = axe.y * axe.z * (1.0 - c) - axe.x * s;
 
     return matrice;
 }

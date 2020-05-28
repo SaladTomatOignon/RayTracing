@@ -35,25 +35,26 @@ void Camera::translater(DIRECTION direction) {
     Vecteur vecteurVertical = Vecteur(1, 0, 0).unitaire();
     Vecteur axeHorizontal = - 1 * orientation.prodVectoriel(vecteurHorizontal).unitaire();
     Vecteur axeVertical = orientation.prodVectoriel(axeHorizontal).unitaire();
+    double vitesseDeplacement = 1.5;
 
     switch (direction) {
         case DIRECTION::GAUCHE:
-            position = position - axeHorizontal;
+            position = position - vitesseDeplacement * axeHorizontal;
             break;
         case DIRECTION::HAUT:
-            position = position + axeVertical;
+            position = position + vitesseDeplacement * axeVertical;
             break;
         case DIRECTION::DROITE:
-            position = position + axeHorizontal;
+            position = position + vitesseDeplacement * axeHorizontal;
             break;
         case DIRECTION::BAS:
-            position = position - axeVertical;
+            position = position - vitesseDeplacement * axeVertical;
             break;
         case DIRECTION::DEVANT:
-            position = position + orientation.unitaire();
+            position = position + vitesseDeplacement * orientation.unitaire();
             break;
         case DIRECTION::DERRIERE:
-            position = position - orientation.unitaire();
+            position = position - vitesseDeplacement * orientation.unitaire();
             break;
         default:
             break;
@@ -61,20 +62,26 @@ void Camera::translater(DIRECTION direction) {
 }
 
 void Camera::orienter(DIRECTION direction) {
+    Vecteur vecteurHorizontal = Vecteur(1, 0, 0).unitaire();
+    Vecteur vecteurVertical = Vecteur(0, 1, 0).unitaire();
+    Vecteur axeHorizontal = orientation.prodVectoriel(vecteurVertical);
+    Vecteur axeVertical = orientation.prodVectoriel(axeHorizontal);
+    double vitesseRotation = M_PI / 48;
+
     switch (direction) {
-        case DIRECTION::GAUCHE:
-            orientation = Matrice::mat_rotation_y(-M_PI/64) * orientation;
-            break;
-        case DIRECTION::HAUT:
-            orientation = Matrice::mat_rotation_x(-M_PI / 64) * orientation;
-            break;
-        case DIRECTION::DROITE:
-            orientation = Matrice::mat_rotation_y(M_PI / 64) * orientation;
-            break;
-        case DIRECTION::BAS:
-            orientation = Matrice::mat_rotation_x(M_PI / 64) * orientation;
-            break;
-        default:
-            break;
+    case DIRECTION::GAUCHE:
+        orientation = (Matrice::mat_rotation_axe(axeVertical, vitesseRotation) * orientation).unitaire();
+        break;
+    case DIRECTION::HAUT:
+        orientation = (Matrice::mat_rotation_axe(axeHorizontal, vitesseRotation) * orientation).unitaire();
+        break;
+    case DIRECTION::DROITE:
+        orientation = (Matrice::mat_rotation_axe(axeVertical, -vitesseRotation) * orientation).unitaire();
+        break;
+    case DIRECTION::BAS:
+        orientation = (Matrice::mat_rotation_axe(axeHorizontal, -vitesseRotation) * orientation).unitaire();
+        break;
+    default:
+        break;
     }
 }

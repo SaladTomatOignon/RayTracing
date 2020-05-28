@@ -22,6 +22,7 @@ class Matrice {
         static Matrice mat_rotation_x(double theta);
         static Matrice mat_rotation_y(double theta);
         static Matrice mat_rotation_z(double theta);
+        static Matrice mat_rotation_axe(Vecteur axe, double theta);
 
     private:
         unsigned int lignes, colonnes;
