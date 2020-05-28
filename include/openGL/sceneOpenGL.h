@@ -18,7 +18,7 @@
 
 class SceneOpenGL {
     public:
-        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, int nbSampling);
+        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, bool eclairage, int nbSampling, bool ombrage);
         ~SceneOpenGL();
 
         bool initialiserFenetre();
@@ -36,8 +36,12 @@ class SceneOpenGL {
 
         /* Objet Input pour la gestion des évènements */
         Input m_input;
+        /* True s'il faut calculer l'éclairage, False sinon */
+        bool m_eclairage;
         /* Nombre de rayons lancés par pixel */
         int m_nbSampling;
+        /* True s'il faut calculer les ombres, False sinon */
+        bool m_ombrage;
 
         Scene m_scene;
         string m_fichierOutput;

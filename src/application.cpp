@@ -23,10 +23,29 @@ Application::~Application() {
 
 }
 
-Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumiere) {
+bool Application::estIllumine(Point point, Lumiere lumiere, vector<Forme*> formes) {
+    Vecteur vecteurIllumination = Point::creerVecteur(point, lumiere.position).unitaire();
+    Rayon r = Rayon(point + _EPSILON_ * vecteurIllumination, vecteurIllumination);
+    Point I;
+    Vecteur N;
+
+    for (Forme* forme : formes) {
+        if (forme->intersection(r, I, N) && point.distance2(I) <= point.distance2(lumiere.position)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumiere, vector<Forme*>* formes) {
     Vecteur I = Point::creerVecteur(inter.intersection, lumiere.position).unitaire();
     Vecteur V = Point::creerVecteur(inter.intersection, camera).unitaire();
     Vecteur H = 0.5 * (I + V);
+
+    if (nullptr != formes && !estIllumine(inter.intersection, lumiere, *formes)) {
+        return Couleur();
+    }
 
     double a = lumiere.intensite / (4 * M_PI * inter.intersection.distance2(lumiere.position));
 
@@ -70,7 +89,7 @@ bool Application::interPlusProche(Rayon r, vector<Forme*> formes, Intersection& 
     return aIntersecte;
 }
 
-void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling) {
+void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
     for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
         for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
             Couleur couleurPixel;
@@ -85,7 +104,7 @@ void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int p
                     if (eclairage) {
                         Couleur moyenneIllumination = Couleur();
                         for (Lumiere& lumiere : scene.lumieres) {
-                            moyenneIllumination = moyenneIllumination + illumination(inter, scene.camera.position, lumiere);
+                            moyenneIllumination = moyenneIllumination + illumination(inter, scene.camera.position, lumiere, ombrage ? &scene.formes : nullptr);
                         }
                         couleurPixel = couleurPixel + moyenneIllumination.clamp();
                     } else {
@@ -98,42 +117,27 @@ void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int p
                 rayonsLances++;
             } while (rayonsLances < pixelSampling);
 
-            image[i][j] = couleurPixel / max(pixelSampling, 1);
+            nouvelle[i][j] = f(couleurPixel / max(pixelSampling, 1), iteration, ancienne[i][j]);
         }
     }
 }
 
-void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling) {
-    for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
-        for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
-            Couleur couleurPixel;
-            int rayonsLances = 0;
+void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling, bool ombrage) {
+    lancerRayonsAux(scene, 1, image, image, pixelSampling, true, ombrage,
+        [](Couleur nouveau, int iteration, Couleur ancien) {
+            return nouveau;
+        });
+}
 
-            do {
-                Vecteur positionPixel = pixelSampling <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
-                Rayon r(scene.camera.position, scene.grille.distance_focale * scene.camera.orientation + positionPixel);
-
-                Intersection inter;
-                if (interPlusProche(r, scene.formes, inter)) {
-                    Couleur moyenneIllumination = Couleur();
-                    for (Lumiere& lumiere : scene.lumieres) {
-                        moyenneIllumination = moyenneIllumination + illumination(inter, scene.camera.position, lumiere);
-                    }
-                    couleurPixel = couleurPixel + moyenneIllumination.clamp();
-                } else {
-                    couleurPixel = couleurPixel + Couleur();
-                }
-
-                rayonsLances++;
-            } while (rayonsLances < pixelSampling);
-
-            nouvelle[i][j] = (couleurPixel / max(pixelSampling, 1)) * (1.0 / iteration) + ancienne[i][j] * ((iteration - 1.0) / iteration);
-        }
-    }
+void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, bool eclairage, int pixelSampling, bool ombrage) {
+    lancerRayonsAux(scene, iteration, ancienne, nouvelle, pixelSampling, eclairage, ombrage, 
+        [](Couleur nouveau, int iteration, Couleur ancien) {
+            return (nouveau * (1.0 / iteration) + ancien * ((iteration - 1.0) / iteration));
+        });
 }
 
 void Application::visualiserScene(Scene& scene) {
-    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput, niveau > 2 ? nbSampling : 1);
+    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2);
 
     // Initialisation de la scène
     if (sceneGL.initialiserFenetre() == false) {
@@ -151,7 +155,7 @@ void Application::visualiserScene(Scene& scene) {
 void Application::enregistrerImage(Scene& scene) {
     Image rendu(scene.grille.resolution_l, scene.grille.resolution_h);
 
-    lancerRayons(scene, rendu, niveau > 1, niveau > 2 ? nbSampling : 1);
+    lancerRayons(scene, rendu, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2);
 
     rendu.exportPPM(fichierOutput.c_str());
 }
