@@ -181,7 +181,7 @@ void SceneOpenGL::bouclePrincipale() {
 }
 
 void SceneOpenGL::afficherImage(Image& image) {
-    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_UNSIGNED_BYTE, image.getData());
+    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_FLOAT, image.getData());
 }
 
 bool SceneOpenGL::deplacerCamera() {

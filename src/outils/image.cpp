@@ -23,7 +23,7 @@ Image::~Image() {
 
 Couleur Image::get(unsigned i, unsigned j) {
     m_Couleur couleur = *(valeurs + ((hauteur - 1 - i) * largeur) + j);
-    return Couleur(couleur.r, couleur.g, couleur.b);
+    return Couleur(couleur.r * CHAR_MAX, couleur.g * CHAR_MAX, couleur.b * CHAR_MAX);
 }
 
 Image::m_Couleur* Image::getData() {
@@ -31,7 +31,7 @@ Image::m_Couleur* Image::getData() {
 }
 
 void Image::set(unsigned i, unsigned j, Couleur& couleur) {
-    *(valeurs + ((hauteur - 1 - i) * largeur) + j) = m_Couleur{ (unsigned char) couleur.r, (unsigned char) couleur.g, (unsigned char) couleur.b };
+    *(valeurs + ((hauteur - 1 - i) * largeur) + j) = m_Couleur{couleur.r / CHAR_MAX, couleur.g / CHAR_MAX, couleur.b / CHAR_MAX };
 }
 
 Image& Image::operator=(Image const& autre) {

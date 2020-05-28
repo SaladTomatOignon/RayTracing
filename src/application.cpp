@@ -98,7 +98,7 @@ void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& a
             int rayonsLances = 0;
 
             do {
-                Vecteur positionPixel = pixelSampling <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
+                Vecteur positionPixel = iteration <= 1 || pixelSampling <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
                 Rayon r(scene.camera.position, scene.grille.distance_focale * scene.camera.orientation + positionPixel);
 
                 Intersection inter;

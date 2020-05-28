@@ -4,7 +4,7 @@
 class Couleur {
     public:
         Couleur();
-        Couleur(unsigned int r, unsigned int g, unsigned int b);
+        Couleur(float r, float g, float b);
         Couleur(const Couleur& pixel);
         ~Couleur();
 
@@ -18,7 +18,7 @@ class Couleur {
         */
         Couleur clamp();
 
-        unsigned int r, g, b;
+        float r, g, b;
 };
 
 #endif
