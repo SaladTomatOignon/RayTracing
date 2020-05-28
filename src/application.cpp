@@ -61,9 +61,9 @@ Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumi
     double bB = inter.materiau.couleur.b * max<double>(inter.normale.prodScalaire(I), 0);
     double cB = inter.materiau.specularite.b * pow(max<double>(inter.normale.prodScalaire(H), 0), inter.materiau.brillance);
 
-    unsigned int r = a * (bR + cR);
-    unsigned int g = a * (bG + cG);
-    unsigned int b = a * (bB + cB);
+    double r = a * (bR + cR);
+    double g = a * (bG + cG);
+    double b = a * (bB + cB);
 
     return Couleur(r, g, b).clamp();
 }

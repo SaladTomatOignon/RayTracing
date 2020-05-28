@@ -34,9 +34,9 @@ Couleur Couleur::operator/(const double& reel) {
 }
 
 Couleur Couleur::clamp() {
-    float rClamp = min(r, 255.0f);
-    float gClamp = min(g, 255.0f);
-    float bClamp = min(b, 255.0f);
+    float rClamp = min(r, 1.0f);
+    float gClamp = min(g, 1.0f);
+    float bClamp = min(b, 1.0f);
 
     return Couleur(rClamp, gClamp, bClamp);
 }

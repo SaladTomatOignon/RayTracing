@@ -277,7 +277,7 @@ Materiau Parser::getMateriau(Value& forme) {
 }
 
 Couleur Parser::getCouleur(Value& forme) {
-    unsigned char r = 0, g = 0, b = 0;
+    float r = 0, g = 0, b = 0;
 
     if (!forme.HasMember("couleur") || !forme["couleur"].IsString()) {
         throw logic_error("Vous devez indiquer une couleur pour chaque forme");
@@ -285,9 +285,9 @@ Couleur Parser::getCouleur(Value& forme) {
         const Value& codeCouleur = forme["couleur"];
 
         try {
-            r = stoi(string(codeCouleur.GetString()).substr(0, 2), nullptr, 16);
-            g = stoi(string(codeCouleur.GetString()).substr(2, 2), nullptr, 16);
-            b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16);
+            r = stoi(string(codeCouleur.GetString()).substr(0, 2), nullptr, 16) / 255.0f;
+            g = stoi(string(codeCouleur.GetString()).substr(2, 2), nullptr, 16) / 255.0f;
+            b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16) / 255.0f;
         } catch (...) {
             throw logic_error("Le code couleur d'une forme est mal formé");
         }
@@ -297,15 +297,15 @@ Couleur Parser::getCouleur(Value& forme) {
 }
 
 Couleur Parser::getSpecularite(Value& forme) {
-    int r = 0, g = 0, b = 0;
+    float r = 0, g = 0, b = 0;
 
     if (forme.HasMember("specularite")) {
         const Value& codeCouleur = forme["specularite"];
 
         try {
-            r = stoi(string(codeCouleur.GetString()).substr(0, 2), nullptr, 16);
-            g = stoi(string(codeCouleur.GetString()).substr(2, 2), nullptr, 16);
-            b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16);
+            r = stoi(string(codeCouleur.GetString()).substr(0, 2), nullptr, 16) / 255.0f;
+            g = stoi(string(codeCouleur.GetString()).substr(2, 2), nullptr, 16) / 255.0f;
+            b = stoi(string(codeCouleur.GetString()).substr(4, 2), nullptr, 16) / 255.0f;
         } catch (...) {
             throw logic_error("Le code couleur de la spécularité d'une forme est mal formé");
         }
