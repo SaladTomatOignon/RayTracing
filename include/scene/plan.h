@@ -18,7 +18,7 @@ class Plan : public Forme {
         }
 
         virtual Point getCentre() override;
-        virtual bool intersection(Rayon r, Point& intersection, Vecteur& normale) override;
+        virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) override;
 
     private:
         Point centre;

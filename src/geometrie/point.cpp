@@ -32,10 +32,10 @@ Point Point::operator-(const Point& p) {
     return Point(x - p.x, y - p.y, z - p.z);
 }
 
-Vecteur Point::creerVecteur(Point a, Point b) {
+Vecteur Point::creerVecteur(Point& a, Point& b) {
     return Vecteur(b.x - a.x, b.y - a.y, b.z - a.z);
 }
 
-double Point::distance2(Point a) {
+double Point::distance2(Point& a) {
     return pow(a.x - x, 2) +  pow(a.y - y, 2) + pow(a.z - z, 2);
 }

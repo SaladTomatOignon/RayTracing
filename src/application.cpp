@@ -23,7 +23,7 @@ Application::~Application() {
 
 }
 
-bool Application::estIllumine(Point point, Lumiere lumiere, vector<Forme*> formes) {
+bool Application::estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& formes) {
     Vecteur vecteurIllumination = Point::creerVecteur(point, lumiere.position).unitaire();
     Rayon r = Rayon(point + _EPSILON_ * vecteurIllumination, vecteurIllumination);
     Point I;
@@ -38,7 +38,7 @@ bool Application::estIllumine(Point point, Lumiere lumiere, vector<Forme*> forme
     return true;
 }
 
-Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumiere, vector<Forme*>* formes) {
+Couleur Application::illumination(Intersection& inter, Point& camera, Lumiere& lumiere, vector<Forme*>* formes) {
     Vecteur I = Point::creerVecteur(inter.intersection, lumiere.position).unitaire();
     Vecteur V = Point::creerVecteur(inter.intersection, camera).unitaire();
     Vecteur H = 0.5 * (I + V);
@@ -68,7 +68,7 @@ Couleur Application::illumination(Intersection inter, Point camera, Lumiere lumi
     return Couleur(r, g, b).clamp();
 }
 
-bool Application::interPlusProche(Rayon r, vector<Forme*> formes, Intersection& inter) {
+bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter) {
     Point I;
     Vecteur N;
     double distance2PlusProche = -1;

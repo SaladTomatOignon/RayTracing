@@ -14,7 +14,7 @@ class Forme {
 
         virtual Forme* clone() const = 0;
         virtual Point getCentre() = 0;
-        virtual bool intersection(Rayon r, Point& intersection, Vecteur& normale) = 0;
+        virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) = 0;
 
         Materiau materiau;
     protected:

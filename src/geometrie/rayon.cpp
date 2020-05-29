@@ -5,11 +5,11 @@ Rayon::Rayon() : Rayon(Point(), Vecteur()) {
 }
 
 Rayon::Rayon(Point o, Vecteur u) {
-    this->origine = Point(o);
-    this->direction = Vecteur(u);
+    this->origine = o;
+    this->direction = u;
 }
 
-Rayon::Rayon(const Rayon& rayon) : Rayon(Point(rayon.origine), Vecteur(rayon.direction)) {
+Rayon::Rayon(const Rayon& rayon) : Rayon(rayon.origine, rayon.direction) {
     
 }
 

@@ -54,6 +54,6 @@ void Triangle::translationFormeCanonique() {
     Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
 
-bool Triangle::intersection(Rayon r, Point& intersection, Vecteur& normale) {
+bool Triangle::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     return false;
 }

@@ -47,9 +47,9 @@ class Application {
          *        Renvoie la Couleur du pixel à appliquer
         */
         static void lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, Couleur (*f)(Couleur nouveau, int iteration, Couleur ancien));
-        static bool interPlusProche(Rayon r, vector<Forme*> formes, Intersection& inter);
-        static Couleur illumination(Intersection inter, Point camera, Lumiere lumiere, vector<Forme*>* formes);
-        static bool estIllumine(Point point, Lumiere lumiere, vector<Forme*> formes);
+        static bool interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter);
+        static Couleur illumination(Intersection& inter, Point& camera, Lumiere& lumiere, vector<Forme*>* formes);
+        static bool estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& formes);
 };
 
 #endif

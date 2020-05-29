@@ -62,6 +62,6 @@ void Cylindre::translationFormeCanonique() {
     Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
 
-bool Cylindre::intersection(Rayon r, Point& intersection, Vecteur& normale) {
+bool Cylindre::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     return false; // TODO
 }

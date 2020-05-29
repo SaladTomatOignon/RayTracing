@@ -55,7 +55,7 @@ void Sphere::translationFormeCanonique() {
     Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
 
-bool Sphere::intersection(Rayon r, Point& intersection, Vecteur& normale) {
+bool Sphere::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     Vecteur u = r.direction.unitaire();
 
     Point L = centre - r.origine;

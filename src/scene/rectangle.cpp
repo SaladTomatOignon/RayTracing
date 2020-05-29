@@ -59,6 +59,6 @@ void Rectangle::translationFormeCanonique() {
     Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
 
-bool Rectangle::intersection(Rayon r, Point& intersection, Vecteur& normale) {
+bool Rectangle::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     return false;
 }

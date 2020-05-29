@@ -61,7 +61,7 @@ void Plan::translationFormeCanonique() {
     Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
 }
 
-bool Plan::intersection(Rayon r, Point& intersection, Vecteur& normale) {
+bool Plan::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     Vecteur u = r.direction.unitaire();
     double m = this->normale.prodScalaire(u);
 
