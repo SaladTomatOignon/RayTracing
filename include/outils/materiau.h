@@ -7,13 +7,15 @@ class Materiau {
     public:
         Materiau();
         Materiau(const Materiau& materiau);
-        Materiau(Couleur couleur, int brillance, Couleur specularite, float reflexion);
+        Materiau(Couleur couleur, int brillance, Couleur specularite, float reflexion, float coeffRefraction, float indiceRefraction);
         ~Materiau();
 
         Couleur couleur;
         Couleur specularite;
         int brillance;
         float reflexion;
+        float coeffRefraction;
+        float indiceRefraction;
 };
 
 #endif

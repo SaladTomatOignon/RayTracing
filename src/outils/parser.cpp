@@ -281,7 +281,23 @@ Materiau Parser::getMateriau(Value& forme) {
         reflexion = forme["reflexion"].GetFloat();
     }
 
-    return Materiau(couleur, brillance, specularite, reflexion);
+    /* Récuperation de la valeur du coefficient de refraction. */
+    float coeffRefraction;
+    if (!forme.HasMember("coeff_refraction")) {
+        coeffRefraction = 0;
+    } else {
+        coeffRefraction = forme["coeff_refraction"].GetFloat();
+    }
+
+    /* Récuperation de la valeur de l'indice de refraction. */
+    float indiceRefraction;
+    if (!forme.HasMember("indice_refraction")) {
+        indiceRefraction = 1;
+    } else {
+        indiceRefraction = forme["indice_refraction"].GetFloat();
+    }
+
+    return Materiau(couleur, brillance, specularite, reflexion, coeffRefraction, indiceRefraction);
 }
 
 Couleur Parser::getCouleur(Value& forme) {
