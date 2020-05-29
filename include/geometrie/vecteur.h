@@ -18,6 +18,7 @@ class Vecteur {
         friend Vecteur operator*(const double scalaire, const Vecteur& u);
         double prodScalaire(Vecteur& v);
         Vecteur prodVectoriel(Vecteur& v);
+        Vecteur rotationAxe(Vecteur& axe, double theta);
         Vecteur unitaire();
 
         /**

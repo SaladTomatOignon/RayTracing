@@ -55,6 +55,13 @@ Vecteur Vecteur::prodVectoriel(Vecteur& v) {
     );
 }
 
+Vecteur Vecteur::rotationAxe(Vecteur& axe, double theta) {
+    double c = cos(theta);
+    double s = sin(theta);
+
+    return c * (*this) + (1 - c) * prodScalaire(axe) * axe + s * axe.prodVectoriel((*this));
+}
+
 Vecteur Vecteur::unitaire() {
     if (x == 0 &&
         y == 0 &&
