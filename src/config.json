@@ -18,6 +18,7 @@
             "couleur": "FF0000",
             "specularite": "FFFFFF",
             "brillance": 10,
+            "reflexion": 0.1,
             "centre": [ 0, 14, 50 ],
             "rayon": 10
         },
@@ -27,6 +28,7 @@
             "couleur": "FFF000",
             "specularite": "FFFFFF",
             "brillance": 50,
+            "reflexion": 0.4,
             "centre": [ 10, 19, 70 ],
             "rayon": 10
         },
@@ -36,8 +38,19 @@
             "couleur": "0083FF",
             "specularite": "FFFFFF",
             "brillance": 100,
+            "reflexion": 0,
             "centre": [ 0, 0, 0 ],
             "normale": [ 0, 1, 0 ]
+        },
+
+        {
+            "type": "plan",
+            "couleur": "00FF7C",
+            "specularite": "FFFFFF",
+            "brillance": 100,
+            "reflexion": 0,
+            "centre": [ 0, 0, 90 ],
+            "normale": [ 0, 0, -1 ]
         }
     ],
 

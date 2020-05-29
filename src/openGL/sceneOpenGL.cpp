@@ -10,7 +10,7 @@
 
 using namespace std;
 
-SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, bool eclairage, int nbSampling, bool ombrage) {
+SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, bool eclairage, int nbSampling, bool ombrage, bool reflet) {
     m_titreFenetre = titreFenetre;
     m_largeurFenetre = largeurFenetre;
     m_hauteurFenetre = hauteurFenetre;
@@ -22,6 +22,7 @@ SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFen
     m_eclairage = eclairage;
     m_nbSampling = nbSampling;
     m_ombrage = ombrage;
+    m_reflet = reflet;
 }
 
 SceneOpenGL::~SceneOpenGL() {
@@ -112,7 +113,7 @@ void SceneOpenGL::bouclePrincipale() {
     unsigned int frameRate(1000 / 50);
     Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
 
-    Application::lancerRayons(m_scene, rendu1, true, m_nbSampling, m_ombrage);
+    Application::lancerRayons(m_scene, rendu1, true, m_nbSampling, m_ombrage, m_reflet);
 
     // Boucle principale
     while (!m_input.terminer()) {
@@ -123,7 +124,7 @@ void SceneOpenGL::bouclePrincipale() {
         /* ---------------------- GESTION DE LA LOGIQUE ------------------ */
         /* --------------------------------------------------------------- */
 
-        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2, m_eclairage, m_nbSampling, m_ombrage);
+        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2, m_eclairage, m_nbSampling, m_ombrage, m_reflet);
 
         // Gestion des évènements
         m_input.updateEvenements();

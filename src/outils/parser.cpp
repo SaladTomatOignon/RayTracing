@@ -273,7 +273,15 @@ Materiau Parser::getMateriau(Value& forme) {
         brillance = forme["brillance"].GetInt();
     }
 
-    return Materiau(couleur, brillance, specularite);
+    /* Récuperation de la valeur du coefficient de reflexion. */
+    float reflexion;
+    if (!forme.HasMember("reflexion")) {
+        reflexion = 0;
+    } else {
+        reflexion = forme["reflexion"].GetFloat();
+    }
+
+    return Materiau(couleur, brillance, specularite, reflexion);
 }
 
 Couleur Parser::getCouleur(Value& forme) {
