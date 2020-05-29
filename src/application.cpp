@@ -1,9 +1,11 @@
 #define _USE_MATH_DEFINES
+#define _MAX_RECURSIONS_ 8
 
 #include "../include/application.h"
 #include "../../include/geometrie/rayon.h"
 #include "../../include/geometrie/point.h"
 #include "../../include/geometrie/vecteur.h"
+#include "../../include/geometrie/matrice.h"
 #include "../../include/openGL/sceneOpenGL.h"
 #include "../../include/scene/scene.h"
 #include "../../include/scene/forme.h"
@@ -23,8 +25,30 @@ Application::~Application() {
 
 }
 
+Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool ombrage, unsigned int iteration) {
+    Couleur couleur;
+    Rayon reflechie = Rayon(inter.intersection, (-1 * (Matrice::mat_rotation_axe(inter.normale, M_PI) * inter.incident.direction)).unitaire());
+    /* On décale un tout petit peu l'origine du rayon pour ne pas rentrer en intersection avec l'objet de départ */
+    reflechie.origine = reflechie.origine + _EPSILON_ * reflechie.direction;
+
+    Intersection intersectionReflexion;
+    if (iteration <= _MAX_RECURSIONS_ && inter.materiau.reflexion > 0 && interPlusProche(reflechie, formes, intersectionReflexion)) {
+        couleur = illuminations(intersectionReflexion, inter.intersection, lumieres, formes, ombrage) *
+                  intersectionReflexion.materiau.specularite *
+                  inter.materiau.reflexion +
+                  couleurReflechieAux(intersectionReflexion, formes, lumieres, ombrage, iteration + 1);
+    }
+
+    return couleur.clamp();
+}
+
+Couleur Application::couleurReflechie(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool ombrage) {
+    return couleurReflechieAux(inter, formes, lumieres, ombrage, 1);
+}
+
 bool Application::estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& formes) {
     Vecteur vecteurIllumination = Point::creerVecteur(point, lumiere.position).unitaire();
+    /* On décale un tout petit peu l'origine du rayon pour ne pas rentrer en intersection avec l'objet de départ */
     Rayon r = Rayon(point + _EPSILON_ * vecteurIllumination, vecteurIllumination);
     Point I;
     Vecteur N;
@@ -38,12 +62,13 @@ bool Application::estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& fo
     return true;
 }
 
-Couleur Application::illumination(Intersection& inter, Point& camera, Lumiere& lumiere, vector<Forme*>* formes) {
+Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumiere, vector<Forme*>& formes, bool ombrage) {
     Vecteur I = Point::creerVecteur(inter.intersection, lumiere.position).unitaire();
-    Vecteur V = Point::creerVecteur(inter.intersection, camera).unitaire();
+    Vecteur V = Point::creerVecteur(inter.intersection, vue).unitaire();
     Vecteur H = 0.5 * (I + V);
 
-    if (nullptr != formes && !estIllumine(inter.intersection, lumiere, *formes)) {
+    /* Calcul de l'ombrage */
+    if (ombrage && !estIllumine(inter.intersection, lumiere, formes)) {
         return Couleur();
     }
 
@@ -68,6 +93,16 @@ Couleur Application::illumination(Intersection& inter, Point& camera, Lumiere& l
     return Couleur(r, g, b).clamp();
 }
 
+Couleur Application::illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool ombrage) {
+    Couleur moyenneIllumination = Couleur();
+
+    for (Lumiere& lumiere : lumieres) {
+        moyenneIllumination = moyenneIllumination + illumination(inter, vue, lumiere, formes, ombrage);
+    }
+
+    return moyenneIllumination.clamp();
+}
+
 bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter) {
     Point I;
     Vecteur N;
@@ -83,6 +118,7 @@ bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection
                 inter.materiau = forme->materiau;
                 inter.intersection = I;
                 inter.normale = N;
+                inter.incident = r;
                 distance2PlusProche = distance2;
             }
         }
@@ -91,7 +127,7 @@ bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection
     return aIntersecte;
 }
 
-void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
+void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, bool reflet, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
     for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
         for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
             Couleur couleurPixel;
@@ -104,11 +140,10 @@ void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& a
                 Intersection inter;
                 if (interPlusProche(r, scene.formes, inter)) {
                     if (eclairage) {
-                        Couleur moyenneIllumination = Couleur();
-                        for (Lumiere& lumiere : scene.lumieres) {
-                            moyenneIllumination = moyenneIllumination + illumination(inter, scene.camera.position, lumiere, ombrage ? &scene.formes : nullptr);
+                        couleurPixel = couleurPixel + illuminations(inter, scene.camera.position, scene.lumieres, scene.formes, ombrage);
+                        if (reflet) {
+                            couleurPixel = couleurPixel + couleurReflechie(inter, scene.formes, scene.lumieres, ombrage);
                         }
-                        couleurPixel = couleurPixel + moyenneIllumination.clamp();
                     } else {
                         couleurPixel = couleurPixel + inter.materiau.couleur;
                     }
@@ -124,22 +159,22 @@ void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& a
     }
 }
 
-void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling, bool ombrage) {
-    lancerRayonsAux(scene, 1, image, image, pixelSampling, true, ombrage,
+void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling, bool ombrage, bool reflet) {
+    lancerRayonsAux(scene, 1, image, image, pixelSampling, true, ombrage, reflet,
         [](Couleur nouveau, int iteration, Couleur ancien) {
             return nouveau;
         });
 }
 
-void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, bool eclairage, int pixelSampling, bool ombrage) {
-    lancerRayonsAux(scene, iteration, ancienne, nouvelle, pixelSampling, eclairage, ombrage, 
+void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, bool eclairage, int pixelSampling, bool ombrage, bool reflet) {
+    lancerRayonsAux(scene, iteration, ancienne, nouvelle, pixelSampling, eclairage, ombrage, reflet,
         [](Couleur nouveau, int iteration, Couleur ancien) {
             return (nouveau * (1.0 / iteration) + ancien * ((iteration - 1.0) / iteration));
         });
 }
 
 void Application::visualiserScene(Scene& scene) {
-    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2);
+    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2, niveau > 2);
 
     // Initialisation de la scène
     if (sceneGL.initialiserFenetre() == false) {
@@ -157,7 +192,7 @@ void Application::visualiserScene(Scene& scene) {
 void Application::enregistrerImage(Scene& scene) {
     Image rendu(scene.grille.resolution_l, scene.grille.resolution_h);
 
-    lancerRayons(scene, rendu, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2);
+    lancerRayons(scene, rendu, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2, niveau > 2);
 
     rendu.exportPPM(fichierOutput.c_str());
 }
