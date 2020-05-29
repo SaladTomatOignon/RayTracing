@@ -1,4 +1,6 @@
 #include "../../include/geometrie/matrice.h"
+#include "../../include/geometrie/vecteur.h"
+#include "../../include/geometrie/point.h"
 #include <math.h>
 #include <stdexcept>
 
@@ -66,6 +68,20 @@ Vecteur Matrice::operator*(Vecteur& vecteur) {
     z = mat[2][0] * vecteur.x + mat[2][1] * vecteur.y + mat[2][2] * vecteur.z;
 
     return Vecteur(x, y, z);
+}
+
+Point Matrice::operator*(Point& point) {
+    double x = 0, y = 0, z = 0;
+
+    if (this->colonnes != 4 && this->colonnes != 3) {
+        throw std::domain_error("Matrice incompatible pour la multiplication");
+    }
+
+    x = mat[0][0] * point.x + mat[0][1] * point.y + mat[0][2] * point.z;
+    y = mat[1][0] * point.x + mat[1][1] * point.y + mat[1][2] * point.z;
+    z = mat[2][0] * point.x + mat[2][1] * point.y + mat[2][2] * point.z;
+
+    return Point(x, y, z);
 }
 
 Matrice& Matrice::operator=(const Matrice& autre) {

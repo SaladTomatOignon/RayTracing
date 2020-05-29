@@ -9,6 +9,7 @@ class Couleur {
         ~Couleur();
 
         Couleur operator*(const double& reel);
+        Couleur operator*(const Couleur& autre);
         Couleur operator+(const Couleur& autre);
         Couleur operator/(const double& reel);
 

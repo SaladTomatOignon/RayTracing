@@ -2,6 +2,7 @@
 #define DEF__MATRICE
 
 #include "../geometrie/vecteur.h"
+#include "../geometrie/point.h"
 
 class Matrice {
     public:
@@ -11,7 +12,8 @@ class Matrice {
 
         double* operator[](int const& i) const;
         Matrice operator*(const Matrice& matrice);
-        Vecteur operator*(Vecteur& matrice);
+        Vecteur operator*(Vecteur& vecteur);
+        Point operator*(Point& point);
         Matrice& operator=(const Matrice& autre);
 
         static Matrice mat_identite(unsigned int taille);
