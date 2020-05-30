@@ -10,9 +10,9 @@ class Image {
         ~Image();
 
         struct m_Couleur {
-            float r;
-            float g;
-            float b;
+            double r;
+            double g;
+            double b;
         };
 
         Image& operator=(Image const& autre);

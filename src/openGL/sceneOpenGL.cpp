@@ -183,7 +183,27 @@ void SceneOpenGL::bouclePrincipale() {
 }
 
 void SceneOpenGL::afficherImage(Image& image) {
-    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_FLOAT, image.getData());
+    struct PixelFloat {
+        float r;
+        float g;
+        float b;
+    };
+
+    /* Passage et recopie dans une structure intermédiaire pour pouvoir utiliser glDrawPixels qui n'accepte pas le type Double.
+     * Or on a besoin des Double pour la précision de calcul entre les couleurs. Donc on convertis en Float uniquement pour l'affichage.
+     * Ce temps de recopie reste très négligeable au reste du programme. */
+
+    Image::m_Couleur* frame = image.getData();
+    PixelFloat* frameFloat = new PixelFloat[image.largeur * image.hauteur]();
+    for (int i = 0; i < image.largeur * image.hauteur; i++) {
+        frameFloat[i].r = frame[i].r;
+        frameFloat[i].g = frame[i].g;
+        frameFloat[i].b = frame[i].b;
+    }
+
+    glDrawPixels(image.largeur, image.hauteur, GL_RGB, GL_FLOAT, frameFloat);
+
+    delete [] frameFloat;
 }
 
 bool SceneOpenGL::deplacerCamera() {

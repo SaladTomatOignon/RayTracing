@@ -4,7 +4,7 @@
 class Couleur {
     public:
         Couleur();
-        Couleur(float r, float g, float b);
+        Couleur(double r, double g, double b);
         Couleur(const Couleur& pixel);
         ~Couleur();
 
@@ -19,7 +19,7 @@ class Couleur {
         */
         Couleur clamp();
 
-        float r, g, b;
+        double r, g, b;
 };
 
 #endif

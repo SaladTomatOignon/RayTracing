@@ -7,7 +7,7 @@ Couleur::Couleur() : Couleur(0, 0, 0) {
 
 }
 
-Couleur::Couleur(float r, float g, float b) {
+Couleur::Couleur(double r, double g, double b) {
     this->r = r;
     this->g = g;
     this->b = b;
@@ -38,9 +38,9 @@ Couleur Couleur::operator/(const double& reel) {
 }
 
 Couleur Couleur::clamp() {
-    float rClamp = min(r, 1.0f);
-    float gClamp = min(g, 1.0f);
-    float bClamp = min(b, 1.0f);
+    double rClamp = min(r, 1.0);
+    double gClamp = min(g, 1.0);
+    double bClamp = min(b, 1.0);
 
     return Couleur(rClamp, gClamp, bClamp);
 }
