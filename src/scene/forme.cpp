@@ -5,10 +5,11 @@ Forme::Forme() : Forme(Materiau()) {
 
 }
 
-Forme::Forme(Materiau materiau) {
+Forme::Forme(Materiau materiau, bool forme2D) {
     formeCanonique = nullptr;
 
     this->materiau = Materiau(materiau);
+    this->forme2D = forme2D;
 }
 
 Forme::~Forme() {

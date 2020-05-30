@@ -9,7 +9,7 @@
 class Forme {
     public:
         Forme();
-        Forme(Materiau couleur);
+        Forme(Materiau couleur, bool forme2D = false);
         ~Forme();
 
         virtual Forme* clone() const = 0;
@@ -17,6 +17,7 @@ class Forme {
         virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) = 0;
 
         Materiau materiau;
+        bool forme2D;
     protected:
         virtual Forme* creerFormeCanonique() = 0;
         virtual Forme* getFormeCanonique() = 0;

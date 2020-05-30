@@ -6,7 +6,7 @@
 
 #include <stdexcept>
 
-Plan::Plan(Point centre, Vecteur normale, Materiau materiau, bool estCanonique) : Forme(materiau) {
+Plan::Plan(Point centre, Vecteur normale, Materiau materiau, bool estCanonique) : Forme(materiau, forme2D = true) {
     Vecteur vecteurNul = normale - normale.unitaire();
 
     if (abs(Vecteur::sommeCoeff(vecteurNul)) > _ZERO_) {

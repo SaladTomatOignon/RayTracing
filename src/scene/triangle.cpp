@@ -4,7 +4,7 @@
 #include "../../include/geometrie/matrice.h"
 #include "../../include/geometrie/rayon.h"
 
-Triangle::Triangle(Point a, Point b, Point c, Materiau materiau, bool estCanonique) : Forme(materiau) {
+Triangle::Triangle(Point a, Point b, Point c, Materiau materiau, bool estCanonique) : Forme(materiau, forme2D = true) {
     this->a = Point(a);
     this->b = Point(b);
     this->c = Point(c);
