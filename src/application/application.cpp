@@ -1,7 +1,8 @@
 #define _USE_MATH_DEFINES
-#define _MAX_RECURSIONS_ 16
+#define _MAX_RECURSIONS_REFLEXION_ 16
+#define _MAX_RECURSIONS_REFRACTION_ 16
 
-#include "../include/application.h"
+#include "../include/application/application.h"
 #include "../../include/geometrie/rayon.h"
 #include "../../include/geometrie/point.h"
 #include "../../include/geometrie/vecteur.h"
@@ -28,7 +29,7 @@ Application::~Application() {
 Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_ || inter.materiau.coeffRefraction <= 0) {
+    if (iteration > _MAX_RECURSIONS_REFRACTION_ || inter.materiau.coeffRefraction <= 0) {
         return couleur;
     }
 
@@ -70,7 +71,7 @@ Couleur Application::couleurRefracte(Intersection& inter, vector<Forme*>& formes
 Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_ || inter.materiau.reflexion <= 0) {
+    if (iteration > _MAX_RECURSIONS_REFLEXION_ || inter.materiau.reflexion <= 0) {
         return couleur;
     }
 
@@ -154,7 +155,7 @@ Couleur Application::illuminations(Intersection& inter, Point& vue, vector<Lumie
     return moyenneIllumination.clamp();
 }
 
-Couleur Application::illuminationFinaleAux(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
+Couleur Application::illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction) {
     Couleur couleur;
 
     if (eclairage) {
@@ -172,10 +173,6 @@ Couleur Application::illuminationFinaleAux(Intersection& inter, Point& vue, vect
     }
 
     return couleur;
-}
-
-Couleur Application::illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction) {
-    return illuminationFinaleAux(inter, vue, lumieres, formes, eclairage, ombrage, reflet, refraction, 1);
 }
 
 

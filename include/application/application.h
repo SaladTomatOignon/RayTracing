@@ -52,7 +52,6 @@ class Application {
         */
         static void lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, bool reflet, bool refraction, Couleur (*f)(Couleur nouveau, int iteration, Couleur ancien));
         static bool interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter);
-        static Couleur illuminationFinaleAux(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration);
         static Couleur illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction);
         static Couleur illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool ombrage);
         static Couleur illumination(Intersection& inter, Point& vue, Lumiere& lumiere, vector<Forme*>& formes, bool ombrage);

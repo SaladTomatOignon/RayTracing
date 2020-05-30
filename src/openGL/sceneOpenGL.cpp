@@ -2,7 +2,7 @@
 #include "../../include/openGL/input.h"
 #include "../../include/outils/image.h"
 #include "../../include/scene/scene.h"
-#include "../../include/application.h"
+#include "../../include/application/application.h"
 
 #include <SDL2/SDL.h>
 #include <iostream>
