@@ -70,7 +70,12 @@ Couleur Application::couleurRefracte(Intersection& inter, vector<Forme*>& formes
 Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_ || inter.materiau.reflexion <= 0 || inter.materiau.coeffRefraction > 0) {
+    if (iteration > _MAX_RECURSIONS_ || inter.materiau.reflexion <= 0) {
+        return couleur;
+    }
+
+    /* On ne réfléchis pas les rayons qui rentrent dans les formes, pour ne pas faire exploser la pile d'appels.  */
+    if (inter.incident.direction.prodScalaire(inter.normale) > 0) {
         return couleur;
     }
 
