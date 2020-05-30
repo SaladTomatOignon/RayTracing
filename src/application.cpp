@@ -28,7 +28,7 @@ Application::~Application() {
 Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_ || inter.materiau.coeffRefraction <= 0 || inter.materiau.reflexion > 0) {
+    if (iteration > _MAX_RECURSIONS_ || inter.materiau.coeffRefraction <= 0) {
         return couleur;
     }
 
@@ -70,7 +70,7 @@ Couleur Application::couleurRefracte(Intersection& inter, vector<Forme*>& formes
 Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_ || inter.materiau.reflexion <= 0) {
+    if (iteration > _MAX_RECURSIONS_ || inter.materiau.reflexion <= 0 || inter.materiau.coeffRefraction > 0) {
         return couleur;
     }
 
