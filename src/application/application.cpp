@@ -140,6 +140,18 @@ Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumi
     double g = a * (bG + cG);
     double b = a * (bB + cB);
 
+    /* Calcul de l'éclairage ambiant : Une couleur ne descend pas en dessous d'un certain seuil,
+     * pour éviter les zones complètement noires */
+    {
+        double seuil = 0.3;
+        if (r + g + b < seuil && !inter.materiau.coeffRefraction > 0) {
+            double k = seuil / max((r + g + b), _EPSILON_);
+            r *= k;
+            g *= k;
+            b *= k;
+        }
+    }
+
     return Couleur(r, g, b).clamp();
 }
 
@@ -172,7 +184,6 @@ Couleur Application::illuminationFinale(Intersection& inter, Point& vue, vector<
 
     return couleur;
 }
-
 
 bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter) {
     Point I;
