@@ -33,24 +33,23 @@ class Application {
     private:
         Context parametres;
 
+        static void lancerRayonsAux(Scene* scene, unsigned int iteration, Image& ancienne, Image* nouvelle, Context& parametres, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien));
         /**
          * @brief Effectue le lancer de rayon dans la scène donné. Les fonctionnalitées dépendent des paramètres donnés.
          * @param[in] scene Scène dans laquelle lancer les rayons
          * @param iteration Nombre d'itération courante du lancer de rayon, dans le cas du pixel sampling.
          * @param[in] ancienne Image précédemment calculée
          * @param[out] nouvelle Résultat du lancé de rayons
-         * @param pixelSampling Nombre de pixels à lancer dans la scène
-         * @param eclairage Détermine s'il faut calculer l'éclairage
-         * @param ombrage Détermine s'il faut calculer les ombres
-         * @param reflet Détermine s'il faut calculer les reflets.
-         * @param refraction Détermine s'il faut calculer la réfraction.
+         * @param parametres Paramètres de la scène
          * @param f Fonction à appliquer pour le calcul du pixel dans l'image :
          *        Le premier argument Couleur : Le pixel calculé après un seul lancer de rayon (sans pixel sampling)
          *        Le premier argument int : Le nombre d'itération courant
          *        Le deuxieme argument Couleur : L'ancien pixel provenant du paramètre `ancienne`
          *        Renvoie la Couleur du pixel à appliquer
+         * @param debutLigne La première ligne de l'image à calculer (en partant du haut de l'image).
+         * @param finLigne La dernière ligne de l'image à calculer (en partant du haut de l'image).
         */
-        static void lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres, Couleur (*f)(Couleur nouveau, int iteration, Couleur ancien));
+        static void lancerRayonsParLignes(Scene** scene, unsigned int iteration, Image& ancienne, Image** nouvelle, Context& parametres, Couleur (*f)(Couleur nouveau, int iteration, Couleur ancien), unsigned debutLigne, unsigned finLigne);
         static bool interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter);
         static Couleur illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, Context& parametres);
         static Couleur illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, Context& parametres);

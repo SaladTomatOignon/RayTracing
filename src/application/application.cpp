@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #define _MAX_RECURSIONS_REFLEXION_ 16
 #define _MAX_RECURSIONS_REFRACTION_ 16
+#define _NB_THREADS_ 4
 
 #include "../include/application/application.h"
 #include "../../include/geometrie/rayon.h"
@@ -15,6 +16,7 @@
 #include <string>
 #include <math.h>
 #include <algorithm>
+#include <thread>
 
 Application::Application(Context& parametres) {
     this->parametres = Context(parametres);
@@ -210,38 +212,51 @@ bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection
     return aIntersecte;
 }
 
-void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
-    for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
-        for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
+void Application::lancerRayonsParLignes(Scene** scene, unsigned int iteration, Image& ancienne, Image** nouvelle, Context& parametres, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien), unsigned int debutLigne, unsigned int finLigne) {
+    for (unsigned int i = debutLigne; i < finLigne; i++) {
+        for (unsigned int j = 0; j < (*scene)->grille.resolution_l; j++) {
             Couleur couleurPixel;
             int rayonsLances = 0;
 
             do {
-                Vecteur positionPixel = iteration <= 1 && parametres.sampling <= 1 || parametres.niveau <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
-                Rayon r(scene.camera.position, scene.grille.distance_focale * scene.camera.orientation + positionPixel);
+                Vecteur positionPixel = iteration <= 1 && parametres.sampling <= 1 || parametres.niveau <= 1 ? (*scene)->grille.centrePixel(i, j) : (*scene)->grille.pointAleatoirePixel(i, j);
+                Rayon r((*scene)->camera.position, (*scene)->grille.distance_focale * (*scene)->camera.orientation + positionPixel);
 
                 Intersection inter;
-                if (interPlusProche(r, scene.formes, inter)) {
-                    couleurPixel = couleurPixel + illuminationFinale(inter, scene.camera.position, scene.lumieres, scene.formes, parametres);
+                if (interPlusProche(r, (*scene)->formes, inter)) {
+                    couleurPixel = couleurPixel + illuminationFinale(inter, (*scene)->camera.position, (*scene)->lumieres, (*scene)->formes, parametres);
                 }
 
                 rayonsLances++;
             } while (rayonsLances < parametres.sampling);
 
-            nouvelle.set(i, j, f(couleurPixel.clamp() / max(parametres.sampling, 1), iteration, ancienne.get(i, j)));
+            (*nouvelle)->set(i, j, f(couleurPixel.clamp() / max(parametres.sampling, 1), iteration, ancienne.get(i, j)));
         }
     }
 }
 
+void Application::lancerRayonsAux(Scene* scene, unsigned int iteration, Image& ancienne, Image* nouvelle, Context& parametres, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
+    unsigned int nbThreads = _NB_THREADS_;
+    vector<thread> threads = vector<thread>(nbThreads);
+
+    for (int i = 0; i < nbThreads; i++) {
+        threads.at(i) = thread(lancerRayonsParLignes, &scene, iteration, ancienne, &nouvelle, parametres, f, i * (scene->grille.resolution_h / nbThreads), (i + 1) * (scene->grille.resolution_h / nbThreads));
+    }
+
+    for (thread& t : threads) {
+        t.join();
+    }
+}
+
 void Application::lancerRayons(Scene& scene, Image& image, Context& parametres) {
-    lancerRayonsAux(scene, 1, image, image, parametres,
+    lancerRayonsAux(&scene, 1, image, &image, parametres,
         [](Couleur nouveau, int iteration, Couleur ancien) {
             return nouveau;
         });
 }
 
 void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres) {
-    lancerRayonsAux(scene, iteration, ancienne, nouvelle, parametres, 
+    lancerRayonsAux(&scene, iteration, ancienne, &nouvelle, parametres, 
         [](Couleur nouveau, int iteration, Couleur ancien) {
             return (nouveau * (1.0 / iteration) + ancien * ((iteration - 1.0) / iteration));
         });
