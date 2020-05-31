@@ -56,7 +56,7 @@ void Ellipsoide::rotationFormeCanonique() {
 void Ellipsoide::translationFormeCanonique() {
     Md = Md * Matrice::mat_translation(centre.x, centre.y, centre.z);
     Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
-    Mn = Mn * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
+    Mn = Mn * Matrice::mat_translation(centre.x, centre.y, centre.z);
 }
 
 bool Ellipsoide::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
@@ -68,7 +68,7 @@ bool Ellipsoide::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     }
 
     intersection = Point(Md * intersection);
-    normale = Vecteur(Mn * normale);
+    normale = Vecteur(Mn * normale.unitaire()).unitaire();
 
     return true;
 }
