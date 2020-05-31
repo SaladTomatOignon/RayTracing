@@ -8,6 +8,7 @@
 #include "../../include/scene/sphere.h"
 #include "../../include/scene/triangle.h"
 #include "../../include/scene/cylindre.h"
+#include "../../include/scene/ellipsoide.h"
 #include "../../include/scene/plan.h"
 #include "../../include/scene/lumiere.h"
 
@@ -213,6 +214,10 @@ Parser::TypeForme Parser::getTypeForme(string forme) {
         return TypeForme::PLAN;
     }
 
+    if (formeToUpperCase == "ELLIPSOIDE") {
+        return TypeForme::ELLIPSOIDE;
+    }
+
     return TypeForme::NONE;
 }
 
@@ -237,6 +242,9 @@ Forme* Parser::parseForme(Value& forme) {
                 break;
             case TypeForme::PLAN:
                 return parsePlan(forme);
+                break;
+            case TypeForme::ELLIPSOIDE:
+                return parseEllipsoide(forme);
                 break;
             default:
                 return nullptr;
@@ -491,6 +499,45 @@ Plan* Parser::parsePlan(Value& forme) {
     }
 
     return new Plan(centre, Vecteur(normale.x, normale.y, normale.z), materiau);
+}
+
+Ellipsoide* Parser::parseEllipsoide(Value& forme) {
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
+
+    /* Détermination du centre de l'ellipsoide */
+    Point centre;
+    try {
+        centre = getPoint(forme, "centre");
+    } catch (logic_error le) {
+        throw logic_error("Point de l'ellipsoide manquant ou invalide.");
+    }
+
+    /* Détermination du rayon A */
+    double rayonA;
+    if (!forme.HasMember("rayonA")) {
+        throw logic_error("Rayon A de l'ellipsoide manquant.");
+    } else {
+        rayonA = forme["rayonA"].GetDouble();
+    }
+
+    /* Détermination du rayon B */
+    double rayonB;
+    if (!forme.HasMember("rayonB")) {
+        throw logic_error("Rayon B de l'ellipsoide manquant.");
+    } else {
+        rayonB = forme["rayonB"].GetDouble();
+    }
+
+    /* Détermination du rayon C */
+    double rayonC;
+    if (!forme.HasMember("rayonC")) {
+        throw logic_error("Rayon C de l'ellipsoide manquant.");
+    } else {
+        rayonC = forme["rayonC"].GetDouble();
+    }
+
+    return new Ellipsoide(centre, rayonA, rayonB, rayonC, materiau);
 }
 
 cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {

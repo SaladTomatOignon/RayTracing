@@ -29,6 +29,7 @@ class Forme {
         Forme* formeCanonique;
         Matrice Md = Matrice::mat_identite(4);
         Matrice Mi = Matrice::mat_identite(4);
+        Matrice Mn = Matrice::mat_identite(4);
 };
 
 #endif

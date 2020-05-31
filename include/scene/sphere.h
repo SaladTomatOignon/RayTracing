@@ -10,6 +10,7 @@ class Sphere : public Forme {
     public:
         Sphere(Point centre, double rayon);
         Sphere(Point centre, double rayon, Materiau materiau);
+        Sphere(Point centre, double rayon, Materiau materiau, bool estCanonique);
         Sphere(const Sphere& sphere);
         ~Sphere();
 
@@ -20,11 +21,9 @@ class Sphere : public Forme {
         virtual Point getCentre() override;
         virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) override;
 
-    private:
-        Point centre;
         double rayon;
-
-        Sphere(Point centre, double rayon, Materiau materiau, bool estCanonique);
+        Point centre;
+    private:
 
         virtual Sphere* creerFormeCanonique() override;
         virtual Sphere* getFormeCanonique() override;

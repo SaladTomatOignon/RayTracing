@@ -12,6 +12,7 @@
 #include "../scene/rectangle.h"
 #include "../scene/triangle.h"
 #include "../scene/cylindre.h"
+#include "../scene/ellipsoide.h"
 #include "../scene/plan.h"
 #include "../scene/lumiere.h"
 #include "../outils/couleur.h"
@@ -44,6 +45,7 @@ class Parser {
             TRIANGLE,
             CYLINDRE,
             PLAN,
+            ELLIPSOIDE,
             NONE
         };
 
@@ -63,6 +65,7 @@ class Parser {
         static Rectangle* parseRectangle(Value& forme);
         static Triangle* parseTriangle(Value& forme);
         static Cylindre* parseCylindre(Value& forme);
+        static Ellipsoide* parseEllipsoide(Value& forme);
         static Plan* parsePlan(Value& forme);
 };
 
