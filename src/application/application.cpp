@@ -143,7 +143,7 @@ Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumi
     /* Calcul de l'éclairage ambiant : Une couleur ne descend pas en dessous d'un certain seuil,
      * pour éviter les zones complètement noires */
     {
-        double seuil = 0.3;
+        double seuil = 0.03;
         if (r + g + b < seuil && !inter.materiau.coeffRefraction > 0) {
             double k = seuil / max((r + g + b), _EPSILON_);
             r *= k;
