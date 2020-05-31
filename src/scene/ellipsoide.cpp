@@ -20,8 +20,7 @@ Ellipsoide::Ellipsoide(Point centre, double rayonA, double rayonB, double rayonC
 
 }
 
-Ellipsoide::Ellipsoide(const Ellipsoide& Ellipsoide) : Ellipsoide(Ellipsoide.centre, Ellipsoide.rayonA, Ellipsoide.rayonB, Ellipsoide.rayonC, Ellipsoide.materiau) {
-
+Ellipsoide::Ellipsoide(const Ellipsoide &ellipsoide) : Ellipsoide(ellipsoide.centre, ellipsoide.rayonA, ellipsoide.rayonB, ellipsoide.rayonC, ellipsoide.materiau) {
 }
 
 Ellipsoide::~Ellipsoide() {
@@ -29,7 +28,7 @@ Ellipsoide::~Ellipsoide() {
 }
 
 Sphere* Ellipsoide::creerFormeCanonique() {
-    // Sphère de rayon 1 centrée à l'origine.
+    // Sphï¿½re de rayon 1 centrï¿½e ï¿½ l'origine.
     return new Sphere(Point(0, 0, 0), 1, Materiau(), true);
 }
 
@@ -68,7 +67,8 @@ bool Ellipsoide::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     }
 
     intersection = Point(Md * intersection);
-    normale = Vecteur(Mn * normale.unitaire()).unitaire();
+    normale = normale.unitaire();
+    normale = Vecteur(Mn * normale).unitaire();
 
     return true;
 }

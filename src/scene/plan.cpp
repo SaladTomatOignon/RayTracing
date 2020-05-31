@@ -10,7 +10,7 @@ Plan::Plan(Point centre, Vecteur normale, Materiau materiau, bool estCanonique) 
     Vecteur vecteurNul = normale - normale.unitaire();
 
     if (abs(Vecteur::sommeCoeff(vecteurNul)) > _ZERO_) {
-        throw std::invalid_argument("La normale du plan doit être un vecteur unitaire");
+        throw std::invalid_argument("La normale du plan doit ï¿½tre un vecteur unitaire");
     }
 
     this->centre = centre;
@@ -34,7 +34,7 @@ Plan::~Plan() {
 }
 
 Plan* Plan::creerFormeCanonique() {
-    // Plan passant par l'origine et parralelle à l'axe x
+    // Plan passant par l'origine et parralelle ï¿½ l'axe x
     return new Plan(Point(0, 0, 0), Vecteur(0, 1, 0), Materiau(), true);
 }
 
@@ -65,7 +65,7 @@ bool Plan::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
     Vecteur u = r.direction.unitaire();
     double m = this->normale.prodScalaire(u);
 
-    if (abs(m) < _EPSILON_) {
+    if (std::abs(m) < _EPSILON_) {
         return false;
     }
 

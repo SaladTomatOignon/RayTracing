@@ -230,7 +230,8 @@ void Application::lancerRayonsParLignes(Scene** scene, unsigned int iteration, I
                 rayonsLances++;
             } while (rayonsLances < parametres.sampling);
 
-            (*nouvelle)->set(i, j, f(couleurPixel.clamp() / max(parametres.sampling, 1), iteration, ancienne.get(i, j)));
+            Couleur pixel = f((couleurPixel / max(parametres.sampling, 1)).clamp(), iteration, ancienne.get(i, j));
+            (*nouvelle)->set(i, j, pixel);
         }
     }
 }
@@ -240,7 +241,7 @@ void Application::lancerRayonsAux(Scene* scene, unsigned int iteration, Image& a
     vector<thread> threads = vector<thread>(nbThreads);
 
     for (int i = 0; i < nbThreads; i++) {
-        threads.at(i) = thread(lancerRayonsParLignes, &scene, iteration, ancienne, &nouvelle, parametres, f, i * (scene->grille.resolution_h / nbThreads), (i + 1) * (scene->grille.resolution_h / nbThreads));
+        threads.at(i) = thread(lancerRayonsParLignes, &scene, iteration, ref(ancienne), &nouvelle, ref(parametres), f, i * (scene->grille.resolution_h / nbThreads), (i + 1) * (scene->grille.resolution_h / nbThreads));
     }
 
     for (thread& t : threads) {

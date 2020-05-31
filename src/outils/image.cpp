@@ -53,7 +53,7 @@ void Image::exportPPM(string fileName) {
 
     for (unsigned int i = 0; i < hauteur; i++) {
         for (unsigned int j = 0; j < largeur; j++) {
-            fichier << (int) get(i, j).r << " " << (int) get(i, j).g << " " << (int) get(i, j).b;
+            fichier << (int) (get(i, j).r * 255.0) << " " << (int) (get(i, j).g * 255.0) << " " << (int) (get(i, j).b * 255.0);
             if (j < largeur - 1) {
                 fichier << '\t';
             }
