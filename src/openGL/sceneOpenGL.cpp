@@ -141,6 +141,18 @@ void SceneOpenGL::bouclePrincipale() {
             }
         }
 
+        if (m_input.getTouche(SDL_SCANCODE_E)) {
+            m_parametres.eclairageActive = !m_parametres.eclairageActive;
+        }
+
+        if (m_input.getTouche(SDL_SCANCODE_R)) {
+            m_parametres.reflexionActive = !m_parametres.reflexionActive;
+        }
+
+        if (m_input.getTouche(SDL_SCANCODE_T)) {
+            m_parametres.transparenceActive = !m_parametres.transparenceActive;
+        }
+
         /* Pour forcer l'�valuation des 2 m�thodes... */
         bool deplacer = deplacerCamera();
         bool orienter = orienterCamera();
@@ -190,7 +202,7 @@ void SceneOpenGL::afficherImage(Image& image) {
 
     Image::m_Couleur* frame = image.getData();
     PixelFloat* frameFloat = new PixelFloat[image.largeur * image.hauteur]();
-    for (int i = 0; i < image.largeur * image.hauteur; i++) {
+    for (unsigned int i = 0; i < image.largeur * image.hauteur; i++) {
         frameFloat[i].r = frame[i].r;
         frameFloat[i].g = frame[i].g;
         frameFloat[i].b = frame[i].b;
