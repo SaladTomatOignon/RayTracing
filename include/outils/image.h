@@ -3,6 +3,10 @@
 
 #include "../outils/couleur.h"
 
+#include <string>
+
+using namespace std;
+
 class Image {
     public:
         Image(unsigned int largeur, unsigned int hauteur);
@@ -27,7 +31,7 @@ class Image {
          *
          * \param fileName Le nom du fichier � cr�er.
          */
-        void exportPPM(const char* fileName);
+        void exportPPM(string fileName);
 
         unsigned int largeur, hauteur;
         m_Couleur* valeurs;

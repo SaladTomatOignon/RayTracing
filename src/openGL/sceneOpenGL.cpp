@@ -10,7 +10,7 @@
 
 using namespace std;
 
-SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, bool eclairage, int nbSampling, bool ombrage, bool reflet, bool refraction) {
+SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, Context& parametres) {
     m_titreFenetre = titreFenetre;
     m_largeurFenetre = largeurFenetre;
     m_hauteurFenetre = hauteurFenetre;
@@ -18,12 +18,7 @@ SceneOpenGL::SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFen
     m_contexteOpenGL = nullptr;
     m_scene = Scene(scene);
     m_input = Input();
-    m_fichierOutput = fichierOutput;
-    m_eclairage = eclairage;
-    m_nbSampling = nbSampling;
-    m_ombrage = ombrage;
-    m_reflet = reflet;
-    m_refraction = refraction;
+    m_parametres = Context(parametres);
 }
 
 SceneOpenGL::~SceneOpenGL() {
@@ -114,7 +109,7 @@ void SceneOpenGL::bouclePrincipale() {
     unsigned int frameRate(1000 / 50);
     Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
 
-    Application::lancerRayons(m_scene, rendu1, true, m_nbSampling, m_ombrage, m_reflet, m_refraction);
+    Application::lancerRayons(m_scene, rendu1, m_parametres);
 
     // Boucle principale
     while (!m_input.terminer()) {
@@ -125,7 +120,7 @@ void SceneOpenGL::bouclePrincipale() {
         /* ---------------------- GESTION DE LA LOGIQUE ------------------ */
         /* --------------------------------------------------------------- */
 
-        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2, m_eclairage, m_nbSampling, m_ombrage, m_reflet, m_refraction);
+        Application::lancerRayonsProgressifs(m_scene, iterations, rendu1, rendu2, m_parametres);
 
         // Gestion des évènements
         m_input.updateEvenements();
@@ -134,7 +129,7 @@ void SceneOpenGL::bouclePrincipale() {
             break;
 
         if (m_input.getTouche(SDL_SCANCODE_RETURN)) {
-            rendu2.exportPPM(m_fichierOutput.c_str());
+            rendu2.exportPPM(m_parametres.fichierSortie);
         }
 
         if (m_input.getTouche(SDL_SCANCODE_P)) {

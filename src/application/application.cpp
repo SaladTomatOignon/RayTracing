@@ -16,17 +16,15 @@
 #include <math.h>
 #include <algorithm>
 
-Application::Application(int niveau, string fichierOutput, int nbSampling) {
-    this->niveau = niveau;
-    this->fichierOutput = fichierOutput;
-    this->nbSampling = nbSampling;
+Application::Application(Context& parametres) {
+    this->parametres = Context(parametres);
 }
 
 Application::~Application() {
 
 }
 
-Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
+Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres, unsigned int iteration) {
     Couleur couleur;
 
     if (iteration > _MAX_RECURSIONS_REFRACTION_ || inter.materiau.coeffRefraction <= 0) {
@@ -57,18 +55,18 @@ Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& for
 
     Intersection intersectionRefraction;
     if (interPlusProche(refracte, formes, intersectionRefraction)) {
-        couleur = illuminationFinale(intersectionRefraction, inter.intersection, lumieres, formes, eclairage, ombrage, reflet, refraction) * inter.materiau.coeffRefraction * (iteration == 1 && !inter.forme2D ? inter.materiau.coeffDiffusion : 1) +
-                  couleurRefracteAux(intersectionRefraction, formes, lumieres, eclairage, ombrage, reflet, refraction, iteration + 1);
+        couleur = illuminationFinale(intersectionRefraction, inter.intersection, lumieres, formes, parametres) * inter.materiau.coeffRefraction * (iteration == 1 && !inter.forme2D ? inter.materiau.coeffDiffusion : 1) +
+                  couleurRefracteAux(intersectionRefraction, formes, lumieres, parametres, iteration + 1);
     }
 
     return couleur.clamp();
 }
 
-Couleur Application::couleurRefracte(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction) {
-    return couleurRefracteAux(inter, formes, lumieres, eclairage, ombrage, reflet, refraction, 1);
+Couleur Application::couleurRefracte(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres) {
+    return couleurRefracteAux(inter, formes, lumieres, parametres, 1);
 }
 
-Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration) {
+Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres, unsigned int iteration) {
     Couleur couleur;
 
     if (iteration > _MAX_RECURSIONS_REFLEXION_ || inter.materiau.reflexion <= 0) {
@@ -87,15 +85,15 @@ Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& fo
 
     Intersection intersectionReflexion;
     if (interPlusProche(reflechie, formes, intersectionReflexion)) {
-        couleur = illuminationFinale(intersectionReflexion, inter.intersection, lumieres, formes, eclairage, ombrage, reflet, refraction) * inter.materiau.reflexion +
-                  couleurReflechieAux(intersectionReflexion, formes, lumieres, eclairage, ombrage, reflet, refraction, iteration + 1);
+        couleur = illuminationFinale(intersectionReflexion, inter.intersection, lumieres, formes, parametres) * inter.materiau.reflexion +
+                  couleurReflechieAux(intersectionReflexion, formes, lumieres, parametres, iteration + 1);
     }
 
     return couleur.clamp();
 }
 
-Couleur Application::couleurReflechie(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction) {
-    return couleurReflechieAux(inter, formes, lumieres, eclairage, ombrage, reflet, refraction, 1);
+Couleur Application::couleurReflechie(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres) {
+    return couleurReflechieAux(inter, formes, lumieres, parametres, 1);
 }
 
 bool Application::estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& formes) {
@@ -114,13 +112,13 @@ bool Application::estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& fo
     return true;
 }
 
-Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumiere, vector<Forme*>& formes, bool ombrage) {
+Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumiere, vector<Forme*>& formes, Context& parametres) {
     Vecteur I = Point::creerVecteur(inter.intersection, lumiere.position).unitaire();
     Vecteur V = Point::creerVecteur(inter.intersection, vue).unitaire();
     Vecteur H = 0.5 * (I + V);
 
     /* Calcul de l'ombrage */
-    if (ombrage && !estIllumine(inter.intersection, lumiere, formes)) {
+    if (parametres.ombrageActive && !estIllumine(inter.intersection, lumiere, formes)) {
         return Couleur();
     }
 
@@ -145,31 +143,31 @@ Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumi
     return Couleur(r, g, b).clamp();
 }
 
-Couleur Application::illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool ombrage) {
+Couleur Application::illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, Context& parametres) {
     Couleur moyenneIllumination = Couleur();
 
     for (Lumiere& lumiere : lumieres) {
-        moyenneIllumination = moyenneIllumination + illumination(inter, vue, lumiere, formes, ombrage);
+        moyenneIllumination = moyenneIllumination + illumination(inter, vue, lumiere, formes, parametres);
     }
 
     return moyenneIllumination.clamp();
 }
 
-Couleur Application::illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction) {
+Couleur Application::illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, Context& parametres) {
     Couleur couleur;
 
-    if (eclairage) {
-        couleur = couleur + illuminations(inter, vue, lumieres, formes, ombrage);
+    if (parametres.eclairageActive) {
+        couleur = couleur + illuminations(inter, vue, lumieres, formes, parametres);
     } else {
         couleur = couleur + inter.materiau.couleur;
     }
 
-    if (reflet) {
-        couleur = couleur + couleurReflechie(inter, formes, lumieres, eclairage, ombrage, reflet, refraction);
+    if (parametres.reflexionActive) {
+        couleur = couleur + couleurReflechie(inter, formes, lumieres, parametres);
     }
 
-    if (refraction) {
-        couleur = couleur * inter.materiau.coeffDiffusion + couleurRefracte(inter, formes, lumieres, eclairage, ombrage, reflet, refraction);
+    if (parametres.transparenceActive) {
+        couleur = couleur * inter.materiau.coeffDiffusion + couleurRefracte(inter, formes, lumieres, parametres);
     }
 
     return couleur;
@@ -201,45 +199,45 @@ bool Application::interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection
     return aIntersecte;
 }
 
-void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, bool reflet, bool refraction, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
+void Application::lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
     for (unsigned int i = 0; i < scene.grille.resolution_h; i++) {
         for (unsigned int j = 0; j < scene.grille.resolution_l; j++) {
             Couleur couleurPixel;
             int rayonsLances = 0;
 
             do {
-                Vecteur positionPixel = iteration <= 1 && pixelSampling <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
+                Vecteur positionPixel = iteration <= 1 && parametres.sampling <= 1 || parametres.niveau <= 1 ? scene.grille.centrePixel(i, j) : scene.grille.pointAleatoirePixel(i, j);
                 Rayon r(scene.camera.position, scene.grille.distance_focale * scene.camera.orientation + positionPixel);
 
                 Intersection inter;
                 if (interPlusProche(r, scene.formes, inter)) {
-                    couleurPixel = couleurPixel + illuminationFinale(inter, scene.camera.position, scene.lumieres, scene.formes, eclairage, ombrage, reflet, refraction);
+                    couleurPixel = couleurPixel + illuminationFinale(inter, scene.camera.position, scene.lumieres, scene.formes, parametres);
                 }
 
                 rayonsLances++;
-            } while (rayonsLances < pixelSampling);
+            } while (rayonsLances < parametres.sampling);
 
-            nouvelle.set(i, j, f(couleurPixel.clamp() / max(pixelSampling, 1), iteration, ancienne.get(i, j)));
+            nouvelle.set(i, j, f(couleurPixel.clamp() / max(parametres.sampling, 1), iteration, ancienne.get(i, j)));
         }
     }
 }
 
-void Application::lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling, bool ombrage, bool reflet, bool refraction) {
-    lancerRayonsAux(scene, 1, image, image, pixelSampling, true, ombrage, reflet, refraction,
+void Application::lancerRayons(Scene& scene, Image& image, Context& parametres) {
+    lancerRayonsAux(scene, 1, image, image, parametres,
         [](Couleur nouveau, int iteration, Couleur ancien) {
             return nouveau;
         });
 }
 
-void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, bool eclairage, int pixelSampling, bool ombrage, bool reflet, bool refraction) {
-    lancerRayonsAux(scene, iteration, ancienne, nouvelle, pixelSampling, eclairage, ombrage, reflet, refraction, 
+void Application::lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres) {
+    lancerRayonsAux(scene, iteration, ancienne, nouvelle, parametres, 
         [](Couleur nouveau, int iteration, Couleur ancien) {
             return (nouveau * (1.0 / iteration) + ancien * ((iteration - 1.0) / iteration));
         });
 }
 
 void Application::visualiserScene(Scene& scene) {
-    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, fichierOutput, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2, niveau > 2, niveau > 2);
+    SceneOpenGL sceneGL("Lancer de rayon interactif", scene.grille.resolution_l, scene.grille.resolution_h, scene, parametres);
 
     // Initialisation de la scène
     if (sceneGL.initialiserFenetre() == false) {
@@ -257,7 +255,7 @@ void Application::visualiserScene(Scene& scene) {
 void Application::enregistrerImage(Scene& scene) {
     Image rendu(scene.grille.resolution_l, scene.grille.resolution_h);
 
-    lancerRayons(scene, rendu, niveau > 1, niveau > 2 ? nbSampling : 1, niveau > 2, niveau > 2, niveau > 2);
+    lancerRayons(scene, rendu, parametres);
 
-    rendu.exportPPM(fichierOutput.c_str());
+    rendu.exportPPM(parametres.fichierSortie);
 }

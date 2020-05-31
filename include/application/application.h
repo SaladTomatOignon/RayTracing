@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "../application/context.h"
 #include "../geometrie/point.h"
 #include "../geometrie/vecteur.h"
 #include "../scene/scene.h"
@@ -13,11 +14,11 @@
 
 class Application {
     public:
-        Application(int niveau, string fichierOutput, int nbSampling);
+        Application(Context& parametres);
         ~Application();
 
-        static void lancerRayons(Scene& scene, Image& image, bool eclairage, int pixelSampling, bool ombrage, bool reflet, bool refraction);
-        static void lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, bool eclairage, int pixelSampling, bool ombrage, bool reflet, bool refraction);
+        static void lancerRayons(Scene& scene, Image& image, Context& parametres);
+        static void lancerRayonsProgressifs(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres);
         void visualiserScene(Scene& scene);
         void enregistrerImage(Scene& scene);
 
@@ -30,8 +31,7 @@ class Application {
         };
 
     private:
-        int niveau, nbSampling;
-        string fichierOutput;
+        Context parametres;
 
         /**
          * @brief Effectue le lancer de rayon dans la scène donné. Les fonctionnalitées dépendent des paramètres donnés.
@@ -50,16 +50,16 @@ class Application {
          *        Le deuxieme argument Couleur : L'ancien pixel provenant du paramètre `ancienne`
          *        Renvoie la Couleur du pixel à appliquer
         */
-        static void lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, int pixelSampling, bool eclairage, bool ombrage, bool reflet, bool refraction, Couleur (*f)(Couleur nouveau, int iteration, Couleur ancien));
+        static void lancerRayonsAux(Scene& scene, unsigned int iteration, Image& ancienne, Image& nouvelle, Context& parametres, Couleur (*f)(Couleur nouveau, int iteration, Couleur ancien));
         static bool interPlusProche(Rayon& r, vector<Forme*>& formes, Intersection& inter);
-        static Couleur illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool eclairage, bool ombrage, bool reflet, bool refraction);
-        static Couleur illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, bool ombrage);
-        static Couleur illumination(Intersection& inter, Point& vue, Lumiere& lumiere, vector<Forme*>& formes, bool ombrage);
+        static Couleur illuminationFinale(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, Context& parametres);
+        static Couleur illuminations(Intersection& inter, Point& vue, vector<Lumiere>& lumieres, vector<Forme*>& formes, Context& parametres);
+        static Couleur illumination(Intersection& inter, Point& vue, Lumiere& lumiere, vector<Forme*>& formes, Context& parametres);
         static bool estIllumine(Point& point, Lumiere& lumiere, vector<Forme*>& formes);
-        static Couleur couleurReflechie(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction);
-        static Couleur couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration);
-        static Couleur couleurRefracte(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction);
-        static Couleur couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, bool eclairage, bool ombrage, bool reflet, bool refraction, unsigned int iteration);
+        static Couleur couleurReflechie(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres);
+        static Couleur couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres, unsigned int iteration);
+        static Couleur couleurRefracte(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres);
+        static Couleur couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres, unsigned int iteration);
 };
 
 #endif

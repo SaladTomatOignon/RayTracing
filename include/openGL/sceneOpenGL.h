@@ -8,6 +8,7 @@
     #include <GL/glut.h>
 #endif
 
+#include "../application/application.h"
 #include "../scene/scene.h"
 #include "../outils/image.h"
 #include "../openGL/input.h"
@@ -18,7 +19,7 @@
 
 class SceneOpenGL {
     public:
-        SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, string fichierOutput, bool eclairage, int nbSampling, bool ombrage, bool reflet, bool refraction);
+        SceneOpenGL(string titreFenetre, int largeurFenetre, int hauteurFenetre, Scene scene, Context& parametres);
         ~SceneOpenGL();
 
         bool initialiserFenetre();
@@ -26,7 +27,7 @@ class SceneOpenGL {
         void bouclePrincipale();
 
     private:
-        std::string m_titreFenetre;
+        string m_titreFenetre;
         int m_largeurFenetre;
         int m_hauteurFenetre;
 
@@ -36,19 +37,10 @@ class SceneOpenGL {
 
         /* Objet Input pour la gestion des évènements */
         Input m_input;
-        /* True s'il faut calculer l'éclairage, False sinon */
-        bool m_eclairage;
-        /* Nombre de rayons lancés par pixel */
-        int m_nbSampling;
-        /* True s'il faut calculer les ombres, False sinon */
-        bool m_ombrage;
-        /* True s'il faut calculer les reflets, False sinon */
-        bool m_reflet;
-        /* True s'il faut calculer la réfraction, False sinon */
-        bool m_refraction;
+        /* Parametres du lancer de rayon */
+        Context m_parametres;
 
         Scene m_scene;
-        string m_fichierOutput;
 
         void afficherImage(Image& image);
         bool deplacerCamera();

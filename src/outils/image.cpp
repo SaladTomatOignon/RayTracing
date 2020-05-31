@@ -44,7 +44,7 @@ Image& Image::operator=(Image const& autre) {
     return *this;
 }
 
-void Image::exportPPM(const char* fileName) {
+void Image::exportPPM(string fileName) {
     ofstream fichier(fileName);
 
     fichier << "P3" << endl;
