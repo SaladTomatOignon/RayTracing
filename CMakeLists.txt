@@ -5,9 +5,9 @@ project(lray)
 # Inclusion de la bibliotheque OpenGL - SDL2
 find_package(GLEW REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
-find_package(OpenGL REQUIRED)
 
 # Inclusion des headers
+include_directories(include/application)
 include_directories(include/geometrie)
 include_directories(include/openGL)
 include_directories(include/outils)
@@ -24,7 +24,7 @@ file(GLOB SRC_FILES
     "src/openGL/*.cpp"
     "src/outils/*.cpp"
     "src/scene/*.cpp"
-    "src/application.cpp"
+    "src/application/*.cpp"
     "src/main.cpp"
 )
 

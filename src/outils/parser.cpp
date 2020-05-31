@@ -541,13 +541,14 @@ Ellipsoide* Parser::parseEllipsoide(Value& forme) {
 }
 
 cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {
-    cxxopts::Options options("lray", "Programme le principe du lancer de rayon");
+    cxxopts::Options options("lray", "Application implémentant le principe du lancer de rayon");
 
     options.add_options()
         ("n,niveau", "Niveau de rendu", cxxopts::value<int>())
         ("p,ps", "Nombre de rayons par pixel", cxxopts::value<int>())
         ("i,input", "Fichier de configuration json", cxxopts::value<string>())
         ("o,output", "Nom de l'image de sortie", cxxopts::value<string>())
+        ("f,force", "Force le rendu en mode interactif")
         ("h,help", "Affiche ce message");
 
     auto resultat = options.parse(argc, argv);
