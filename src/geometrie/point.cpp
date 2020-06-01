@@ -37,5 +37,5 @@ Vecteur Point::creerVecteur(Point& a, Point& b) {
 }
 
 double Point::distance2(Point& a) {
-    return pow(a.x - x, 2) +  pow(a.y - y, 2) + pow(a.z - z, 2);
+    return (a.x - x) * (a.x - x) + (a.y - y) * (a.y - y) + (a.z - z) * (a.z - z);
 }

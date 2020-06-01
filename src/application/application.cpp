@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 #define _MAX_RECURSIONS_REFLEXION_ 16
 #define _MAX_RECURSIONS_REFRACTION_ 16
-#define _NB_THREADS_ 4
+#define _NB_THREADS_ 8
 
 #include "../include/application/application.h"
 #include "../../include/geometrie/rayon.h"
@@ -57,7 +57,8 @@ Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& for
 
     Intersection intersectionRefraction;
     if (interPlusProche(refracte, formes, intersectionRefraction)) {
-        couleur = illuminationFinale(intersectionRefraction, inter.intersection, lumieres, formes, parametres) * inter.materiau.coeffRefraction * (iteration == 1 && !inter.forme2D ? inter.materiau.coeffDiffusion : 1) +
+        /* Cette dernière multiplication permet d'appliquer le coeffcient de diffusion lorsque le rayon traverse l'autre coté de la forme 3D. C'est à dire lorsqu'on est à la première iteration et qu'on ne se trouve pas à l'extremité de la forme (auquel cas on ne rentre pas dans la forme) */
+        couleur = illuminationFinale(intersectionRefraction, inter.intersection, lumieres, formes, parametres) * inter.materiau.coeffRefraction * (iteration == 1 && (!inter.forme2D && inter.incident.direction.prodScalaire(inter.normale) < 0) ? inter.materiau.coeffDiffusion : 1) +
                   couleurRefracteAux(intersectionRefraction, formes, lumieres, parametres, iteration + 1);
     }
 
@@ -142,11 +143,11 @@ Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumi
     double g = a * (bG + cG);
     double b = a * (bB + cB);
 
-    /* Calcul de l'éclairage ambiant : Une couleur ne descend pas en dessous d'un certain seuil,
+    /* Calcul de l'éclairage "ambiant" : Une couleur ne descend pas en dessous d'un certain seuil,
      * pour éviter les zones complètement noires */
     {
         double seuil = 0.03;
-        if (r + g + b < seuil && !inter.materiau.coeffRefraction > 0) {
+        if ((r + g + b < seuil) && !(inter.materiau.coeffRefraction > 0)) {
             double k = seuil / max((r + g + b), _EPSILON_);
             r *= k;
             g *= k;
@@ -240,7 +241,7 @@ void Application::lancerRayonsAux(Scene* scene, unsigned int iteration, Image& a
     unsigned int nbThreads = _NB_THREADS_;
     vector<thread> threads = vector<thread>(nbThreads);
 
-    for (int i = 0; i < nbThreads; i++) {
+    for (unsigned int i = 0; i < nbThreads; i++) {
         threads.at(i) = thread(lancerRayonsParLignes, &scene, iteration, ref(ancienne), &nouvelle, ref(parametres), f, i * (scene->grille.resolution_h / nbThreads), (i + 1) * (scene->grille.resolution_h / nbThreads));
     }
 

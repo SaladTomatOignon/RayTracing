@@ -68,7 +68,7 @@ bool Ellipsoide::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
 
     intersection = Point(Md * intersection);
     normale = normale.unitaire();
-    normale = Vecteur(Mn * normale).unitaire();
+    normale = -1 * Vecteur(Md * normale).unitaire();
 
     return true;
 }
