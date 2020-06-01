@@ -1,7 +1,5 @@
 #define _USE_MATH_DEFINES
-#define _MAX_RECURSIONS_REFLEXION_ 16
-#define _MAX_RECURSIONS_REFRACTION_ 16
-#define _NB_THREADS_ 8
+#define _SEUIL_MINIMAL_ECLAIRAGE_ 0.03
 
 #include "../include/application/application.h"
 #include "../../include/geometrie/rayon.h"
@@ -29,7 +27,7 @@ Application::~Application() {
 Couleur Application::couleurRefracteAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_REFRACTION_ || inter.materiau.coeffRefraction <= 0) {
+    if (iteration > parametres.maxRecursionsRefraction || inter.materiau.coeffRefraction <= 0) {
         return couleur;
     }
 
@@ -72,7 +70,7 @@ Couleur Application::couleurRefracte(Intersection& inter, vector<Forme*>& formes
 Couleur Application::couleurReflechieAux(Intersection& inter, vector<Forme*>& formes, vector<Lumiere>& lumieres, Context& parametres, unsigned int iteration) {
     Couleur couleur;
 
-    if (iteration > _MAX_RECURSIONS_REFLEXION_ || inter.materiau.reflexion <= 0) {
+    if (iteration > parametres.maxRecursionsReflexion || inter.materiau.reflexion <= 0) {
         return couleur;
     }
 
@@ -146,7 +144,7 @@ Couleur Application::illumination(Intersection& inter, Point& vue, Lumiere& lumi
     /* Calcul de l'éclairage "ambiant" : Une couleur ne descend pas en dessous d'un certain seuil,
      * pour éviter les zones complètement noires */
     {
-        double seuil = 0.03;
+        const double seuil = _SEUIL_MINIMAL_ECLAIRAGE_;
         if ((r + g + b < seuil) && !(inter.materiau.coeffRefraction > 0)) {
             double k = seuil / max((r + g + b), _EPSILON_);
             r *= k;
@@ -238,7 +236,7 @@ void Application::lancerRayonsParLignes(Scene** scene, unsigned int iteration, I
 }
 
 void Application::lancerRayonsAux(Scene* scene, unsigned int iteration, Image& ancienne, Image* nouvelle, Context& parametres, Couleur(*f)(Couleur nouveau, int iteration, Couleur ancien)) {
-    unsigned int nbThreads = _NB_THREADS_;
+    unsigned int nbThreads = parametres.nbThreads;
     vector<thread> threads = vector<thread>(nbThreads);
 
     for (unsigned int i = 0; i < nbThreads; i++) {

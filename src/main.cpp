@@ -13,6 +13,10 @@
 void initParametres(Context& parametres) {
     srand(time(NULL));
 
+    parametres.maxRecursionsReflexion = 16;
+    parametres.maxRecursionsRefraction = 16;
+    parametres.nbThreads = 8;
+
     switch (parametres.niveau) {
         /* Les niveaux plus élevés héritent des fonctionnalités des niveaux plus bas */
         case 3:

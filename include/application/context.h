@@ -18,6 +18,9 @@ class Context {
         bool ombrageActive;
         bool reflexionActive;
         bool transparenceActive;
+        unsigned int maxRecursionsReflexion;
+        unsigned int maxRecursionsRefraction;
+        unsigned int nbThreads;
 };
 
 #endif
