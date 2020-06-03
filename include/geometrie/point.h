@@ -11,6 +11,7 @@ class Point {
         ~Point();
 
         Point operator+(const Vecteur& v);
+        Point operator+(const Point& p);
         Point operator-(const Point& p);
         Point operator-(const Vecteur& v);
 

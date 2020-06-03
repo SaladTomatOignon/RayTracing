@@ -24,6 +24,10 @@ Point Point::operator+(const Vecteur& v) {
     return Point(x + v.x, y + v.y, z + v.z);
 }
 
+Point Point::operator+(const Point& p) {
+    return Point(x + p.x, y + p.y, z + p.z);
+}
+
 Point Point::operator-(const Vecteur& v) {
     return Point(x - v.x, y - v.y, z - v.z);
 }
