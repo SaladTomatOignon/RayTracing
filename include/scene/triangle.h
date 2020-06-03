@@ -8,8 +8,8 @@
 
 class Triangle : public Forme {
     public:
-        Triangle(Point a, Point b, Point c);
-        Triangle(Point a, Point b, Point c, Materiau materiau);
+        Triangle(Point a, Point b, Point c, Vecteur rotation);
+        Triangle(Point a, Point b, Point c, Vecteur rotation, Materiau materiau);
         Triangle(const Triangle& tr);
         ~Triangle();
 
@@ -23,7 +23,7 @@ class Triangle : public Forme {
     private:
         Point a, b, c;
 
-        Triangle(Point a, Point b, Point c, Materiau materiau, bool estCanonique);
+        Triangle(Point a, Point b, Point c, Vecteur rotation, Materiau materiau, bool estCanonique);
 
         virtual Triangle* creerFormeCanonique() override;
         virtual Triangle* getFormeCanonique() override;

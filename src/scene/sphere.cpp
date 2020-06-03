@@ -5,20 +5,19 @@
 #include "../../include/geometrie/rayon.h"
 #include <math.h>
 
-Sphere::Sphere(Point centre, double rayon, Materiau materiau, bool estCanonique) : Forme(materiau) {
-    this->centre = Point(centre);
+Sphere::Sphere(Point centre, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique) : Forme(centre, rotation, materiau) {
     this->rayon = rayon;
 }
 
-Sphere::Sphere(Point centre, double rayon, Materiau materiau) : Sphere(centre, rayon, materiau, false) {
+Sphere::Sphere(Point centre, double rayon, Vecteur rotation, Materiau materiau) : Sphere(centre, rayon, rotation, materiau, false) {
 
 }
 
-Sphere::Sphere(Point centre, double rayon) : Sphere(centre, rayon, Materiau(), false) {
+Sphere::Sphere(Point centre, double rayon, Vecteur rotation) : Sphere(centre, rayon, rotation, Materiau(), false) {
 
 }
 
-Sphere::Sphere(const Sphere& sphere) : Sphere(sphere.centre, sphere.rayon, sphere.materiau) {
+Sphere::Sphere(const Sphere& sphere) : Sphere(sphere.centre, sphere.rayon, sphere.rotation, sphere.materiau) {
 
 }
 
@@ -28,7 +27,7 @@ Sphere::~Sphere() {
 
 Sphere* Sphere::creerFormeCanonique() {
     // Sph�re de rayon 1 centr� � l'origine.
-    return new Sphere(Point(0, 0, 0), 1, Materiau(), true);
+    return new Sphere(Point(0, 0, 0), 1, Vecteur(), Materiau(), true);
 }
 
 Sphere* Sphere::getFormeCanonique() {
@@ -43,16 +42,26 @@ void Sphere::homothetieFormeCanonique() {
     Sphere* sphereCanonique = getFormeCanonique();
 
     Md = Md * Matrice::mat_homothetie(rayon, rayon, rayon);
-    Mi = Mi * Matrice::mat_homothetie(sphereCanonique->rayon / rayon, sphereCanonique->rayon / rayon, sphereCanonique->rayon / rayon);
+    Mi = Matrice::mat_homothetie(sphereCanonique->rayon / rayon, sphereCanonique->rayon / rayon, sphereCanonique->rayon / rayon) * Mi;
 }
 
 void Sphere::rotationFormeCanonique() {
+    Md = Md * Matrice::mat_rotation_x(rotation.x);
+    Mi = Matrice::mat_rotation_x(-rotation.x) * Mi;
+    Mn = Mn * Matrice::mat_rotation_x(rotation.x);
 
+    Md = Md * Matrice::mat_rotation_y(rotation.y);
+    Mi = Matrice::mat_rotation_y(-rotation.y) * Mi;
+    Mn = Mn * Matrice::mat_rotation_y(rotation.y);
+
+    Md = Md * Matrice::mat_rotation_z(rotation.z);
+    Mi = Matrice::mat_rotation_z(-rotation.z) * Mi;
+    Mn = Mn * Matrice::mat_rotation_z(rotation.z);
 }
 
 void Sphere::translationFormeCanonique() {
     Md = Md * Matrice::mat_translation(centre.x, centre.y, centre.z);
-    Mi = Mi * Matrice::mat_translation(-centre.x, -centre.y, -centre.z);
+    Mi = Matrice::mat_translation(-centre.x, -centre.y, -centre.z) * Mi;
 }
 
 bool Sphere::intersection(Rayon& r, Point& intersection, Vecteur& normale) {

@@ -8,8 +8,8 @@
 
 class Plan : public Forme {
     public:
-        Plan(Point centre, Vecteur normale);
-        Plan(Point centre, Vecteur normale, Materiau materiau);
+        Plan(Point centre, Vecteur normale, Vecteur rotation);
+        Plan(Point centre, Vecteur normale, Vecteur rotation, Materiau materiau);
         Plan(const Plan& plan);
         ~Plan();
 
@@ -21,16 +21,16 @@ class Plan : public Forme {
         virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) override;
 
     private:
-        Point centre;
         Vecteur normale;
 
-        Plan(Point centre, Vecteur normale, Materiau materiau, bool estCanonique);
+        Plan(Point centre, Vecteur normale, Vecteur rotation, Materiau materiau, bool estCanonique);
 
         virtual Plan* creerFormeCanonique() override;
         virtual Plan* getFormeCanonique() override;
         virtual void homothetieFormeCanonique() override;
         virtual void rotationFormeCanonique() override;
         virtual void translationFormeCanonique() override;
+        bool intersectionCanonique(Rayon& r, Point& intersection, Vecteur& normale);
 };
 
 #endif

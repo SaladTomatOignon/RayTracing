@@ -8,9 +8,9 @@
 
 class Sphere : public Forme {
     public:
-        Sphere(Point centre, double rayon);
-        Sphere(Point centre, double rayon, Materiau materiau);
-        Sphere(Point centre, double rayon, Materiau materiau, bool estCanonique);
+        Sphere(Point centre, double rayon, Vecteur rotation);
+        Sphere(Point centre, double rayon, Vecteur rotation, Materiau materiau);
+        Sphere(Point centre, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique);
         Sphere(const Sphere& sphere);
         ~Sphere();
 
@@ -22,9 +22,8 @@ class Sphere : public Forme {
         virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) override;
 
         double rayon;
-        Point centre;
-    private:
 
+    private:
         virtual Sphere* creerFormeCanonique() override;
         virtual Sphere* getFormeCanonique() override;
         virtual void homothetieFormeCanonique() override;

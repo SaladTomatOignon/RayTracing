@@ -8,8 +8,8 @@
 
 class Cylindre : public Forme {
     public:
-        Cylindre(Point a, Point b, double rayon);
-        Cylindre(Point a, Point b, double rayon, Materiau materiau);
+        Cylindre(Point a, Point b, double rayon, Vecteur rotation);
+        Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau);
         Cylindre(const Cylindre& cylindre);
         ~Cylindre();
 
@@ -24,7 +24,7 @@ class Cylindre : public Forme {
         Point a, b;
         double rayon;
 
-        Cylindre(Point a, Point b, double rayon, Materiau materiau, bool estCanonique);
+        Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique);
 
         virtual Cylindre* creerFormeCanonique() override;
         virtual Cylindre* getFormeCanonique() override;

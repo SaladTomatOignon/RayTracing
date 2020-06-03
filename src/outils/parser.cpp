@@ -1,3 +1,5 @@
+#include "../../geometrie/point.h"
+#include "../../geometrie/vecteur.h"
 #include "../../include/outils/parser.h"
 #include "../../include/outils/couleur.h"
 #include "../../include/rapidjson/document.h"
@@ -9,6 +11,7 @@
 #include "../../include/scene/triangle.h"
 #include "../../include/scene/cylindre.h"
 #include "../../include/scene/ellipsoide.h"
+#include "../../include/scene/cube.h"
 #include "../../include/scene/plan.h"
 #include "../../include/scene/lumiere.h"
 
@@ -218,6 +221,14 @@ Parser::TypeForme Parser::getTypeForme(string forme) {
         return TypeForme::ELLIPSOIDE;
     }
 
+    if (formeToUpperCase == "CUBE") {
+        return TypeForme::CUBE;
+    }
+
+    if (formeToUpperCase == "PAVE DROIT") {
+        return TypeForme::PAVE_DROIT;
+    }
+
     return TypeForme::NONE;
 }
 
@@ -246,6 +257,12 @@ Forme* Parser::parseForme(Value& forme) {
             case TypeForme::ELLIPSOIDE:
                 return parseEllipsoide(forme);
                 break;
+            case TypeForme::CUBE:
+                return parseCube(forme);
+                break;
+            case TypeForme::PAVE_DROIT:
+                return parsePaveDroit(forme);
+                break;
             default:
                 return nullptr;
                 break;
@@ -264,6 +281,22 @@ Point Parser::getPoint(Value& forme, const char* champ) {
     }
 
     return point;
+}
+
+Vecteur Parser::getRotation(Value& forme) {
+    Vecteur rotation;
+
+    if (!forme.HasMember("rotation")) {
+        return rotation;
+    } else {
+        if (!forme["rotation"].IsArray() || forme["rotation"].GetArray().Size() != 3) {
+            throw logic_error("La rotation de la forme doit être représentée sous la forme d'un tableau de 3 décimaux");
+        }
+        const Value& coords = forme["rotation"];
+        rotation = Vecteur(coords[0].GetDouble(), coords[1].GetDouble(), coords[2].GetDouble());
+    }
+
+    return rotation;
 }
 
 Materiau Parser::getMateriau(Value& forme) {
@@ -358,6 +391,9 @@ Sphere* Parser::parseSphere(Value& forme) {
     /* Récupération du materiau */
     Materiau materiau = getMateriau(forme);
 
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
+
     /* R�cup�ration du centre de la sph�re. */
     Point centre;
     try {
@@ -374,12 +410,15 @@ Sphere* Parser::parseSphere(Value& forme) {
         rayon = forme["rayon"].GetDouble();
     }
 
-    return new Sphere(centre, rayon, materiau);
+    return new Sphere(centre, rayon, rotation, materiau);
 }
 
 Rectangle* Parser::parseRectangle(Value& forme) {
     /* Récupération du materiau */
     Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
 
     /* D�termination du point A */
     Point pointA;
@@ -413,12 +452,15 @@ Rectangle* Parser::parseRectangle(Value& forme) {
         throw logic_error("Point D du rectangle manquant ou invalide.");
     }
 
-    return new Rectangle(pointA, pointB, pointC, pointD, materiau);
+    return new Rectangle(pointA, pointB, pointC, pointD, rotation, materiau);
 }
 
 Triangle* Parser::parseTriangle(Value& forme) {
     /* Récupération du materiau */
     Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
 
     /* D�termination du point A */
     Point pointA;
@@ -444,12 +486,15 @@ Triangle* Parser::parseTriangle(Value& forme) {
         throw logic_error("Point C du triangle manquant ou invalide.");
     }
 
-    return new Triangle(pointA, pointB, pointC, materiau);
+    return new Triangle(pointA, pointB, pointC, rotation, materiau);
 }
 
 Cylindre* Parser::parseCylindre(Value& forme) {
     /* Récupération du materiau */
     Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
 
     /* Détermination du point A */
     Point pointA;
@@ -475,12 +520,15 @@ Cylindre* Parser::parseCylindre(Value& forme) {
         rayon = forme["rayon"].GetDouble();
     }
 
-    return new Cylindre(pointA, pointB, rayon, materiau);
+    return new Cylindre(pointA, pointB, rayon, rotation, materiau);
 }
 
 Plan* Parser::parsePlan(Value& forme) {
     /* Récupération du materiau */
     Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
 
     /* Détermination du point par lequel le plan passe */
     Point centre;
@@ -498,12 +546,15 @@ Plan* Parser::parsePlan(Value& forme) {
         throw logic_error("Normale au plan manquante ou invalide.");
     }
 
-    return new Plan(centre, Vecteur(normale.x, normale.y, normale.z), materiau);
+    return new Plan(centre, Vecteur(normale.x, normale.y, normale.z), rotation, materiau);
 }
 
 Ellipsoide* Parser::parseEllipsoide(Value& forme) {
     /* Récupération du materiau */
     Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
 
     /* Détermination du centre de l'ellipsoide */
     Point centre;
@@ -537,7 +588,75 @@ Ellipsoide* Parser::parseEllipsoide(Value& forme) {
         rayonC = forme["rayonC"].GetDouble();
     }
 
-    return new Ellipsoide(centre, rayonA, rayonB, rayonC, materiau);
+    return new Ellipsoide(centre, rayonA, rayonB, rayonC, rotation, materiau);
+}
+
+Cube* Parser::parseCube(Value& forme) {
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
+
+    /* Récupération du centre du cube. */
+    Point centre;
+    try {
+        centre = getPoint(forme, "centre");
+    } catch (logic_error le) {
+        throw logic_error("Position du cube manquante ou invalide.");
+    }
+
+    /* Récupération de la taille du cube. */
+    double taille;
+    if (!forme.HasMember("taille")) {
+        throw logic_error("Taille du cube manquante ou invalide.");
+    } else {
+        taille = forme["taille"].GetDouble();
+    }
+
+    return new Cube(centre, taille, rotation, materiau);
+}
+
+PaveDroit* Parser::parsePaveDroit(Value& forme) {
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
+
+    /* Récupération du centre du cube. */
+    Point centre;
+    try {
+        centre = getPoint(forme, "centre");
+    } catch (logic_error le) {
+        throw logic_error("Position du pavé droit manquante ou invalide.");
+    }
+
+    /* Récupération de la largeur du pavé droit. */
+    double largeur;
+    if (!forme.HasMember("largeur")) {
+        throw logic_error("Largeur du pavé droit manquante ou invalide.");
+    } else {
+        largeur = forme["largeur"].GetDouble();
+    }
+
+    /* Récupération de la hauteur du pavé droit. */
+    double hauteur;
+    if (!forme.HasMember("hauteur")) {
+        throw logic_error("Hauteur du pavé droit manquante ou invalide.");
+    } else {
+        hauteur = forme["hauteur"].GetDouble();
+    }
+
+    /* Récupération de la profondeur du pavé droit. */
+    double profondeur;
+    if (!forme.HasMember("profondeur")) {
+        throw logic_error("Profondeur du pavé droit manquante ou invalide.");
+    } else {
+        profondeur = forme["profondeur"].GetDouble();
+    }
+
+    return new PaveDroit(centre, largeur, hauteur, profondeur, rotation, materiau);
 }
 
 cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {

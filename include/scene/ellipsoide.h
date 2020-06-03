@@ -9,8 +9,8 @@
 
 class Ellipsoide : public Forme {
 public:
-    Ellipsoide(Point centre, double rayonA, double rayonB, double rayonC);
-    Ellipsoide(Point centre, double rayonA, double rayonB, double rayonC, Materiau materiau);
+    Ellipsoide(Point centre, double rayonA, double rayonB, double rayonC, Vecteur rotation);
+    Ellipsoide(Point centre, double rayonA, double rayonB, double rayonC, Vecteur rotation, Materiau materiau);
     Ellipsoide(const Ellipsoide& sphere);
     ~Ellipsoide();
 
@@ -22,7 +22,6 @@ public:
     virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) override;
 
 private:
-    Point centre;
     double rayonA, rayonB, rayonC;
 
     virtual Sphere* creerFormeCanonique() override;

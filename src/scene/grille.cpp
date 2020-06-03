@@ -60,7 +60,8 @@ Rectangle Grille::at(unsigned int i, unsigned int j) {
         Point(A), /* Point haut gauche */
         Point(A + tailleCaseHauteur * inclinaison_v), /* Point bas gauche */
         Point(A + tailleCaseHauteur * inclinaison_v + tailleCaseLargeur * inclinaison_h), /* Point bas droit */
-        Point(A + tailleCaseLargeur * inclinaison_h) /* Point haut droit */
+        Point(A + tailleCaseLargeur * inclinaison_h), /* Point haut droit */
+        Vecteur()
     );
 }
 

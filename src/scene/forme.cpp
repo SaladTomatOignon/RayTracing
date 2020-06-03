@@ -1,13 +1,18 @@
 #include "../../include/scene/forme.h"
 #include "../../include/outils/materiau.h"
+#include <vector>
 
-Forme::Forme() : Forme(Materiau()) {
+using namespace std;
+
+Forme::Forme() : Forme(Point(), Vecteur(), Materiau()) {
 
 }
 
-Forme::Forme(Materiau materiau, bool forme2D) {
+Forme::Forme(Point centre, Vecteur rotation, Materiau materiau, bool forme2D) {
     formeCanonique = nullptr;
 
+    this->centre = centre;
+    this->rotation = rotation;
     this->materiau = Materiau(materiau);
     this->forme2D = forme2D;
 }
@@ -19,7 +24,7 @@ Forme::~Forme() {
 void Forme::initialiserMatricesTransformation() {
     formeCanonique = creerFormeCanonique();
 
-    homothetieFormeCanonique();
-    rotationFormeCanonique();
     translationFormeCanonique();
+    rotationFormeCanonique();
+    homothetieFormeCanonique();
 }

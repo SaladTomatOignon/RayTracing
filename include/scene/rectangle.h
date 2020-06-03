@@ -8,8 +8,8 @@
 
 class Rectangle : public Forme {
     public:
-        Rectangle(Point a, Point b, Point c, Point d);
-        Rectangle(Point a, Point b, Point c, Point d, Materiau materiau);
+        Rectangle(Point a, Point b, Point c, Point d, Vecteur rotation);
+        Rectangle(Point a, Point b, Point c, Point d, Vecteur rotation, Materiau materiau);
         Rectangle(const Rectangle& rect);
         ~Rectangle();
 
@@ -23,7 +23,7 @@ class Rectangle : public Forme {
     private:
         Point a, b, c, d;
 
-        Rectangle(Point a, Point b, Point c, Point d, Materiau materiau, bool estCanonique);
+        Rectangle(Point a, Point b, Point c, Point d, Vecteur rotation, Materiau materiau, bool estCanonique);
 
         virtual Rectangle* creerFormeCanonique() override;
         virtual Rectangle* getFormeCanonique() override;
