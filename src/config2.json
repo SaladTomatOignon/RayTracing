@@ -1,0 +1,225 @@
+{
+    "camera_position": [ 0, 107.87909528646358, -116.13292772960584 ],
+    "camera_orientation": [ 0, -0.31815042709641306, 0.94804024478835802 ],
+
+    "distance_focale": 10,
+
+    "definition_largeur": 30,
+    "definition_hauteur": 30,
+
+    "resolution_largeur": 300,
+    "resolution_hauteur": 300,
+
+    "inclinaison_grille": [ 1, 0, 0 ],
+
+    "formes": [
+        {
+            "type": "plan",
+            "couleur": "000000",
+            "specularite": "000000",
+            "brillance": 500,
+            "reflexion": 1,
+            "centre": [ 0, 0, 0 ],
+            "normale": [ 0, 1, 0 ]
+        },
+
+        {
+            "type": "plan",
+            "couleur": "41BEFF",
+            "specularite": "ADCAD9",
+            "brillance": 500,
+            "centre": [ 0, 120, 0 ],
+            "normale": [ 0, -1, 0 ]
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "000000",
+            "specularite": "000000",
+            "reflexion": 1,
+            "brillance": 30,
+            "centre": [ 0, 20, 0 ],
+            "rayon": 20
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "00DCFF",
+            "specularite": "B8F5FF",
+            "brillance": 30,
+            "centre": [ -60, 20, 60 ],
+            "rayon": 20
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "00FF00",
+            "specularite": "BDFFBD",
+            "brillance": 30,
+            "centre": [ 60, 20, 60 ],
+            "rayon": 20
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "ECFF00",
+            "specularite": "FAFFBB",
+            "brillance": 30,
+            "centre": [ 60, 20, -60 ],
+            "rayon": 20
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "FF0000",
+            "specularite": "FFB7B7",
+            "brillance": 30,
+            "centre": [ -60, 20, -60 ],
+            "rayon": 20
+        },
+
+        {
+            "type": "sphere",
+            "couleur": "850000",
+            "specularite": "8B7777",
+            "brillance": 30,
+            "coeff_refraction": 1,
+            "indice_refraction": 1.33,
+            "centre": [ 0, 20, -60 ],
+            "rayon": 20
+        },
+
+        {
+            "type": "cube",
+            "couleur": "007A2D",
+            "specularite": "6F8978",
+            "coeff_refraction": 1,
+            "brillance": 30,
+            "centre": [ 100, 25, 0 ],
+            "taille": 50
+        },
+
+        {
+            "type": "cube",
+            "couleur": "37ADC4",
+            "specularite": "AEE3ED",
+            "brillance": 30,
+            "centre": [ -100, 25, 0 ],
+            "taille": 50
+        },
+
+        {
+            "type": "pave droit",
+            "couleur": "000000",
+            "specularite": "000000",
+            "brillance": 30,
+            "reflexion": 1,
+            "centre": [ 0, 100, 100 ],
+            "rotation": [ 1.2, 0, 0 ],
+            "largeur": 200,
+            "hauteur": 50,
+            "profondeur": 50
+        },
+
+        {
+            "type": "ellipsoide",
+            "couleur": "000000",
+            "specularite": "000000",
+            "coeff_refraction": 1,
+            "indice_refraction": 1,
+            "reflexion": 0.1,
+            "centre": [ -120, 120, -30 ],
+            "rotation": [ 0, 1.57, 0 ],
+            "rayonA": 100,
+            "rayonB": 50,
+            "rayonC": 20
+        },
+
+        {
+            "type": "triangle",
+            "couleur": "F3C409",
+            "specularite": "FFEEAA",
+            "brillance": 200,
+            "pointA": [ 160, 0, 220 ],
+            "pointB": [ 550, 0, 220 ],
+            "pointC": [ 355, 230, 0 ]
+        },
+
+        {
+            "type": "triangle",
+            "couleur": "F3C409",
+            "specularite": "FFEEAA",
+            "brillance": 200,
+            "pointA": [ 160, 0, -220 ],
+            "pointB": [ 550, 0, -220 ],
+            "pointC": [ 355, 230, 0 ]
+        },
+
+        {
+            "type": "triangle",
+            "couleur": "F3C409",
+            "specularite": "FFEEAA",
+            "brillance": 200,
+            "pointA": [ 550, 0, -220 ],
+            "pointB": [ 550, 0, 220 ],
+            "pointC": [ 355, 230, 0 ]
+        },
+
+        {
+            "type": "triangle",
+            "couleur": "F3C409",
+            "specularite": "FFEEAA",
+            "brillance": 200,
+            "pointA": [ 160, 0, -220 ],
+            "pointB": [ 160, 0, 220 ],
+            "pointC": [ 355, 230, 0 ]
+        }
+    ],
+
+    "lumieres": [
+        {
+            "position": [ 0, 90, 0 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ -300, 90, 0 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ 300, 90, 0 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ 0, 90, 300 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ -300, 90, 300 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ 300, 90, 300 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ 0, 90, -300 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ -100, 90, -300 ],
+            "intensite": 100000
+        },
+
+        {
+            "position": [ 100, 90, -300 ],
+            "intensite": 100000
+        }
+    ]
+}
