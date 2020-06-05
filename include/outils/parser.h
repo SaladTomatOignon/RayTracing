@@ -17,6 +17,7 @@
 #include "../scene/cube.h"
 #include "../scene/paveDroit.h"
 #include "../scene/plan.h"
+#include "../scene/cone.h"
 #include "../scene/lumiere.h"
 #include "../outils/couleur.h"
 #include "../outils/materiau.h"
@@ -51,6 +52,7 @@ class Parser {
             ELLIPSOIDE,
             CUBE,
             PAVE_DROIT,
+            CONE,
             NONE
         };
 
@@ -71,6 +73,7 @@ class Parser {
         static Rectangle* parseRectangle(Value& forme);
         static Triangle* parseTriangle(Value& forme);
         static Cylindre* parseCylindre(Value& forme);
+        static Cone* parseCone(Value& forme);
         static Ellipsoide* parseEllipsoide(Value& forme);
         static Cube* parseCube(Value& forme);
         static PaveDroit* parsePaveDroit(Value& forme);

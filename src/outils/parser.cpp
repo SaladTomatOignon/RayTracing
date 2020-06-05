@@ -13,6 +13,7 @@
 #include "../../include/scene/ellipsoide.h"
 #include "../../include/scene/cube.h"
 #include "../../include/scene/plan.h"
+#include "../../include/scene/cone.h"
 #include "../../include/scene/lumiere.h"
 
 #include <fstream>
@@ -229,6 +230,10 @@ Parser::TypeForme Parser::getTypeForme(string forme) {
         return TypeForme::PAVE_DROIT;
     }
 
+    if (formeToUpperCase == "CONE") {
+        return TypeForme::CONE;
+    }
+
     return TypeForme::NONE;
 }
 
@@ -262,6 +267,9 @@ Forme* Parser::parseForme(Value& forme) {
                 break;
             case TypeForme::PAVE_DROIT:
                 return parsePaveDroit(forme);
+                break;
+            case TypeForme::CONE:
+                return parseCone(forme);
                 break;
             default:
                 return nullptr;
@@ -420,39 +428,39 @@ Rectangle* Parser::parseRectangle(Value& forme) {
     /* Récupération du vecteur de rotation */
     Vecteur rotation = getRotation(forme);
 
-    /* D�termination du point A */
-    Point pointA;
+    /* Détermination du centre */
+    Point centre;
     try {
-        pointA = getPoint(forme, "pointA");
+        centre = getPoint(forme, "centre");
     } catch (logic_error le) {
-        throw logic_error("Point A du rectangle manquant ou invalide.");
+        throw logic_error("Centre du rectangle manquant ou invalide.");
     }
 
-    /* D�termination du point B */
-    Point pointB;
+    /* D�termination de la normale du rectangle */
+    Point normale;
     try {
-        pointB = getPoint(forme, "pointB");
+        normale = getPoint(forme, "normale");
     } catch (logic_error le) {
-        throw logic_error("Point B du rectangle manquant ou invalide.");
+        throw logic_error("Normale au rectangle manquante ou invalide.");
     }
 
-    /* D�termination du point C */
-    Point pointC;
-    try {
-        pointC = getPoint(forme, "pointC");
-    } catch (logic_error le) {
-        throw logic_error("Point C du rectangle manquant ou invalide.");
+    /* Détermination de la largeur */
+    double largeur;
+    if (!forme.HasMember("largeur")) {
+        throw logic_error("Largeur du rectangle manquant.");
+    } else {
+        largeur = forme["largeur"].GetDouble();
     }
 
-    /* D�termination du point D */
-    Point pointD;
-    try {
-        pointD = getPoint(forme, "pointD");
-    } catch (logic_error le) {
-        throw logic_error("Point D du rectangle manquant ou invalide.");
+    /* Détermination de la longueur */
+    double longueur;
+    if (!forme.HasMember("longueur")) {
+        throw logic_error("Longueur du rectangle manquant.");
+    } else {
+        longueur = forme["longueur"].GetDouble();
     }
 
-    return new Rectangle(pointA, pointB, pointC, pointD, rotation, materiau);
+    return new Rectangle(centre, Vecteur(normale.x, normale.y, normale.z), largeur, longueur, rotation, materiau);
 }
 
 Triangle* Parser::parseTriangle(Value& forme) {
@@ -657,6 +665,40 @@ PaveDroit* Parser::parsePaveDroit(Value& forme) {
     }
 
     return new PaveDroit(centre, largeur, hauteur, profondeur, rotation, materiau);
+}
+
+Cone* Parser::parseCone(Value& forme) {
+    /* Récupération du materiau */
+    Materiau materiau = getMateriau(forme);
+
+    /* Récupération du vecteur de rotation */
+    Vecteur rotation = getRotation(forme);
+
+    /* Récupération du centre du cone. */
+    Point centre;
+    try {
+        centre = getPoint(forme, "centre");
+    } catch (logic_error le) {
+        throw logic_error("Position du cone manquante ou invalide.");
+    }
+
+    /* Récupération du rayon du cone. */
+    double rayon;
+    if (!forme.HasMember("rayon")) {
+        throw logic_error("Rayon du cone manquant ou invalide.");
+    } else {
+        rayon = forme["rayon"].GetDouble();
+    }
+
+    /* Récupération de la taille en hauteur du cone. */
+    double hauteur;
+    if (!forme.HasMember("hauteur")) {
+        throw logic_error("Hauteur du cone manquante ou invalide.");
+    } else {
+        hauteur = forme["hauteur"].GetDouble();
+    }
+
+    return new Cone(centre, rayon, hauteur, rotation, materiau);
 }
 
 cxxopts::ParseResult Parser::parseArguments(int argc, char* argv[]) {
