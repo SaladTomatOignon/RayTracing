@@ -4,6 +4,8 @@
 #include "../../include/geometrie/matrice.h"
 #include "../../include/geometrie/rayon.h"
 
+#include <math.h>
+
 Rectangle::Rectangle(Point centre, Vecteur normale, double largeur, double longueur, Vecteur rotation, Materiau materiau, bool estCanonique) : Forme(centre, rotation, materiau, forme2D = true) {
     this->normale = normale;
     this->largeur = largeur;
@@ -42,7 +44,7 @@ Rectangle::~Rectangle() {
 }
 
 Rectangle* Rectangle::creerFormeCanonique() {
-    // Carré de côté 2 centré sur l'origine, dans le plan z = 0
+    // Carrï¿½ de cï¿½tï¿½ 2 centrï¿½ sur l'origine, dans le plan z = 0
     return new Rectangle(Point(0, 0, 0), Vecteur(0, 0, 1), 2, 2, Vecteur(), Materiau(), true);
 }
 
@@ -63,7 +65,7 @@ void Rectangle::homothetieFormeCanonique() {
 }
 
 void Rectangle::rotationFormeCanonique() {
-    // TODO : Ramener le plan aligné sur l'axe Z
+    // TODO : Ramener le plan alignï¿½ sur l'axe Z
 
     Md = Md * Matrice::mat_rotation_x(rotation.x);
     Mi = Matrice::mat_rotation_x(-rotation.x) * Mi;

@@ -4,6 +4,8 @@
 #include "../../include/geometrie/matrice.h"
 #include "../../include/geometrie/rayon.h"
 
+#include <math.h>
+
 Cylindre::Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique) : Forme(Point(), rotation, materiau) {
     this->a = Point(a);
     this->b = Point(b);
@@ -87,7 +89,7 @@ bool Cylindre::intersectionCanonique(Rayon& r, Point& intersection, Vecteur& nor
     double c = (r.origine.x - centre.x) * (r.origine.x - centre.x) + (r.origine.z - centre.z) * (r.origine.z - centre.z) - (rayon * rayon);
 
     double delta = b * b - 4 * (a * c);
-    if (fabs(delta) < _EPSILON_) {
+    if (std::abs(delta) < _EPSILON_) {
         return false;
     }
     if (delta < 0.0) {

@@ -153,6 +153,10 @@ void SceneOpenGL::bouclePrincipale() {
             m_parametres.transparenceActive = !m_parametres.transparenceActive;
         }
 
+        if (m_input.getTouche(SDL_SCANCODE_O)) {
+            m_parametres.ombrageActive = !m_parametres.ombrageActive;
+        }
+
         /* Pour forcer l'�valuation des 2 m�thodes... */
         bool deplacer = deplacerCamera();
         bool orienter = orienterCamera();

@@ -4,6 +4,8 @@
 #include "../../include/geometrie/matrice.h"
 #include "../../include/geometrie/rayon.h"
 
+#include <math.h>
+
 Cone::Cone(Point centre, double rayon, double hauteur, Vecteur rotation, Materiau materiau, bool estCanonique) : Forme(centre, rotation, materiau, forme2D = true) {
     this->rayon = rayon;
     this->hauteur = hauteur;
@@ -30,7 +32,7 @@ Cone::~Cone() {
 }
 
 Cone* Cone::creerFormeCanonique() {
-    // Cone centré en (0, 0, 0) de rayon 1 et de hauteur 1.
+    // Cone centrï¿½ en (0, 0, 0) de rayon 1 et de hauteur 1.
     return new Cone(Point(0, 0, 0), 1, 1, Vecteur(0, 0, 0), Materiau(), true);
 }
 
