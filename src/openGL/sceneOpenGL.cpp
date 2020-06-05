@@ -281,7 +281,7 @@ bool SceneOpenGL::orienterCamera() {
 
     if (deplacer) {
         Vecteur vecteurVertical = Vecteur(0, 1, 0);
-        m_scene.grille.inclinaison_h = -1 * m_scene.camera.orientation.prodVectoriel(vecteurVertical);
+        m_scene.grille.inclinaison_h = -1 * m_scene.camera.orientation.prodVectoriel(vecteurVertical).unitaire();
         m_scene.grille.positionner(m_scene.camera);
         return true;
     }

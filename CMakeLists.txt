@@ -15,29 +15,29 @@ set(CMAKE_USE_PTHREADS_INIT 1)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 # Inclusion des headers
-include_directories(include/application)
-include_directories(include/geometrie)
-include_directories(include/openGL)
-include_directories(include/outils)
-include_directories(include/rapidjson)
-include_directories(include/rapidjson/error)
-include_directories(include/rapidjson/internal)
-include_directories(include/rapidjson/msinttypes)
-include_directories(include/scene)
-include_directories(include/)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/application")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/geometrie")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/openGL")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/outils")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson/error")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson/internal")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/rapidjson/msinttypes")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/scene")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
 # Inclusion des sources
 file(GLOB SRC_FILES
-    "src/geometrie/*.cpp"
-    "src/openGL/*.cpp"
-    "src/outils/*.cpp"
-    "src/scene/*.cpp"
-    "src/application/*.cpp"
-    "src/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/geometrie/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/openGL/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/outils/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/scene/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/application/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
 )
 
 # Place les binaires générés dans un dossier bin
-set(EXECUTABLE_OUTPUT_PATH "../bin/")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bin/")
 
 add_executable(lray ${SRC_FILES})
 
