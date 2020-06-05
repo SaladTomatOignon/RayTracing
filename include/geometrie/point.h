@@ -14,10 +14,14 @@ class Point {
         Point operator+(const Point& p);
         Point operator-(const Point& p);
         Point operator-(const Vecteur& v);
+        Point operator*(const Point& p);
+        Point operator*(const Vecteur& v);
 
         static Vecteur creerVecteur(Point& a, Point& b);
+        static double sommeCoeff(Point& vecteur);
         double distance(Point& a);
         double distance2(Point& a);
+        double normeCarre();
 
         double x, y, z;
 };

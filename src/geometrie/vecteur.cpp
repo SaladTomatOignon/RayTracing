@@ -43,6 +43,10 @@ Vecteur operator*(const double scalaire, const Vecteur& u) {
     return Vecteur(scalaire * u.x, scalaire * u.y, scalaire * u.z);
 }
 
+Vecteur Vecteur::operator/(double reel) {
+    return Vecteur(x / reel, y / reel, z / reel);
+}
+
 double Vecteur::prodScalaire(Vecteur& v) {
     return x * v.x + y * v.y + z * v.z;
 }
@@ -78,4 +82,8 @@ Vecteur Vecteur::unitaire() {
 
 double Vecteur::sommeCoeff(Vecteur& vecteur) {
     return vecteur.x + vecteur.y + vecteur.z;
+}
+
+double Vecteur::normeCarre() {
+    return x * x + y * y + z * z;
 }

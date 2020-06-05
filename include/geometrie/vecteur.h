@@ -15,11 +15,13 @@ class Vecteur {
         bool operator!=(const Vecteur& autre);
         Vecteur operator+(const Vecteur& autre);
         Vecteur operator-(const Vecteur& autre);
+        Vecteur operator/(const double reel);
         friend Vecteur operator*(const double scalaire, const Vecteur& u);
         double prodScalaire(Vecteur& v);
         Vecteur prodVectoriel(Vecteur& v);
         Vecteur rotationAxe(Vecteur& axe, double theta);
         Vecteur unitaire();
+        double normeCarre();
 
         /**
          * @brief Renvoie la somme des coefficients du vecteur en param�tre.
