@@ -31,6 +31,7 @@ class Cylindre : public Forme {
         virtual void homothetieFormeCanonique() override;
         virtual void rotationFormeCanonique() override;
         virtual void translationFormeCanonique() override;
+        bool intersectionCanonique(Rayon& r, Point& intersection, Vecteur& normale);
 };
 
 #endif
