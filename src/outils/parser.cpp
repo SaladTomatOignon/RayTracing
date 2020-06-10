@@ -504,20 +504,20 @@ Cylindre* Parser::parseCylindre(Value& forme) {
     /* Récupération du vecteur de rotation */
     Vecteur rotation = getRotation(forme);
 
-    /* Détermination du point A */
-    Point pointA;
+    /* Détermination du centre du cylindre */
+    Point centre;
     try {
-        pointA = getPoint(forme, "pointA");
+        centre = getPoint(forme, "centre");
     } catch (logic_error le) {
-        throw logic_error("Point A du cylindre manquant ou invalide.");
+        throw logic_error("Centre du cylindre manquant ou invalide.");
     }
 
-    /* Détermination du point B */
-    Point pointB;
-    try {
-        pointB = getPoint(forme, "pointB");
-    } catch (logic_error le) {
-        throw logic_error("Point B du cylindre manquant ou invalide.");
+    /* Récupération de la hauteur du cylindre. */
+    double hauteur;
+    if (!forme.HasMember("hauteur")) {
+        throw logic_error("Hauteur du cylindre manquant.");
+    } else {
+        hauteur = forme["hauteur"].GetDouble();
     }
 
     /* Récupération du rayon du cylindre. */
@@ -528,7 +528,7 @@ Cylindre* Parser::parseCylindre(Value& forme) {
         rayon = forme["rayon"].GetDouble();
     }
 
-    return new Cylindre(pointA, pointB, rayon, rotation, materiau);
+    return new Cylindre(centre, hauteur, rayon, rotation, materiau);
 }
 
 Plan* Parser::parsePlan(Value& forme) {

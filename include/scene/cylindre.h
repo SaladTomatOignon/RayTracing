@@ -8,8 +8,8 @@
 
 class Cylindre : public Forme {
     public:
-        Cylindre(Point a, Point b, double rayon, Vecteur rotation);
-        Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau);
+        Cylindre(Point centre, double hauteur, double rayon, Vecteur rotation);
+        Cylindre(Point centre, double hauteur, double rayon, Vecteur rotation, Materiau materiau);
         Cylindre(const Cylindre& cylindre);
         ~Cylindre();
 
@@ -21,10 +21,9 @@ class Cylindre : public Forme {
         virtual bool intersection(Rayon& r, Point& intersection, Vecteur& normale) override;
 
     private:
-        Point a, b;
-        double rayon;
+        double rayon, hauteur;
 
-        Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique);
+        Cylindre(Point centre, double hauteur, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique);
 
         virtual Cylindre* creerFormeCanonique() override;
         virtual Cylindre* getFormeCanonique() override;

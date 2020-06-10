@@ -6,9 +6,8 @@
 
 #include <math.h>
 
-Cylindre::Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique) : Forme(Point(), rotation, materiau) {
-    this->a = Point(a);
-    this->b = Point(b);
+Cylindre::Cylindre(Point centre, double hauteur, double rayon, Vecteur rotation, Materiau materiau, bool estCanonique) : Forme(centre, rotation, materiau) {
+    this->hauteur = hauteur;
     this->rayon = rayon;
 
     if (!estCanonique) {
@@ -16,15 +15,15 @@ Cylindre::Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau ma
     }
 }
 
-Cylindre::Cylindre(Point a, Point b, double rayon, Vecteur rotation, Materiau materiau) : Cylindre(a, b, rayon, rotation, materiau, false) {
+Cylindre::Cylindre(Point centre, double hauteur, double rayon, Vecteur rotation, Materiau materiau) : Cylindre(centre, hauteur, rayon, rotation, materiau, false) {
 
 }
 
-Cylindre::Cylindre(Point a, Point b, double rayon, Vecteur rotation) : Cylindre(a, b, rayon, rotation, Materiau(), false) {
+Cylindre::Cylindre(Point centre, double hauteur, double rayon, Vecteur rotation) : Cylindre(centre, hauteur, rayon, rotation, Materiau(), false) {
 
 }
 
-Cylindre::Cylindre(const Cylindre& cylindre) : Cylindre(cylindre.a, cylindre.b, cylindre.rayon, cylindre.rotation, cylindre.materiau) {
+Cylindre::Cylindre(const Cylindre& cylindre) : Cylindre(cylindre.centre, cylindre.hauteur, cylindre.rayon, cylindre.rotation, cylindre.materiau) {
 
 }
 
@@ -33,10 +32,10 @@ Cylindre::~Cylindre() {
 }
 
 Cylindre* Cylindre::creerFormeCanonique() {
-    /* Cylindre centré à l'origine de rayon 1 et de hauteur 2 */
+    /* Cylindre centré à l'origine de rayon 1 et de hauteur 1 */
     return new Cylindre(
-        Point(0, -1, 0),
-        Point(0, 1, 0),
+        Point(0, 0, 0),
+        1,
         1,
         Vecteur(0, 0, 0),
         Materiau(),
@@ -49,11 +48,7 @@ Cylindre* Cylindre::getFormeCanonique() {
 }
 
 Point Cylindre::getCentre() {
-    return Point(
-        (a.x + b.x) / 2,
-        (a.y + b.y) / 2,
-        (a.z + b.z) / 2
-    );
+    return centre;
 }
 
 void Cylindre::homothetieFormeCanonique() {
@@ -82,35 +77,106 @@ void Cylindre::translationFormeCanonique() {
     Mn = Mn * Matrice::mat_translation(centre.x, centre.y, centre.z);
 }
 
+bool intersectionPlan(Rayon& r, double& Tin, double& Tout, Point posPlan, Vecteur normPlan) {
+    double Dc = r.direction.prodScalaire(normPlan);
+    double Dw = Point::creerVecteur(r.origine, posPlan).prodScalaire(normPlan);
+
+    if (Dc == 0) { /* Rayon parrallèle au plan */
+        if (Dw > 0) {
+            return false;
+        }
+    } else {
+        double t = -Dw / Dc;
+        if (Dc >= 0) {
+            if (t > Tin && t < Tout) {
+                Tout = t;
+            }
+            if (t < Tin) {
+                return false;
+            }
+        } else {
+            if (t > Tin && t < Tout) {
+                Tin = t;
+            }
+            if (t > Tout) {
+                return false;
+            }
+        }
+    }
+
+    if (Tin > Tout) {
+        return false;
+    }
+}
+
 bool Cylindre::intersectionCanonique(Rayon& r, Point& intersection, Vecteur& normale) {
     r.direction = r.direction.unitaire();
-    double a = (r.direction.x * r.direction.x) + (r.direction.z * r.direction.z);
-    double b = 2 * (r.direction.x * (r.origine.x - centre.x) + r.direction.z * (r.origine.z - centre.z));
-    double c = (r.origine.x - centre.x) * (r.origine.x - centre.x) + (r.origine.z - centre.z) * (r.origine.z - centre.z) - (rayon * rayon);
+    Vecteur v = Vecteur(0, 1, 0);
 
-    double delta = b * b - 4 * (a * c);
-    if (std::abs(delta) < _EPSILON_) {
-        return false;
+    Point posPlanInf = Point(0, 0, 0);
+    Vecteur normPlanInf = Vecteur(0, -1, 0);
+    Point posPlanSup = Point(0, hauteur, 0);
+    Vecteur normPlanSup = Vecteur(0, 1, 0);
+
+    Vecteur L = Point::creerVecteur(r.origine, centre);
+    Vecteur w = r.direction.prodVectoriel(v);
+    double wCarre = w.prodScalaire(w);
+
+    if (wCarre == 0) { /* Cas rayon parrallèle à l'axe du cylindre */
+        double a = L.prodScalaire(v);
+        Vecteur D = L - a * v;
+        double dCarre = D.prodScalaire(D);
+
+        if (dCarre > rayon * rayon) {
+            return false;
+        }
+
+        return true; /* Intersections à l'infini (dans le cylindre) */
+
+    } else {
+        Vecteur wn = w.unitaire();
+        double R = std::abs(L.prodScalaire(wn));
+
+        if (R > rayon) {
+            return false;
+        }
+
+        Vecteur E = L.prodVectoriel(v);
+        double t = -E.prodScalaire(wn) / sqrt(wCarre);
+        Vecteur F = wn.prodVectoriel(v);
+        Vecteur Fn = F.unitaire();
+        double s = sqrt(rayon * rayon - R * R) * std::abs(r.direction.prodScalaire(Fn));
+
+        double tin = (t - s);
+        double tout = (t + s);
+        
+        bool haut = intersectionPlan(r, tin, tout, posPlanSup, normPlanSup);
+
+        tin = (t - s);
+        tout = (t + s);
+
+        bool bas = intersectionPlan(r, tin, tout, posPlanInf, normPlanInf);
+
+        if (!haut && !bas) {
+            intersection = r.origine + tout * r.direction;
+        } else {
+            return false;
+        }
+
+        Vecteur Q = Vecteur(intersection.x, 0, intersection.z);
+        Vecteur CP = Point::creerVecteur(centre, intersection);
+        double CQ = CP.prodScalaire(v);
+        Vecteur QP = CP - CQ * v;
+        normale = QP / rayon;
+
+        if (!haut) {
+            normale = normPlanSup;
+        } else if (!bas) {
+            normale = normPlanInf;
+        }
+
+        return true;
     }
-    if (delta < 0.0) {
-        return false;
-    }
-
-    double t1 = (-b - sqrt(delta)) / (2 * a);
-    double t2 = (-b + sqrt(delta)) / (2 * a);
-    double t;
-
-    if (t1 > t2) t = t2;
-    else t = t1;
-
-    double R = r.origine.y + t * r.direction.y;
-
-    if ((R >= centre.y) && (R <= centre.y + 1)) {
-        intersection = r.origine + t * r.direction;
-        normale = Vecteur(intersection.x - centre.x, 0, intersection.z - centre.z).unitaire();
-        return t;
-    }
-    return false;
 }
 
 bool Cylindre::intersection(Rayon& r, Point& intersection, Vecteur& normale) {
