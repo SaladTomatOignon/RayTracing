@@ -10,7 +10,7 @@ L'application utilise les bibliothèques OpenGL Glew et SDL2
 # Installation
 
  - Créer un répertoire *build* à la racine du projet
- - Lancer la commande **../cmake CMakeLists.txt**
+ - Lancer la commande **cmake ../**
  - Compiler avec la commande **make**
 
 L'exécutable *lray* se génère dans un dossier *bin/*
